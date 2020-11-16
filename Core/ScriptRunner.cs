@@ -6,6 +6,10 @@ using Core.Models;
 
 namespace Core {
     class ScriptRunner {
+
+        public ScriptRunner() {
+
+        }
         
         public List<string> RunScripts(List<string> scriptPaths) {
             List<string> scriptOutput = new List<string>();
@@ -14,9 +18,23 @@ namespace Core {
             }
             return scriptOutput;
         }
-        private string RunScript(string scriptPath) {
+
+        //remember to set the paths to the interpreters
+        private string RunScript(string scriptPath, string language) {
+            string fileName = "";
+            switch (language) {
+                case "javascript":
+                    fileName = @"c:\";
+                    break;
+                case "python":
+                    fileName = $@"c:\";
+                    break;
+                case "ruby":
+                    fileName = $@"c:\";
+                    break;
+            }
             ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = @"C:\Python38\python.exe";
+            start.FileName = fileName;
             start.Arguments = string.Format("\"{0}\" \"{1}\"", scriptPath, null);
             start.UseShellExecute = false;// Do not use OS shell
             start.CreateNoWindow = true; // We don't need new window
