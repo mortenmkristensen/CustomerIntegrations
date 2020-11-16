@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "tWs9CLc5s7A4uvMjNubVfOP2wpoBHJ+EWwvPWGkGB4CpF/hg/xxfhW62/LCTbpxj84wO0+jln/wSz52BvQR+8w==",
+  "dgSpecHash": "ciyuoLNPRVYB1QRHywuV4FLPDxLYtVWUzn+sAUxhDSmn26eU/wgVrNnm+FHZE3eYlvpEm6zrXuQUJCMpGTMTuQ==",
   "success": true,
   "projectFilePath": "C:\\Datamatiker\\Repos\\CustomerIntegrations\\CustomerIntegrations\\Core\\Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\morte\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
