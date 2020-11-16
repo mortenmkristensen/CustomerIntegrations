@@ -6,12 +6,13 @@ using Core.Models;
 
 namespace Core {
     class ScriptRunner {
-        public string GetScriptPaths(string path) {
-            throw new NotImplementedException();
-        }
         
         public List<string> RunScripts(List<string> scriptPaths) {
-            throw new NotImplementedException();
+            List<string> scriptOutput = new List<string>();
+            foreach(var path in scriptPaths) {
+                scriptOutput.Add(RunScript(path));
+            }
+            return scriptOutput;
         }
         private string RunScript(string scriptPath) {
             ProcessStartInfo start = new ProcessStartInfo();
