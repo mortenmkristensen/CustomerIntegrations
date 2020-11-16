@@ -15,7 +15,7 @@ namespace Core {
         }
 
         public void Run() {
-            List<Script> scripts = Stager.getScriptsBy();
+            List<Script> scripts = Stager.GetScriptsByIds(); //what to send here??
             List<string> paths = (List<string>) Stager.GetPaths(scripts);
             List<string> scriptOutput = ScriptRunner.RunScripts(paths);
         }

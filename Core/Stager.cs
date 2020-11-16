@@ -16,14 +16,14 @@ namespace Core {
             DBAccess = dBAccess;
         }
 
-        public Script getScriptsById(string id) {
+        public Script getScriptById(string id) {
             return DBAccess.GetById(id);
         }
 
-        public IEnumerable<Script> GetScriptByIds(IEnumerable<string> ids) {
+        public IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
             List<Script> scripts = new List<Script>();
             foreach (var id in ids) {
-                scripts.Add(getScriptsById(id));
+                scripts.Add(getScriptById(id));
             }
             return scripts;
         }
