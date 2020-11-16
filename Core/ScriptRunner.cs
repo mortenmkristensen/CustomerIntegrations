@@ -29,10 +29,5 @@ namespace Core {
                 //}
             }
         }        
-        public void SendData(List<string> domains) {
-            throw new NotImplementedException();
-        }
-    }
-
     }
 }
