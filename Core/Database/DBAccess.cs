@@ -10,6 +10,7 @@ namespace Core.Database {
         MongoClient Client { get; set; }
         IMongoDatabase Database { get; set; }
         IMongoCollection<Script> Collection { get; set; }
+        public DBConfig Config { get; set; }
         public DBAccess() {
             try {
                 Client = new MongoClient("mongodb://localhost:27017");
@@ -22,9 +23,10 @@ namespace Core.Database {
         }
         public DBAccess(DBConfig dBConfig) {
             try {
-                Client = new MongoClient(dBConfig.ConnectionString);
-                Database = Client.GetDatabase(dBConfig.Database);
-                Collection = Database.GetCollection<Script>(dBConfig.Collection);
+                Config = dBConfig;
+                Client = new MongoClient(Config.ConnectionString);
+                Database = Client.GetDatabase(Config.Database);
+                Collection = Database.GetCollection<Script>(Config.Collection);
             }
             catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
@@ -62,6 +64,12 @@ namespace Core.Database {
             catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
             }
+        }
+
+        public IEnumerable<Script> GetByLanguage(string language) {
+            var filter = Builders<Script>.Filter.Eq("Language", language);
+            var scripts = Collection.Find<Script>(filter).ToListAsync();
+            return scripts.Result;
         }
     }
 }

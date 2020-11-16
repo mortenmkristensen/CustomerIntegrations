@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,6 @@ namespace Core.Models {
         public double ScriptVersion { get; set; }
         public string Language { get; set; }
         public string LanguageVersion { get; set; }
-        public string Code { get; set; }
+        public BsonBinaryData Code { get; set; }
     }
 }

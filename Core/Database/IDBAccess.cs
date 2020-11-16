@@ -8,6 +8,7 @@ namespace Core.Database {
         void Upsert(Script script);
         void Delete(Script script);
         Script GetScriptById(string id);
+        IEnumerable<Script> GetByLanguage(string language);
         IEnumerable<Script> GetAll();
 
     }
