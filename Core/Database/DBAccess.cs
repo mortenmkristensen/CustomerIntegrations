@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Core.Database {
     class DBAccess : IDBAccess {
@@ -34,7 +35,7 @@ namespace Core.Database {
         }
         public void Delete(Script script) {
             var filter = Builders<Script>.Filter.Eq("_id", script.Id);
-            Collection.DeleteOneAsync(filter);
+            Collection.DeleteOne(filter);
         }
 
         public IEnumerable<Script> GetAll() {
@@ -59,7 +60,8 @@ namespace Core.Database {
         public void Upsert(Script script) {
             try {
                 var filter = Builders<Script>.Filter.Eq("_id", script.Id);
-                Collection.ReplaceOneAsync(filter, script, new ReplaceOptions { IsUpsert = true });
+                Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
+                //Collection.InsertOne(script);
             }
             catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
