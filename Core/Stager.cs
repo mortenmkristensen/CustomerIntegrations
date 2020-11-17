@@ -42,13 +42,13 @@ namespace Core {
             string path = "";
             switch (script.Language.ToLower()) {
                 case "javascript":
-                    path = $@"c:\scripts\javascript\{script.Name}.js";
+                    path = $@"c:\scripts\javascript\{script.Id}.js";
                     break;
                 case "python":
-                    path = $@"c:\scripts\python\{script.Name}.PY";
+                    path = $@"c:\scripts\python\{script.Id}.py";
                     break;
                 case "ruby":
-                    path = $@"c:\scripts\ruby\{script.Name}.rb";
+                    path = $@"c:\scripts\ruby\{script.Id}.rb";
                     break;
             }
             File.WriteAllText(path, script.Code);
