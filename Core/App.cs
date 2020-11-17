@@ -1,5 +1,6 @@
 ﻿using Core.Database;
 using Core.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,15 +10,21 @@ namespace Core {
 
         private Stager Stager { get; set; }
         private ScriptRunner ScriptRunner { get; set; }
-        public App(Stager stager, ScriptRunner scriptRunner) {
+
+        private string Ids { get; set; } 
+        public App(Stager stager, ScriptRunner scriptRunner, string ids) {
             Stager = stager;
             ScriptRunner = scriptRunner;
         }
 
-        public void Run(string interpreterPath, IEnumerable<string> ids) {
-            List<Script> scripts =(List<Script>) Stager.GetScriptsByIds(ids); //what to send here??
+        public void Run(string interpreterPath) {
+            List<Script> scripts =(List<Script>) Stager.GetScriptsByIds(DeserializeIds());
             List<string> paths = (List<string>) Stager.GetPaths(scripts);
             List<string> scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
+        }
+
+        private List<string> DeserializeIds() {
+            return JsonConvert.DeserializeObject<List<string>>(Ids);
         }
     }
 }

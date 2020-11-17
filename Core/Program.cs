@@ -4,12 +4,13 @@ using System.Collections;
 
 namespace Core {
     class Program {
-        static void Main(string[] args) { //dont know how to send a list from outside
+        static void Main(string[] args) {
             IDBAccess dbAccess = new DBAccess();
             Stager stager = new Stager(dbAccess);
             ScriptRunner scriptRunner = new ScriptRunner();
-            App app = new App(stager, scriptRunner);
-            string interpreterPath = ""; //set denne via env variabel
+            string ids = "";
+            App app = new App(stager, scriptRunner, ids); //set with env variables
+            string interpreterPath = ""; //set with env virables
             app.Run(interpreterPath);
         }
     }
