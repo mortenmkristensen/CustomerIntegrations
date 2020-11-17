@@ -17,7 +17,7 @@ namespace Core {
         }
 
         public Script getScriptById(string id) {
-            return DBAccess.GetById(id);
+            return DBAccess.GetScriptById(id);
         }
 
         public IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
