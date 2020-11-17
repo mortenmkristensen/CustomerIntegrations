@@ -32,10 +32,19 @@ namespace Core {
             return SaveToDisk(script);
         }
 
+        /*
         public IEnumerable<string> GetPaths(IEnumerable<Script> scripts) {
             List<string> paths = new List<string>();
             foreach(var script in scripts) {
                 paths.Add(GetPath(script));
+            }
+            return paths;
+        }
+        */
+         public IEnumerable<KeyValuePair<string,string>> GetPaths(IEnumerable<Script> scripts) {
+            Dictionary<string, string> paths = new Dictionary<string, string>();
+            foreach(var script in scripts) {
+                paths.Add(GetPath(script), script.Language);
             }
             return paths;
         }
