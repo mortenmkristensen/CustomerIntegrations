@@ -31,8 +31,6 @@ namespace Core {
         public string GetPath(Script script) {
             return SaveToDisk(script);
         }
-
-        /*
         public IEnumerable<string> GetPaths(IEnumerable<Script> scripts) {
             List<string> paths = new List<string>();
             foreach(var script in scripts) {
@@ -40,7 +38,7 @@ namespace Core {
             }
             return paths;
         }
-        */
+        /*
          public IEnumerable<KeyValuePair<string,string>> GetPaths(IEnumerable<Script> scripts) {
             Dictionary<string, string> paths = new Dictionary<string, string>();
             foreach(var script in scripts) {
@@ -48,7 +46,7 @@ namespace Core {
             }
             return paths;
         }
-
+        */
         //this might not be the correct way to make the files as i dont know if File.writeAllText can make anything else than txt files
         private string SaveToDisk(Script script) {
             string path = "";
