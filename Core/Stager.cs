@@ -38,16 +38,6 @@ namespace Core {
             }
             return paths;
         }
-        /*
-         public IEnumerable<KeyValuePair<string,string>> GetPaths(IEnumerable<Script> scripts) {
-            Dictionary<string, string> paths = new Dictionary<string, string>();
-            foreach(var script in scripts) {
-                paths.Add(GetPath(script), script.Language);
-            }
-            return paths;
-        }
-        */
-        //this might not be the correct way to make the files as i dont know if File.writeAllText can make anything else than txt files
         private string SaveToDisk(Script script) {
             string path = "";
             switch (script.Language) {
