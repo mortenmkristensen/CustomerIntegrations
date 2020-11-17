@@ -11,30 +11,18 @@ namespace Core {
 
         }
         
-        public List<string> RunScripts(List<string> scriptPaths) {
+        public List<string> RunScripts(List<string> scriptPaths, string interpreterPath) {
             List<string> scriptOutput = new List<string>();
             foreach(var path in scriptPaths) {
-                scriptOutput.Add(RunScript(path));
+                scriptOutput.Add(RunScript(path, interpreterPath));
             }
             return scriptOutput;
         }
 
         //remember to set the paths to the interpreters
-        private string RunScript(string scriptPath, string language) {
-            string fileName = "";
-            switch (language) {
-                case "javascript":
-                    fileName = @"c:\";
-                    break;
-                case "python":
-                    fileName = $@"c:\";
-                    break;
-                case "ruby":
-                    fileName = $@"c:\";
-                    break;
-            }
+        private string RunScript(string scriptPath, string interpreterPath) {
             ProcessStartInfo start = new ProcessStartInfo();
-            start.FileName = fileName;
+            start.FileName = interpreterPath;
             start.Arguments = string.Format("\"{0}\" \"{1}\"", scriptPath, null);
             start.UseShellExecute = false;// Do not use OS shell
             start.CreateNoWindow = true; // We don't need new window

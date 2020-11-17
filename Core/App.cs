@@ -14,10 +14,10 @@ namespace Core {
             ScriptRunner = scriptRunner;
         }
 
-        public void Run() {
-            List<Script> scripts = Stager.GetScriptsByIds(); //what to send here??
+        public void Run(string interpreterPath, IEnumerable<string> ids) {
+            List<Script> scripts =(List<Script>) Stager.GetScriptsByIds(ids); //what to send here??
             List<string> paths = (List<string>) Stager.GetPaths(scripts);
-            List<string> scriptOutput = ScriptRunner.RunScripts(paths);
+            List<string> scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
         }
     }
 }
