@@ -40,7 +40,7 @@ namespace Core {
         }
         private string SaveToDisk(Script script) {
             string path = "";
-            switch (script.Language) {
+            switch (script.Language.ToLower()) {
                 case "javascript":
                     path = $@"c:\scripts\javascript\{script.Name}.js";
                     break;
