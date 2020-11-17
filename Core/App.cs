@@ -15,12 +15,17 @@ namespace Core {
         public App(Stager stager, ScriptRunner scriptRunner, string ids) {
             Stager = stager;
             ScriptRunner = scriptRunner;
+            Ids = ids;
         }
 
         public void Run(string interpreterPath) {
             List<Script> scripts =(List<Script>) Stager.GetScriptsByIds(DeserializeIds());
             List<string> paths = (List<string>) Stager.GetPaths(scripts);
             List<string> scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
+            foreach (var script in scriptOutput) {
+                Console.WriteLine(script + "\n\n");
+                
+            }
         }
 
         private List<string> DeserializeIds() {

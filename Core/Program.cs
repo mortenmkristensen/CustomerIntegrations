@@ -1,16 +1,17 @@
 ﻿using Core.Database;
 using System;
-using System.Collections;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Core {
     class Program {
         static void Main(string[] args) {
-            IDBAccess dbAccess = new DBAccess();
+            IDBAccess dbAccess = new DBAccess(new DBConfig());
             Stager stager = new Stager(dbAccess);
             ScriptRunner scriptRunner = new ScriptRunner();
-            string ids = "";
-            App app = new App(stager, scriptRunner, ids); //set with env variables
-            string interpreterPath = ""; //set with env virables
+            string ids = Environment.GetEnvironmentVariable("MP_IDS");//set with env variables
+            App app = new App(stager, scriptRunner, ids); 
+            string interpreterPath = Environment.GetEnvironmentVariable("MP_INTERPRETERPATH"); //set with env virables
             app.Run(interpreterPath);
         }
     }

@@ -8,10 +8,10 @@ namespace Core.Database {
         public string Database { get; set; }
         public string Collection { get; set; }
 
-        public DBConfig(string connectionString, string database, string collection) {
-            ConnectionString = connectionString;
-            Database = database;
-            Collection = collection;
+        public DBConfig() {
+            ConnectionString = Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING");
+            Database = Environment.GetEnvironmentVariable("MP_DATABASE");
+            Collection = Environment.GetEnvironmentVariable("MP_COLLECTION");
         }
     }
 }
