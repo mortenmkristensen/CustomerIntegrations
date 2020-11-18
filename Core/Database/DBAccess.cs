@@ -12,16 +12,6 @@ namespace Core.Database {
         IMongoDatabase Database { get; set; }
         IMongoCollection<Script> Collection { get; set; }
         public DBConfig Config { get; set; }
-        public DBAccess() {
-            try {
-                Client = new MongoClient("mongodb://localhost:27017");
-                Database = Client.GetDatabase("MapsPeople");
-                Collection = Database.GetCollection<Script>("Scripts");
-            }
-            catch (MongoException me) {
-                throw new Exception("Something went wrong when trying to connect to the database", me);
-            }
-        }
         public DBAccess(DBConfig dBConfig) {
             try {
                 Config = dBConfig;
@@ -61,7 +51,6 @@ namespace Core.Database {
             try {
                 var filter = Builders<Script>.Filter.Eq("_id", script.Id);
                 Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
-                //Collection.InsertOne(script);
             }
             catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
