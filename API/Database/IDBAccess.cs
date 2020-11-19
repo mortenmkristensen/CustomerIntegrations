@@ -1,13 +1,10 @@
-﻿using Core.Models;
-using System;
+﻿using API.Models;
 using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Core.Database {
-    interface IDBAccess {
+namespace API.Database {
+    public interface IDBAccess {
         void Upsert(Script script);
-        void Delete(Script script);
+        void Delete(string script);
         Script GetScriptById(string id);
         IEnumerable<Script> GetByLanguage(string language);
         IEnumerable<Script> GetAll();

@@ -1,7 +1,5 @@
-﻿using Core.Database;
+﻿using Database;
 using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace Core {
     class Program {

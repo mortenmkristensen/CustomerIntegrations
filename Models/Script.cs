@@ -1,10 +1,5 @@
-﻿using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Core.Models {
-    class Script {
+﻿namespace Models {
+    public class Script {
         public string Id { get; set; }
         public string Name { get; set; }
         public string Customer { get; set; }

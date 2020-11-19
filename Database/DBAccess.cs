@@ -1,13 +1,10 @@
-﻿using Core.Models;
+﻿using Models;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
-using System.Threading;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Core.Database {
-    class DBAccess : IDBAccess {
+namespace Database {
+    public class DBAccess : IDBAccess {
         MongoClient Client { get; set; }
         IMongoDatabase Database { get; set; }
         IMongoCollection<Script> Collection { get; set; }
@@ -18,8 +15,7 @@ namespace Core.Database {
                 Client = new MongoClient(Config.ConnectionString);
                 Database = Client.GetDatabase(Config.Database);
                 Collection = Database.GetCollection<Script>(Config.Collection);
-            }
-            catch (MongoException me) {
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
             }
         }
@@ -40,8 +36,7 @@ namespace Core.Database {
                     var filter = Builders<Script>.Filter.Eq("_id", id);
                     script = Collection.Find(filter).FirstOrDefault();
                 }
-            }
-            catch (MongoException me) {
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to get a script", me);
             }
             return script;
@@ -51,8 +46,7 @@ namespace Core.Database {
             try {
                 var filter = Builders<Script>.Filter.Eq("_id", script.Id);
                 Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
-            }
-            catch (MongoException me) {
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
             }
         }

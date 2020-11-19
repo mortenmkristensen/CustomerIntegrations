@@ -1,9 +1,7 @@
-﻿using Core.Database;
-using Core.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using Models;
 
 namespace Core {
     class App {

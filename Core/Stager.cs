@@ -1,13 +1,8 @@
-﻿using Core.Database;
-using Core.Models;
+﻿using Database;
+using Models;
 using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-
 namespace Core {
     class Stager {
 
