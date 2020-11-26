@@ -60,8 +60,8 @@ namespace API.Controllers {
         private string Serialize(Script script) {
             return JsonConvert.SerializeObject(script);
         }
-
-        public HttpResponseMessage GetByCustomer(HttpRequestMessage request, string customer) {
+        [HttpGet]
+        public HttpResponseMessage GetScriptByCustomer(HttpRequestMessage request, string customer) {
             IEnumerable<Script> scripts = new List<Script>();
             try {
                 scripts = dbAccess.GetByCustomer(customer);
