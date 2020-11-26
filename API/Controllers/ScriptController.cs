@@ -11,7 +11,8 @@ namespace API.Controllers {
     public class ScriptController : ApiController{
         IDBAccess dbAccess = new DBAccess(new DBConfig());
 
-        public HttpResponseMessage Post(HttpRequestMessage request, [FromBody] string script) {
+        [HttpPost]
+        public HttpResponseMessage UploadScript(HttpRequestMessage request, [FromBody] string script) {
             try {
                 Script deserialzedScript = Deserialize(script);
                 dbAccess.Upsert(deserialzedScript);
@@ -21,7 +22,8 @@ namespace API.Controllers {
             return request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage Put(HttpRequestMessage request, [FromBody]string script) {
+        [HttpPut]
+        public HttpResponseMessage UpdateScript(HttpRequestMessage request, [FromBody]string script) {
             try {
                 Script deserialzedScript = Deserialize(script);
                 dbAccess.Upsert(deserialzedScript);
@@ -31,7 +33,8 @@ namespace API.Controllers {
             return request.CreateResponse(HttpStatusCode.OK);
         }
 
-        public HttpResponseMessage Get(HttpRequestMessage request, string id) {
+        [HttpGet]
+        public HttpResponseMessage GetScriptById(HttpRequestMessage request, string id) {
             string json = "";
             try {
                 Script script = dbAccess.GetScriptById(id);
@@ -42,8 +45,8 @@ namespace API.Controllers {
             return request.CreateResponse(HttpStatusCode.OK, json);
         }
 
-        
-        public HttpResponseMessage Delete(HttpRequestMessage request, string id) {
+        [HttpDelete]
+        public HttpResponseMessage DeleteScript(HttpRequestMessage request, string id) {
             try {
                 dbAccess.Delete(id);
             }catch(Exception e) {
