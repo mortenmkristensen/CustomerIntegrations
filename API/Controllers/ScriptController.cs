@@ -1,12 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using API.Models;
+﻿using API.Models;
 using API.Database;
+using System.Net.Http;
+using System.Net;
+using System;
+using System.Web.Http;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace API.Controllers{
+namespace API.Controllers {
     public class ScriptController : ApiController{
         IDBAccess dbAccess = new DBAccess(new DBConfig());
 
@@ -46,11 +47,12 @@ namespace API.Controllers{
             try {
                 dbAccess.Delete(id);
             }catch(Exception e) {
-                return request.CreateResponse(HttpStatusCode.InternalServerError);
+                return request.CreateResponse(HttpStatusCode.InternalServerError);<
             }
             return request.CreateResponse(HttpStatusCode.OK);
         }
 
+       
         private Script Deserialize(string json) {
             return JsonConvert.DeserializeObject<Script>(json);
         }
@@ -59,5 +61,15 @@ namespace API.Controllers{
             return JsonConvert.SerializeObject(script);
         }
 
+        public HttpResponseMessage GetByCustomer(HttpRequestMessage request, string customer) {
+            IEnumerable<Script> scripts = new List<Script>();
+            try {
+                scripts = dbAccess.GetByCustomer(customer);
+            }catch(Exception e) {
+                return request.CreateResponse(HttpStatusCode.InternalServerError);
+            }
+            return request.CreateResponse(HttpStatusCode.OK,scripts);
+        }
     }
 }
+ 
