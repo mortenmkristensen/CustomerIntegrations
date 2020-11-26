@@ -6,8 +6,8 @@
         "MP_COLLECTION": "Scripts",
         "MP_DATABASE": "MapsPeople",
         "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
-        "MP_INTERPRETERPATH": "C:\\nodejs\\node.exe",
-        "MP_IDS": "[\"1\", \"2\"]"
+        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe",
+        "MP_IDS": "[\"1\"]"
       }
     }
   }

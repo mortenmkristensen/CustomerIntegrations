@@ -8,6 +8,6 @@ namespace API.Database {
         Script GetScriptById(string id);
         IEnumerable<Script> GetByLanguage(string language);
         IEnumerable<Script> GetAll();
-
+        IEnumerable<Script> GetByCustomer(string customer);
     }
 }

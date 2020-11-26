@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace API.Database {
     public class DBAccess : IDBAccess {
@@ -20,26 +21,35 @@ namespace API.Database {
             }
         }
         public void Delete(string id) {
-            var filter = Builders<Script>.Filter.Eq("_id", id);
-            Collection.DeleteOne(filter);
+            try {
+                var filter = Builders<Script>.Filter.Eq("_id", id);
+                Collection.DeleteOne(filter);
+            } catch (MongoException me) {
+                throw new Exception("Something went wrong when trying to delte a script", me);
+            }
         }
 
         public IEnumerable<Script> GetAll() {
-            var scripts = Collection.Find<Script>(f => true).ToListAsync();
+            Task<List<Script>> scripts = null;
+            try {
+                scripts = Collection.Find<Script>(f => true).ToListAsync();
+            } catch(MongoException me) {
+                throw new Exception("Something went wrong when trying to get the scripts", me);
+            }
             return scripts.Result;
         }
 
         public Script GetScriptById(string id) {
-            Script script = null;
+            Task<Script> script = null;
             try {
                 if (id != null) {
                     var filter = Builders<Script>.Filter.Eq("_id", id);
-                    script = Collection.Find(filter).FirstOrDefault();
+                    script = Collection.Find(filter).FirstOrDefaultAsync();
                 }
             } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to get a script", me);
             }
-            return script;
+            return script.Result;
         }
 
         public void Upsert(Script script) {
@@ -52,8 +62,26 @@ namespace API.Database {
         }
 
         public IEnumerable<Script> GetByLanguage(string language) {
-            var filter = Builders<Script>.Filter.Eq("Language", language);
-            var scripts = Collection.Find<Script>(filter).ToListAsync();
+            Task<List<Script>> scripts = null;
+            try {
+                var filter = Builders<Script>.Filter.Eq("Language", language);
+                scripts = Collection.Find<Script>(filter).ToListAsync();
+            } catch (MongoException me) {
+                throw new Exception("Something went wrong when trying to get the scripts", me);
+            }
+            return scripts.Result;
+        }
+
+        public IEnumerable<Script> GetByCustomer(string customer) {
+            Task<List<Script>> scripts = null;
+            try {
+                if(customer != null) {
+                    var filter = Builders<Script>.Filter.Eq("Customer", customer);
+                    scripts = Collection.Find<Script>(filter).ToListAsync();
+                }
+            }catch(MongoException me) {
+                throw new Exception("Something went wrong when trying to get the scripts", me);
+            }
             return scripts.Result;
         }
     }
