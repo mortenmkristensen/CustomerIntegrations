@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Database": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MP_COLLECTION": "Scripts",
+        "MP_DATABASE": "MapsPeople",
+        "MP_CONNECTIONSTRING": "mongodb://localhost:27017"
+      }
+    }
+  }
+}
