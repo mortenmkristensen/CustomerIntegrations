@@ -59,8 +59,7 @@ namespace API.Controllers
 
         //this metod returns an empty list no matter what i send to it and i cant figure out why
         // api/script/customer?customer={customer}
-        [HttpGet]
-        [Route("{customer}")]
+        [HttpGet("Customer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Script> GetScriptByCustomer(string customer) {
