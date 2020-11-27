@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 namespace Core {
-    class Stager {
+    class Stager : IStager {
 
         public IDBAccess DBAccess { get; set; }
         public Stager(IDBAccess dBAccess) {
@@ -28,7 +28,7 @@ namespace Core {
         }
         public IEnumerable<string> GetPaths(IEnumerable<Script> scripts) {
             List<string> paths = new List<string>();
-            foreach(var script in scripts) {
+            foreach (var script in scripts) {
                 paths.Add(GetPath(script));
             }
             return paths;

@@ -2,15 +2,15 @@
 using System.Diagnostics;
 
 namespace Core {
-    class ScriptRunner {
+    class ScriptRunner : IScriptRunner {
 
         public ScriptRunner() {
 
         }
-        
+
         public List<string> RunScripts(List<string> scriptPaths, string interpreterPath) {
             List<string> scriptOutput = new List<string>();
-            foreach(var path in scriptPaths) {
+            foreach (var path in scriptPaths) {
                 scriptOutput.Add(RunScript(path, interpreterPath));
             }
             return scriptOutput;
@@ -32,6 +32,6 @@ namespace Core {
                 return result;
                 //}
             }
-        }        
+        }
     }
 }
