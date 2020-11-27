@@ -42,7 +42,7 @@ namespace API.Controllers
             }
             return Ok();
         }
-
+        // /api/script?id={id}
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -55,6 +55,23 @@ namespace API.Controllers
                 return StatusCode(500);
             }
             return Ok(json);
+        }
+
+        //this metod returns an empty list no matter what i send to it and i cant figure out why
+        // api/script/customer?customer={customer}
+        [HttpGet]
+        [Route("{customer}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Script> GetScriptByCustomer(string customer) {
+            IEnumerable<Script> scripts = new List<Script>();
+            try {
+                scripts = dbAccess.GetByCustomer(customer);
+
+            } catch (Exception e) {
+                return StatusCode(500);
+            }
+            return Ok(scripts);
         }
 
         [HttpDelete]
