@@ -18,8 +18,8 @@ namespace Core {
 
         public void Run(string interpreterPath) {
             List<Script> scripts =(List<Script>) Stager.GetScriptsByIds(DeserializeIds());
-            List<string> paths = (List<string>) Stager.GetPaths(scripts);
-            List<string> scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
+            Dictionary<string, string> paths = Stager.GetPaths(scripts);
+            Dictionary<string, string> scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
             foreach (var script in scriptOutput) {
                 Console.WriteLine(script + "\n\n");
                 
