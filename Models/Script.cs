@@ -7,7 +7,7 @@
         public string Language { get; set; }
         public string LanguageVersion { get; set; }
         public string Code { get; set; }
-        public string state { get; set; }
-        public bool hasErrors { get; set; }
+        public string LastResult { get; set; }
+        public bool HasErrors { get; set; }
     }
 }

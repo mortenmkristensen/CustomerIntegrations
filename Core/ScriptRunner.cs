@@ -27,10 +27,10 @@ namespace Core {
             start.RedirectStandardError = true; // Any error in standard output will be redirected back (for example exceptions)
             using (Process process = Process.Start(start)) {
                 string result = process.StandardOutput.ReadToEnd(); // Here is the result of StdOut(for example: print "test")
-                string errors = process.StandardError.ReadToEnd(); // Here are the exceptions from our Python script
                 if (result.Length != 0) {
                     return result;
                 } else {
+                    string errors = process.StandardError.ReadToEnd(); // Here are the exceptions from our script
                     throw new ScriptFailedException(scriptId, errors);
                 }
             }

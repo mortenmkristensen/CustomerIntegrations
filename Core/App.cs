@@ -25,10 +25,19 @@ namespace Core {
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
             try {
                 scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
+                foreach (var script in scripts) {
+                    foreach (var output in scriptOutput) {
+                        if(script.Id == output.Key) {
+                            script.LastResult = output.Value;
+                            script.HasErrors = false;
+                            DBAccess.Upsert(script);
+                        }
+                    }
+                }
             }catch(ScriptFailedException sfe) {
                 Script script = DBAccess.GetScriptById(sfe.ScriptId);
-                script.hasErrors = true;
-                script.state = sfe.Message;
+                script.HasErrors = true;
+                script.LastResult = sfe.Message;
                 DBAccess.Upsert(script);
                 scriptOutput.Add(sfe.ScriptId, sfe.Message); //this is to print out errors while developing
             }
