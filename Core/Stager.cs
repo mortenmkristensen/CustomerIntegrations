@@ -6,23 +6,6 @@ using System.IO;
 namespace Core {
     class Stager {
 
-        public IDBAccess DBAccess { get; set; }
-        public Stager(IDBAccess dBAccess) {
-            DBAccess = dBAccess;
-        }
-
-        public Script GetScriptById(string id) {
-            return DBAccess.GetScriptById(id);
-        }
-
-        public IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
-            List<Script> scripts = new List<Script>();
-            foreach (var id in ids) {
-                scripts.Add(GetScriptById(id));
-            }
-            return scripts;
-        }
-
         public string GetPath(Script script) {
             return SaveToDisk(script);
         }
