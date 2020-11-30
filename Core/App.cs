@@ -42,7 +42,7 @@ namespace Core {
             return JsonConvert.DeserializeObject<List<string>>(Ids);
         }
 
-        public IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
+        private IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
             List<Script> scripts = new List<Script>();
             foreach (var id in ids) {
                 scripts.Add(DBAccess.GetScriptById(id));
