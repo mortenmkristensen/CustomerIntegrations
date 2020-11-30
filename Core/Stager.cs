@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 namespace Core {
-    class Stager {
+    class Stager : IStager {
 
         public string GetPath(Script script) {
             return SaveToDisk(script);

@@ -6,7 +6,7 @@ using Database;
 using Models;
 
 namespace Core {
-    class ScriptRunner {
+    class ScriptRunner :IScriptRunner {
         
         public Dictionary<string,string> RunScripts(Dictionary<string,string> scripts, string interpreterPath) {
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
@@ -34,6 +34,6 @@ namespace Core {
                     throw new ScriptFailedException(scriptId, errors);
                 }
             }
-        }        
+        }
     }
 }

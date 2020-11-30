@@ -9,8 +9,8 @@ namespace Database {
             MongoClient Client { get; set; }
             IMongoDatabase Database { get; set; }
             IMongoCollection<Script> Collection { get; set; }
-            public DBConfig Config { get; set; }
-            public DBAccess(DBConfig dBConfig) {
+            public IDBConfig Config { get; set; }
+            public DBAccess(IDBConfig dBConfig) {
                 try {
                     Config = dBConfig;
                     Client = new MongoClient(Config.ConnectionString);

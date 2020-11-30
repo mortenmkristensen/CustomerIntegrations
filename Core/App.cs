@@ -6,16 +6,16 @@ using Core.Exceptions;
 using Database;
 
 namespace Core {
-    class App {
+    class App : IApp {
 
         private Stager Stager { get; set; }
         private ScriptRunner ScriptRunner { get; set; }
         private string Ids { get; set; }
         IDBAccess DBAccess { get; set; }
-        public App(IDBAccess dbAccess, Stager stager, ScriptRunner scriptRunner, string ids) {
+        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner) {
             Stager = stager;
             ScriptRunner = scriptRunner;
-            Ids = ids;
+            Ids = Environment.GetEnvironmentVariable("MP_IDS");
             DBAccess = dbAccess;
         }
 
@@ -43,7 +43,7 @@ namespace Core {
             }
             foreach (var script in scriptOutput) {
                 Console.WriteLine(script + "\n\n");
-                
+
             }
         }
 
