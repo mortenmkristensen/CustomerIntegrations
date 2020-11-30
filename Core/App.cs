@@ -14,32 +14,33 @@ namespace Core {
 
         private IStager Stager { get; set; }
         private IScriptRunner ScriptRunner { get; set; }
-        private string Ids { get; set; }
         IDBAccess DBAccess { get; set; }
         public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner) {
             Stager = stager;
             ScriptRunner = scriptRunner;
-          //Ids = Environment.GetEnvironmentVariable("MP_IDS");
             DBAccess = dbAccess;
         }
 
         public void Run(string interpreterPath) {
-            GetIdsFromScheduler();
-            List<Script> scripts =(List<Script>) GetScriptsByIds(DeserializeIds());
+            string ids = GetIdsFromScheduler();
+            if(ids == null) {
+                return;
+            }
+            List<Script> scripts = (List<Script>)GetScriptsByIds(DeserializeIds(ids));
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
             try {
                 scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
                 foreach (var script in scripts) {
                     foreach (var output in scriptOutput) {
-                        if(script.Id == output.Key) {
+                        if (script.Id == output.Key) {
                             script.LastResult = output.Value;
                             script.HasErrors = false;
                             DBAccess.Upsert(script);
                         }
                     }
                 }
-            }catch(ScriptFailedException sfe) {
+            } catch (ScriptFailedException sfe) {
                 Script script = DBAccess.GetScriptById(sfe.ScriptId);
                 script.HasErrors = true;
                 script.LastResult = sfe.Message;
@@ -52,8 +53,8 @@ namespace Core {
             }
         }
 
-        private List<string> DeserializeIds() {
-            return JsonConvert.DeserializeObject<List<string>>(Ids);
+        private List<string> DeserializeIds(string ids) {
+            return JsonConvert.DeserializeObject<List<string>>(ids);
         }
 
         private IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
@@ -64,49 +65,42 @@ namespace Core {
             return scripts;
         }
 
-        private void GetIdsFromScheduler() {
+        public string GetIdsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
-                try {
-                    var factory = new ConnectionFactory() { HostName = "localhost" };
-                    using (var connection = factory.CreateConnection())
-                    using (var channel = connection.CreateModel()) {
-                        channel.QueueDeclare(queue: queueName,
-                                             durable: true,
-                                             exclusive: false,
-                                             autoDelete: false,
-                                             arguments: null);
-
-                        channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
-
-                        Console.WriteLine(" [*] Waiting for messages.");
-
-                        var consumer = new EventingBasicConsumer(channel);
-                        consumer.Received += (sender, ea) => {
-                            var body = ea.Body.Span;
-                            var message = Encoding.UTF8.GetString(body);
-                            if (message != null) {
-                                Ids = message;
-                            }
-                            channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                        };
-                        channel.BasicConsume(queue: queueName,
-                                             autoAck: false,
-                                             consumer: consumer);
-                        Console.ReadLine();
-                    }
-                } catch (Exception e) {
-                    if (e is AlreadyClosedException) {
-                        Console.WriteLine("The connectionis already closed");
-                    } else if (e is BrokerUnreachableException) {
-                        Console.WriteLine("The broker cannot be reached");
-                    } else if (e is OperationInterruptedException) {
-                        Console.WriteLine("The operation was interupted");
-                    } else if (e is ConnectFailureException) {
-                        Console.WriteLine("Could not connect to the broker broker");
+            try {
+                var factory = new ConnectionFactory() { HostName = "localhost" };
+                using (var connection = factory.CreateConnection())
+                using (var channel = connection.CreateModel()) {
+                    channel.QueueDeclare(queue: queueName,
+                                         durable: true,
+                                         exclusive: false,
+                                         autoDelete: false,
+                                         arguments: null);
+                    var data = channel.BasicGet(queueName, false);
+                    if (data == null) {
+                        return null;
                     } else {
-                        Console.WriteLine("Something went wrong");
+                        var message = Encoding.UTF8.GetString(data.Body.Span);
+                        // ack the message, ie. confirm that we have processed it
+                        // otherwise it will be requeued a bit later
+                        channel.BasicAck(data.DeliveryTag, false);
+                        return message;
                     }
                 }
+            } catch (Exception e) {
+                if (e is AlreadyClosedException) {
+                    Console.WriteLine("The connectionis already closed");
+                } else if (e is BrokerUnreachableException) {
+                    Console.WriteLine("The broker cannot be reached");
+                } else if (e is OperationInterruptedException) {
+                    Console.WriteLine("The operation was interupted");
+                } else if (e is ConnectFailureException) {
+                    Console.WriteLine("Could not connect to the broker broker");
+                } else {
+                    Console.WriteLine("Something went wrong");
+                }
+            }
+            return null;
         }
     }
 }
