@@ -2,6 +2,6 @@
 
 namespace Core {
     interface IScriptRunner {
-        List<string> RunScripts(List<string> scriptPaths, string interpreterPath);
+        Dictionary<string,string> RunScripts(Dictionary<string, string> scripts, string interpreterPath);
     }
 }

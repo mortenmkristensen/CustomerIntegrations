@@ -8,8 +8,8 @@ using Database;
 namespace Core {
     class App : IApp {
 
-        private Stager Stager { get; set; }
-        private ScriptRunner ScriptRunner { get; set; }
+        private IStager Stager { get; set; }
+        private IScriptRunner ScriptRunner { get; set; }
         private string Ids { get; set; }
         IDBAccess DBAccess { get; set; }
         public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner) {
