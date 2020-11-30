@@ -24,6 +24,7 @@ namespace Core {
         }
 
         public void Run(string interpreterPath) {
+            GetIdsFromScheduler();
             List<Script> scripts =(List<Script>) GetScriptsByIds(DeserializeIds());
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
