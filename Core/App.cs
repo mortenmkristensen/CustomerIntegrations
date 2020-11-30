@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using Models;
 using Core.Exceptions;
 using Database;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System.Text;
+using RabbitMQ.Client.Exceptions;
 
 namespace Core {
     class App : IApp {
@@ -15,7 +19,7 @@ namespace Core {
         public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner) {
             Stager = stager;
             ScriptRunner = scriptRunner;
-            Ids = Environment.GetEnvironmentVariable("MP_IDS");
+          //Ids = Environment.GetEnvironmentVariable("MP_IDS");
             DBAccess = dbAccess;
         }
 
@@ -57,6 +61,51 @@ namespace Core {
                 scripts.Add(DBAccess.GetScriptById(id));
             }
             return scripts;
+        }
+
+        private void GetIdsFromScheduler() {
+            var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+                try {
+                    var factory = new ConnectionFactory() { HostName = "localhost" };
+                    using (var connection = factory.CreateConnection())
+                    using (var channel = connection.CreateModel()) {
+                        channel.QueueDeclare(queue: queueName,
+                                             durable: true,
+                                             exclusive: false,
+                                             autoDelete: false,
+                                             arguments: null);
+
+                        channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+
+                        Console.WriteLine(" [*] Waiting for messages.");
+
+                        var consumer = new EventingBasicConsumer(channel);
+                        consumer.Received += (sender, ea) => {
+                            var body = ea.Body.Span;
+                            var message = Encoding.UTF8.GetString(body);
+                            if (message != null) {
+                                Ids = message;
+                            }
+                            channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        };
+                        channel.BasicConsume(queue: queueName,
+                                             autoAck: false,
+                                             consumer: consumer);
+                        Console.ReadLine();
+                    }
+                } catch (Exception e) {
+                    if (e is AlreadyClosedException) {
+                        Console.WriteLine("The connectionis already closed");
+                    } else if (e is BrokerUnreachableException) {
+                        Console.WriteLine("The broker cannot be reached");
+                    } else if (e is OperationInterruptedException) {
+                        Console.WriteLine("The operation was interupted");
+                    } else if (e is ConnectFailureException) {
+                        Console.WriteLine("Could not connect to the broker broker");
+                    } else {
+                        Console.WriteLine("Something went wrong");
+                    }
+                }
         }
     }
 }
