@@ -10,7 +10,7 @@ using System.Text;
 using RabbitMQ.Client.Exceptions;
 
 namespace Core {
-    class App : IApp {
+    public class App : IApp {
 
         private IStager Stager { get; set; }
         private IScriptRunner ScriptRunner { get; set; }
@@ -65,7 +65,7 @@ namespace Core {
             return scripts;
         }
 
-        public string GetIdsFromScheduler() {
+        private string GetIdsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             try {
                 var factory = new ConnectionFactory() { HostName = "localhost" };

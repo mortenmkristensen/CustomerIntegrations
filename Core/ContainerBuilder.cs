@@ -5,7 +5,7 @@ using System.Text;
 using Database;
 
 namespace Core {
-    class ContainerBuilder {
+    public class ContainerBuilder {
         public IServiceProvider Build() {
             var container = new ServiceCollection();
             container.AddSingleton<IDBConfig, DBConfig>();
