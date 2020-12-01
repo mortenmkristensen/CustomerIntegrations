@@ -10,6 +10,9 @@
         "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe",
         "MP_IDS": "[\"2\"]"
       }
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }
