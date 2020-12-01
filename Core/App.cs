@@ -67,6 +67,7 @@ namespace Core {
 
         public string GetIdsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+            string message = null;
             try {
                 var factory = new ConnectionFactory() { HostName = "localhost" };
                 using (var connection = factory.CreateConnection())
@@ -77,14 +78,11 @@ namespace Core {
                                          autoDelete: false,
                                          arguments: null);
                     var data = channel.BasicGet(queueName, false);
-                    if (data == null) {
-                        return null;
-                    } else {
-                        var message = Encoding.UTF8.GetString(data.Body.Span);
+                    if (data != null) {
+                        message = Encoding.UTF8.GetString(data.Body.Span);
                         // ack the message, ie. confirm that we have processed it
                         // otherwise it will be requeued a bit later
                         channel.BasicAck(data.DeliveryTag, false);
-                        return message;
                     }
                 }
             } catch (Exception e) {
@@ -100,7 +98,7 @@ namespace Core {
                     Console.WriteLine("Something went wrong");
                 }
             }
-            return null;
+            return message;
         }
     }
 }
