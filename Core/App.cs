@@ -69,7 +69,7 @@ namespace Core {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             string message = null;
             try {
-                var factory = new ConnectionFactory() { HostName = "localhost" };
+                var factory = new ConnectionFactory() { HostName = Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Password="123", UserName="abc" };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
                     channel.QueueDeclare(queue: queueName,

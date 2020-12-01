@@ -18,5 +18,16 @@ RUN dotnet publish "Core.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+RUN apt update
+RUN apt install ruby-full -y
+ENV MP_CONNECTIONSTRING="mongodb://192.168.87.107:27017"
+ENV MP_COLLECTION="Scripts"
+ENV MP_DATABASE="MapsPeople"
+ENV MP_QUEUENAME="queue1"
+ENV MP_INTERPRETERPATH="ruby"
+ENV MP_MESSAGEBROKER="192.168.87.107" 
+RUN mkdir -p /root/scripts/ruby
+RUN mkdir -p /root/scripts/python
+RUN mkdir -p /root/scripts/javascript       
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Core.dll"]
