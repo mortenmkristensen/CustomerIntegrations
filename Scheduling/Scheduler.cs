@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Database;
 using Microsoft.Extensions.Hosting;
+using Models;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
 
 namespace Scheduling {
     public class Scheduler : IHostedService {
