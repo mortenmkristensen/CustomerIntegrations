@@ -24,12 +24,18 @@ RUN apt install python -y
 RUN apt install python-pip -y 
 RUN pip install requests
 RUN apt install nodejs npm -y
-ENV MP_CONNECTIONSTRING="mongodb://192.168.87.107:27017"
-ENV MP_COLLECTION="Scripts"
-ENV MP_DATABASE="MapsPeople"
-ENV MP_QUEUENAME="queue1"
-ENV MP_INTERPRETERPATH="node"
-ENV MP_MESSAGEBROKER="192.168.87.107" 
+ARG buildtime_connectionstring
+ARG buildtime_collection="Scripts"
+ARG buildtime_database="MapsPeople"
+ARG buildtime_queuename
+ARG buildtime_interpreterpath
+ARG buildtime_messagebroker
+ENV MP_CONNECTIONSTRING=$buildtime_connectionstring
+ENV MP_COLLECTION=$buildtime_collection
+ENV MP_DATABASE=$buildtime_database
+ENV MP_QUEUENAME=$buildtime_queuename
+ENV MP_INTERPRETERPATH=$buildtime_interpreterpath
+ENV MP_MESSAGEBROKER=$buildtime_messagebroker 
 RUN mkdir -p /root/scripts/ruby
 RUN mkdir -p /root/scripts/python
 RUN mkdir -p /root/scripts/javascript       
