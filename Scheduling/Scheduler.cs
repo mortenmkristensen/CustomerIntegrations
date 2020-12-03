@@ -94,9 +94,11 @@ namespace Scheduling {
                 List<string> idsList1 = new List<string>();
                 for (int i =0; i<30; i++) {
                     idsList1.Add(ids[i]);
-                    ids.RemoveAt(i);
                 }
                 superIdsLists.Add(idsList1);
+                foreach (var id in idsList1) {
+                    ids.Remove(id);
+                }
             }
             superIdsLists.Add(ids);
             return superIdsLists;
