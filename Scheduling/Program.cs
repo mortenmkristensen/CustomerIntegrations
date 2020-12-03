@@ -3,7 +3,8 @@
 namespace Scheduling {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine("Hello World!");
+            DockerService ds = new DockerService();
+            ds.BuildImage();
         }
     }
 }
