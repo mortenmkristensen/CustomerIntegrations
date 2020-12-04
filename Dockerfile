@@ -30,6 +30,8 @@ ENV MP_DATABASE=""
 ENV MP_QUEUENAME=""
 ENV MP_INTERPRETERPATH=""
 ENV MP_MESSAGEBROKER=""
+ENV MP_QUEUEUSER=""
+ENV MP_QUEUEPASSWORD=""
 RUN mkdir -p /root/scripts/ruby
 RUN mkdir -p /root/scripts/python
 RUN mkdir -p /root/scripts/javascript       
