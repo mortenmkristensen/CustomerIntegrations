@@ -4,19 +4,30 @@ using System.Text;
 using Docker.DotNet;
 using Docker.DotNet.Models;
 using System.IO;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Scheduling {
     class DockerService {
-        DockerClient client = new DockerClientConfiguration().CreateClient();
-        public void BuildImage() {
-            using (FileStream fs = File.OpenRead(@"C:\Datamatiker\Repos\CustomerIntegrations\CustomerIntegrations\Dockerfile")) {
-                byte[] dockerfile = new byte[3072];
-                fs.Read(dockerfile, 0, dockerfile.Length);
-                ImageBuildParameters ibp = new ImageBuildParameters();
-                ibp.BuildArgs.Add("buildtime_connectionstring", "mongodb://192.168.0.73:27017");
-                //client.Images.BuildImageFromDockerfileAsync(fs, )
-            } 
-            
+        private DockerClient _client = new DockerClientConfiguration().CreateClient();
+        public async Task PullImage() {
+            await _client.Images
+                .CreateImageAsync(new ImagesCreateParameters {
+                    FromImage = "mmkristensen/ucngrp11",
+                    Tag = "latest"
+                },
+                    new AuthConfig(),
+                    new Progress<JSONMessage>());
+        }
+        public async Task StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
+                                        string messageBroker, string queueUser, string queuePassword) {
+            var response = await _client.Containers.CreateContainerAsync(new CreateContainerParameters {
+                Image = "mmkristensen/ucngrp11",
+                Env = new List<string>() { $"MP_CONNECTIONSTRING={connectionString}", $"MP_COLLECTION={collection}", $"MP_DATABASE={database}",
+                                            $"MP_QUEUENAME={queuename}", $"MP_INTERPRETERPATH={interpreterpath}", $"MP_MESSAGEBROKER={messageBroker}", 
+                                            $"MP_QUEUEUSER={queueUser}", $"MP_QUEUEPASSWORD={queuePassword}"} 
+            });
+            await _client.Containers.StartContainerAsync(response.ID, null);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Scheduling {
 
         private void SendWithRabbitMQ(string queueName, List<string> ids) {               
             try {
-                var factory = new ConnectionFactory() { HostName = "localhost" };
+                var factory = new ConnectionFactory() { HostName = "localhost", UserName = "abc", Password = "123" };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
                     channel.QueueDeclare(queue: queueName,
