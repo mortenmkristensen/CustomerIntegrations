@@ -1,0 +1,35 @@
+﻿body {
+    max-width: 1200px;
+    max-height: 1200px;
+    background-color: cadetblue;
+}
+
+.head {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    text-align: center;
+    height: 600px;
+    background-color: cadetblue;
+}
+
+.right {
+    position: absolute;
+    right: 0px;
+    width: 650px;
+    height: 100%;
+    text-align: left;
+    background-color: white;
+}
+
+.left {
+    position: absolute;
+    left: 150px;
+    height: 100%;
+    width: 500px;
+    text-align: center;
+    background-color: cadetblue;   
+}
+
+
