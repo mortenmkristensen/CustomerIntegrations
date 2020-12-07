@@ -22,14 +22,14 @@ namespace Scheduling {
         public Scheduler() {
             DockerService = new DockerService();
         }
-        public Task StartAsync(CancellationToken cancellationToken) {
+        public async Task StartAsync(CancellationToken cancellationToken) {
+            await PullDockerImage();
             _timer = new Timer(
                 Run,
                 null,
                 TimeSpan.Zero,
                 TimeSpan.FromSeconds(5)
                 );
-            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken) {
@@ -41,7 +41,6 @@ namespace Scheduling {
 
         private async void Run(Object state) {
             GetIds();
-            await PullDockerImage();
             await SendIdsToRabbitMQ();
             ClearScriptLists();
         }
