@@ -30,6 +30,10 @@ namespace Scheduling {
                 TimeSpan.Zero,
                 TimeSpan.FromSeconds(5)
                 );
+            //while (true) {
+            //    Run(new object());
+            //    Thread.Sleep(5000);
+            //}
         }
 
         public Task StopAsync(CancellationToken cancellationToken) {
@@ -39,7 +43,7 @@ namespace Scheduling {
 
         }
 
-        private async void Run(Object state) {
+        private async void Run(object state) {
             GetIds();
             await SendIdsToRabbitMQ();
             ClearScriptLists();
@@ -98,57 +102,36 @@ namespace Scheduling {
                 }
             }
         }
-        /*
-        private List<List<string>> BreakdownList(List<string> ids) {
-            List<List<string>> superIdsLists = new List<List<string>>();
-            while (ids.Count > 30) {
-                List<string> idsList1 = new List<string>();
-                for (int i =0; i<30; i++) {
-                    idsList1.Add(ids[i]);
-                }
-                superIdsLists.Add(idsList1);
-                foreach (var id in idsList1) {
-                    ids.Remove(id);
-                }
+
+        private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
+            for (int i = 0; i < ids.Count; i += nSize) {
+                yield return ids.GetRange(i, Math.Min(nSize, ids.Count - i));
             }
-            superIdsLists.Add(ids);
-            return superIdsLists;
         }
 
         private async Task SendIdsToRabbitMQ() {
-            List<List<string>> rubySuperLists = BreakdownList(rubyIds);
-            for (int i=0; i < rubySuperLists.Count; i++) {
-                string queueName = "RubyIds_Queue" + (i).ToString();
-                SendWithRabbitMQ(queueName, rubySuperLists[i]);
-                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
+            var rubyLists = SplitList<string>(rubyIds, 1);
+            int i = 0;
+            foreach (var list in rubyLists) {
+                string queueName = "Ruby_Queue" + i++;
+                SendWithRabbitMQ(queueName, list);
+                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
             }
-            List<List<string>> pythonSuperLists = BreakdownList(pythonIds);
-            for (int i = 0; i < pythonSuperLists.Count; i++) {
-                string queueName = "PythonIds_Queue" + (i).ToString();
-                SendWithRabbitMQ(queueName, pythonSuperLists[i]);
-                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
+            var pythonLists = SplitList<string>(pythonIds, 1);
+            i = 0;
+            foreach (var list in pythonLists) {
+                string queueName = "PythonIds_Queue" + i++;
+                SendWithRabbitMQ(queueName, list);
+                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
             }
-            List<List<string>> javaScriptSuperLists = BreakdownList(javaScriptIds);
-            for (int i = 0; i < javaScriptSuperLists.Count; i++) {
-                string queueName = "JavaScriptIds_Queue" + (i).ToString();
-                SendWithRabbitMQ(queueName, javaScriptSuperLists[i]);
-                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
+
+            var jsLists = SplitList<string>(javaScriptIds, 1);
+            i = 0;
+            foreach (var list in jsLists) {
+                string queueName = "JavaScriptIds_Queue" + i++;
+                SendWithRabbitMQ(queueName, list);
+                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
             }
-        }
-        */
-
-        private async Task SendIdsToRabbitMQ() {
-            string queueName = "RubyIds_Queue";
-            SendWithRabbitMQ(queueName, rubyIds);
-            await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
-
-            queueName = "PythonIds_Queue";
-            SendWithRabbitMQ(queueName, pythonIds);
-            await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
-
-            queueName = "JavaScriptIds_Queue";
-            SendWithRabbitMQ(queueName,javaScriptIds);
-            await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
         }
 
         private void ClearScriptLists() {
