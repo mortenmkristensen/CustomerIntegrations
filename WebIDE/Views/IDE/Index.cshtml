@@ -25,18 +25,11 @@
 
     <style type="text/css">
         header {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            right: 0px;
             text-align: center;
-            height: 600px;
             background-color: cadetblue;
         }
 
         body {
-            max-width: 1200px;
-            max-height: 1200px;
             background-color: cadetblue;
         }
 
@@ -45,17 +38,11 @@
         }
 
         .right {
-            right: 0px;
-            width: 650px;
-            height: 100%;
-            text-align: left;
+            /*text-align: left;*/
             background-color: white;
         }
 
         .left {
-            left: 0px;
-            height: 100%;
-            width: 300px;
             text-align: center;
             background-color: cadetblue;
         }
@@ -65,40 +52,55 @@
             font-family: Arial;
         }
 
-            .custom-select select {
+/*            .custom-select select {
                 display: none;
-            }
+            }*/
 
         .select-selected {
             background-color: DodgerBlue;
         }
     </style>
-
 </head>
 @{
     ViewBag.Title = "Index";
 }
 <header>
-    <h1>MapsPeople Web IDE</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>MapsPeople Web IDE</h1>
+            </div>
+        </div>
+    </div>
 </header>
 <html>
 <body>
-    <div class="left">
-        <div class="custom-select">
-            <select>
-                <option value="0">Choose scripting language </option>
-                <option value="1">Python</option>
-                <option value="2">Ruby</option>
-                <option value="3">JavaScript</option>
-            </select>
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="left">
+                    <div class="custom-select">
+                        <select>
+                            <option value="0">Choose scripting language</option>
+                            <option value="1">Python</option>
+                            <option value="2">Ruby</option>
+                            <option value="3">JavaScript</option>
+                        </select>
+                    </div>
+
+                    <p>Or</p>
+                    <button class="bg-primary" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open a list of scripts</button>
+
+                    <p>Save this script</p>
+                    <button class="bg-success" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="right">
+                   @*This is where the text editor should be*@
+                </div>
+            </div>
         </div>
-        <button class="bg-primary" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open a list of scripts</button>
-
-        <p>Save this script</p>
-        <button class="bg-success" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
-      </div>
-    <div class="right">
-
     </div>
 </body>
 
