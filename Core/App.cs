@@ -29,24 +29,24 @@ namespace Core {
             List<Script> scripts = (List<Script>)GetScriptsByIds(DeserializeIds(ids));
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
-            try {
-                scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
                 foreach (var script in scripts) {
-                    foreach (var output in scriptOutput) {
-                        if (script.Id == output.Key) {
-                            script.LastResult = output.Value;
-                            script.HasErrors = false;
-                            DBAccess.Upsert(script);
+                    foreach (var path in paths) {
+                        if (script.Id == path.Key) {
+                            try {
+                                var result = ScriptRunner.RunScript(script.Id, path.Value, interpreterPath);
+                                script.LastResult = result;
+                                script.HasErrors = false;
+                                DBAccess.Upsert(script);
+                                scriptOutput.Add(script.Id, result);
+                            } catch (ScriptFailedException sfe) {
+                                script.HasErrors = true;
+                                script.LastResult = sfe.Message;
+                                DBAccess.Upsert(script);
+                                scriptOutput.Add(sfe.ScriptId, sfe.Message); //this is to print out errors while developing
+                            }
                         }
                     }
                 }
-            } catch (ScriptFailedException sfe) {
-                Script script = DBAccess.GetScriptById(sfe.ScriptId);
-                script.HasErrors = true;
-                script.LastResult = sfe.Message;
-                DBAccess.Upsert(script);
-                scriptOutput.Add(sfe.ScriptId, sfe.Message); //this is to print out errors while developing
-            }
             foreach (var script in scriptOutput) {
                 Console.WriteLine(script + "\n\n");
 

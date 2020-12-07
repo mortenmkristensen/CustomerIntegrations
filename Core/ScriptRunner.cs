@@ -17,7 +17,7 @@ namespace Core {
         }
 
         //remember to set the paths to the interpreters
-        private string RunScript(string scriptId, string scriptPath, string interpreterPath) {
+        public string RunScript(string scriptId, string scriptPath, string interpreterPath) {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = interpreterPath;
             start.Arguments = string.Format("\"{0}\" \"{1}\"", scriptPath, null);
