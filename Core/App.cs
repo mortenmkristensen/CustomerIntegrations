@@ -23,11 +23,17 @@ namespace Core {
 
         public void Run(string interpreterPath) {
             string ids = GetIdsFromScheduler();
-            if(ids == null) {
+            Dictionary<string, string> paths = new Dictionary<string, string>();
+            if (ids == null) {
                 return;
             }
             List<Script> scripts = (List<Script>)GetScriptsByIds(DeserializeIds(ids));
-            Dictionary<string, string> paths = Stager.GetPaths(scripts);
+            try {
+                paths = Stager.GetPaths(scripts);
+            }
+            catch (Exception e) {
+                Console.WriteLine("Error occured while getting paths, Error:", e.Message);
+            }
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
                 foreach (var script in scripts) {
                     foreach (var path in paths) {
@@ -51,6 +57,7 @@ namespace Core {
                 Console.WriteLine(script + "\n\n");
 
             }
+
         }
 
         private List<string> DeserializeIds(string ids) {
