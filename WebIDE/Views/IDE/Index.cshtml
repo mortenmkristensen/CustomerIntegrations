@@ -1,6 +1,78 @@
 ﻿<!DOCTYPE html>
 <head>
-    <style src="~/Styles/css/IDEIndex.css"></style>
+
+    @*<link rel="stylesheet" href="~Styles/css/IDEIndex.css" asp-append-version="true" />*@
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Bootstrap CSS -->
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">-->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+    <script src="./static/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <style type="text/css">
+        header {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            text-align: center;
+            height: 600px;
+            background-color: cadetblue;
+        }
+
+        body {
+            max-width: 1200px;
+            max-height: 1200px;
+            background-color: cadetblue;
+        }
+
+        .button {
+            font-size: 40px;
+        }
+
+        .right {
+            right: 0px;
+            width: 650px;
+            height: 100%;
+            text-align: left;
+            background-color: white;
+        }
+
+        .left {
+            left: 0px;
+            height: 100%;
+            width: 300px;
+            text-align: center;
+            background-color: cadetblue;
+        }
+
+        .custom-select {
+            position: relative;
+            font-family: Arial;
+        }
+
+            .custom-select select {
+                display: none;
+            }
+
+        .select-selected {
+            background-color: DodgerBlue;
+        }
+    </style>
 
 </head>
 @{
@@ -11,13 +83,23 @@
 </header>
 <html>
 <body>
+    <div class="left">
+        <div class="custom-select">
+            <select>
+                <option value="0">Choose scripting language </option>
+                <option value="1">Python</option>
+                <option value="2">Ruby</option>
+                <option value="3">JavaScript</option>
+            </select>
+        </div>
+        <button class="bg-primary" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open a list of scripts</button>
 
-    <button class="bg-primary">Open a list of scripts</button>
+        <p>Save this script</p>
+        <button class="bg-success" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
+      </div>
+    <div class="right">
 
-    <p>Save this script</p>
-    <button class="bg-success">Save script</button>
-    
-
+    </div>
 </body>
 
 </html>
