@@ -1,10 +1,6 @@
-﻿body {
-    max-width: 1200px;
-    max-height: 1200px;
-    background-color: cadetblue;
-}
+﻿
 
-.head {
+header {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -12,6 +8,16 @@
     text-align: center;
     height: 600px;
     background-color: cadetblue;
+}
+
+body {
+    max-width: 1200px;
+    max-height: 1200px;
+    background-color: cadetblue;
+}
+
+.button {
+    font-size: 40px;
 }
 
 .right {
