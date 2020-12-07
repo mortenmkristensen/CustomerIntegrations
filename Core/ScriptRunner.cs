@@ -7,14 +7,6 @@ using Models;
 
 namespace Core {
     class ScriptRunner :IScriptRunner {
-        
-        public Dictionary<string,string> RunScripts(Dictionary<string,string> scripts, string interpreterPath) {
-            Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
-            foreach(var script in scripts) {
-                scriptOutput.Add(script.Key, RunScript(script.Key, script.Value, interpreterPath));
-            }
-            return scriptOutput;
-        }
 
         //remember to set the paths to the interpreters
         public string RunScript(string scriptId, string scriptPath, string interpreterPath) {
