@@ -7,17 +7,9 @@ using Models;
 
 namespace Core {
     class ScriptRunner :IScriptRunner {
-        
-        public Dictionary<string,string> RunScripts(Dictionary<string,string> scripts, string interpreterPath) {
-            Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
-            foreach(var script in scripts) {
-                scriptOutput.Add(script.Key, RunScript(script.Key, script.Value, interpreterPath));
-            }
-            return scriptOutput;
-        }
 
         //remember to set the paths to the interpreters
-        private string RunScript(string scriptId, string scriptPath, string interpreterPath) {
+        public string RunScript(string scriptId, string scriptPath, string interpreterPath) {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = interpreterPath;
             start.Arguments = string.Format("\"{0}\" \"{1}\"", scriptPath, null);
