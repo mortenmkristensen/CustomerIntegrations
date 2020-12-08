@@ -1,0 +1,9 @@
+﻿body {
+}
+header {
+    text-align: center;
+    background-color: cadetblue;
+}
+.openScriptInput {
+    visibility: hidden;
+}

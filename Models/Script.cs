@@ -1,4 +1,6 @@
-﻿namespace Models {
+﻿using System;
+
+namespace Models {
     public class Script {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -9,5 +11,8 @@
         public string Code { get; set; }
         public string LastResult { get; set; }
         public bool HasErrors { get; set; }
+        public DateTime DateCreated { get; set; }
+        public string Author { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }

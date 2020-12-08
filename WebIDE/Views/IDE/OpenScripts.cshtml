@@ -1,5 +1,63 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Models.Script>
 @{
 }
+<!DOCTYPE html>
+<head>
+    <link href="~/css/OpenScripts.css" rel="stylesheet" />
+</head>
+<style>
+    table tr:not(:first-child) {
+        cursor: pointer;
+        transition: all .25s ease-in-out;
+    }
+
+        table tr:not(:first-child):hover {
+            background-color: lawngreen;
+        }
+</style>
+<header>
+</header>
+ <html>
+ <body>
+     <form id='search' action='@Url.Action("Index","IDE")' method="post">
+         <input type="text" name="scriptID" id="ID">
+         <input type="submit" value="Search ScriptID" class="button" />
+     </form>
+     <form id='open' action='@Url.Action("OpenScripts","IDE")' method="post">
+         <input class="openScriptInput" type="text" name="scriptID2" id="ID">
+         <input type="submit" value="Open Script" class="button" />
+     </form>
+     <table id="table" border="1">
+         <tr>
+             <th>Script Id</th>
+             <th>Script name</th>
+             <th>Language</th>
+             <th>Version</th>
+             <th>Date created</th>
+             <th>Author</th>
+             <th>Last modified</th>
+         </tr>
+         <tr>
+             @foreach (var item in Model) {
+             <tr>
+                 <td>@item.Id</td>
+                 <td>@item.Name</td>
+                 <td>@item.Language</td>
+                 <td>@item.LanguageVersion</td>
+                 <td>@item.DateCreated</td>
+                 <td>@item.Author</td>
+                 <td>@item.LastModified</td>
+             </tr>
+         }
+         </table>
+         <script>
+             var table = document.getElementById('table');
+             for (var i = 1; i < table.rows.length; i++) {
+                 table.rows[i].onclick = function () {
+                     //rIndex = this.rowIndex;
+                     document.getElementById("scriptID2").value = this.cells[0].innerHTML;
+                 };
+             }
+         </script>
+     </body>
+</html>
