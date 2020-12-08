@@ -22,14 +22,12 @@ namespace WebIDE.Controllers {
 
         private IEnumerable<Script> GetAllScripts() {
             var client = new RestClient();
-            client.BaseUrl = new Uri("https://localhost:44321/script");
-            var request = new RestRequest("api/GetAllScripts", Method.GET);
+            client.BaseUrl = new Uri("https://localhost:44321/api/script/");
+            var request = new RestRequest("all", Method.GET);
             var response = client.Execute(request);
             string scriptsJson = response.Content;
-            List<RootObject> scriptsRoot = JsonConvert.DeserializeObject<List<RootObject>>(scriptsJson);
-
-
-
+            List<Script> scripts = JsonConvert.DeserializeObject<List<Script>>(scriptsJson);
+            return scripts;
         }
     }
 }
