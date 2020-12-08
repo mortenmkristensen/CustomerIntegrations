@@ -44,7 +44,7 @@ namespace WebIDE.Controllers {
         private Script GetScriptById(string id) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script/");
-            var request = new RestRequest($" ?id={id}", Method.GET);
+            var request = new RestRequest($"?id={id}", Method.GET);
             var response = client.Execute(request);
             string scriptJson = response.Content;
             Script script = JsonConvert.DeserializeObject<Script>(scriptJson);
