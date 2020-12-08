@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
+using Database;
 
 namespace Scheduling {
     class Program {
@@ -10,8 +11,12 @@ namespace Scheduling {
 
             static IHostBuilder CreateHostBuilder(string[] args) =>
                 Host.CreateDefaultBuilder(args)
-                    .ConfigureServices((_, services) =>
-                        services.AddHostedService<Scheduler>());
+                    .ConfigureServices((_, services) => {
+                        services.AddSingleton<IDBAccess, DBAccess>();
+                        services.AddSingleton<IDBConfig, DBConfig>();
+                        services.AddSingleton<IDockerService, DockerService>();
+                        services.AddHostedService<Scheduler>();
+                    });
         }
         
     }

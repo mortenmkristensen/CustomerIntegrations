@@ -12,15 +12,16 @@ using RabbitMQ.Client.Exceptions;
 
 namespace Scheduling {
     public class Scheduler : IHostedService {
-        IDBAccess dbAccess = new DBAccess(new DBConfig());
-        Timer _timer;
-        List<string> rubyIds = new List<string>();
-        List<string> pythonIds = new List<string>();
-        List<string> javaScriptIds = new List<string>();
-        public DockerService DockerService { get; set; }
+        private IDBAccess _dbAccess;
+        private IDockerService _dockerService;
+        private Timer _timer;
+        private List<string> rubyIds = new List<string>();
+        private List<string> pythonIds = new List<string>();
+        private List<string> javaScriptIds = new List<string>();
 
-        public Scheduler() {
-            DockerService = new DockerService();
+        public Scheduler(IDBAccess dBAccess, IDockerService dockerService) {
+            _dbAccess = dBAccess;
+            _dockerService = dockerService;
         }
         public async Task StartAsync(CancellationToken cancellationToken) {
             await PullDockerImage();
@@ -50,7 +51,7 @@ namespace Scheduling {
         }
 
         private void GetIds() {
-            IEnumerable<Script> scripts = dbAccess.GetAll();
+            IEnumerable<Script> scripts = _dbAccess.GetAll();
             foreach (var script in scripts) {
                 if (script.Language.Equals("ruby")) {
                     rubyIds.Add(script.Id);
@@ -141,11 +142,11 @@ namespace Scheduling {
         }
 
         private async Task PullDockerImage() {
-            await DockerService.PullImage();
+            await _dockerService.PullImage();
         }
-        private async Task<string> StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
+        private async Task StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                             string messageBroker, string queueUser, string queuePassword) {
-           return await DockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword);
+           await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword);
         }
     }
 }

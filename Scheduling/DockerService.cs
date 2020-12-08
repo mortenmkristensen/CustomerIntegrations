@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Threading;
 
 namespace Scheduling {
-    public class DockerService {
+    public class DockerService : IDockerService{
         private DockerClient _client = new DockerClientConfiguration().CreateClient();
         public async Task PullImage() {
             await _client.Images
@@ -19,7 +19,7 @@ namespace Scheduling {
                     new AuthConfig(),
                     new Progress<JSONMessage>());
         }
-        public async Task<string> StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
+        public async Task StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                         string messageBroker, string queueUser, string queuePassword) {
             var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters() { All = true });
             Console.WriteLine("");
@@ -27,7 +27,7 @@ namespace Scheduling {
                 if (container.Names != null && container.Names.Count > 0) {
                     string name = container.Names[0].Split("/")[1];
                     if (name == queuename) {
-                        return null;
+                        await _client.Containers.StartContainerAsync(container.ID, null);
                     }
                 }
             }
@@ -46,7 +46,6 @@ namespace Scheduling {
             //        newContainerName = container.Names[0];
             //    }
             //}
-            return response.ID;
         }
     }
 }
