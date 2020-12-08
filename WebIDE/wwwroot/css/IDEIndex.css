@@ -1,0 +1,37 @@
+﻿
+
+header {
+    text-align: center;
+    background-color: cadetblue;
+}
+
+body {
+    background-color: cadetblue;
+}
+
+.button {
+    font-size: 40px;
+}
+
+.right {
+    /*text-align: left;*/
+    background-color: white;
+}
+
+.left {
+    text-align: center;
+    background-color: cadetblue;
+}
+
+.custom-select {
+    position: relative;
+    font-family: Arial;
+}
+
+/*            .custom-select select {
+                display: none;
+            }*/
+
+.select-selected {
+    background-color: DodgerBlue;
+}
