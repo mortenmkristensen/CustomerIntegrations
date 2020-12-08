@@ -39,13 +39,6 @@ namespace Scheduling {
                                             $"MP_QUEUEUSER={queueUser}", $"MP_QUEUEPASSWORD={queuePassword}"} 
             });
             await _client.Containers.StartContainerAsync(response.ID, null);
-            //var containers = await _client.Containers.ListContainersAsync(null);
-            //string newContainerName = "";
-            //foreach (var container in containers) {
-            //    if(response.ID == container.ID) {
-            //        newContainerName = container.Names[0];
-            //    }
-            //}
         }
     }
 }

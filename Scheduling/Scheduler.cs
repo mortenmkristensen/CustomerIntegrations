@@ -31,10 +31,6 @@ namespace Scheduling {
                 TimeSpan.Zero,
                 TimeSpan.FromSeconds(5)
                 );
-            //while (true) {
-            //    Run(new object());
-            //    Thread.Sleep(5000);
-            //}
         }
 
         public Task StopAsync(CancellationToken cancellationToken) {
