@@ -17,9 +17,9 @@ namespace Scheduling {
         private IDockerService _dockerService;
         private IMessageBroker _messageBroker;
         private Timer _timer;
-        private List<string> rubyIds = new List<string>();
-        private List<string> pythonIds = new List<string>();
-        private List<string> javaScriptIds = new List<string>();
+        private List<Script> rubyScripts = new List<Script>();
+        private List<Script> pythonScripts = new List<Script>();
+        private List<Script> jsScripts = new List<Script>();
 
         public Scheduler(IDBAccess dBAccess, IDockerService dockerService, IMessageBroker messageBroker) {
             _dbAccess = dBAccess;
@@ -53,18 +53,18 @@ namespace Scheduling {
             IEnumerable<Script> scripts = _dbAccess.GetAll();
             foreach (var script in scripts) {
                 if (script.Language.Equals("ruby")) {
-                    rubyIds.Add(script.Id);
+                    rubyScripts.Add(script);
                 }
                 if (script.Language.Equals("python")) {
-                    pythonIds.Add(script.Id);
+                    pythonScripts.Add(script);
                 }
                 if (script.Language.Equals("javascript")) {
-                    javaScriptIds.Add(script.Id);
+                    jsScripts.Add(script);
                 }
             }
         }
 
-        private void SendWithRabbitMQ(string queueName, List<string> scripts) {
+        private void SendWithRabbitMQ(string queueName, List<Script> scripts) {
             _messageBroker.Send(queueName, scripts);
         }
 
@@ -75,14 +75,14 @@ namespace Scheduling {
         }
 
         private async Task SendIdsToRabbitMQ() {
-            var rubyLists = SplitList<string>(rubyIds, 1);
+            var rubyLists = SplitList<Script>(rubyScripts, 1);
             int i = 0;
             foreach (var list in rubyLists) {
                 string queueName = "Ruby_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
                 StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
             }
-            var pythonLists = SplitList<string>(pythonIds, 1);
+            var pythonLists = SplitList<Script>(pythonScripts, 1);
             i = 0;
             foreach (var list in pythonLists) {
                 string queueName = "Python_Queue" + i++;
@@ -90,7 +90,7 @@ namespace Scheduling {
                 StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
             }
 
-            var jsLists = SplitList<string>(javaScriptIds, 1);
+            var jsLists = SplitList<Script>(jsScripts, 1);
             i = 0;
             foreach (var list in jsLists) {
                 string queueName = "JavaScript_Queue" + i++;
@@ -100,9 +100,9 @@ namespace Scheduling {
         }
 
         private void ClearScriptLists() {
-            rubyIds.Clear();
-            pythonIds.Clear();
-            javaScriptIds.Clear();
+            rubyScripts.Clear();
+            pythonScripts.Clear();
+            jsScripts.Clear();
         }
 
         private async Task PullDockerImage() {

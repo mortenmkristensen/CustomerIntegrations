@@ -25,11 +25,11 @@ namespace Core {
         }
 
         public void Run(string interpreterPath) {
-            string ids = GetIdsFromScheduler();
-            if(ids == null) {
+            string scriptsJson = GetScriptsFromScheduler();
+            if(scriptsJson == null) {
                 return;
             }
-            List<Script> scripts = (List<Script>)GetScriptsByIds(DeserializeIds(ids));
+            List<Script> scripts = DeserializeIds(scriptsJson);
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
                 foreach (var script in scripts) {
@@ -56,8 +56,8 @@ namespace Core {
             }
         }
 
-        private List<string> DeserializeIds(string ids) {
-            return JsonConvert.DeserializeObject<List<string>>(ids);
+        private List<Script> DeserializeIds(string scripts) {
+            return JsonConvert.DeserializeObject<List<Script>>(scripts);
         }
 
         private IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
@@ -68,7 +68,7 @@ namespace Core {
             return scripts;
         }
 
-        public string GetIdsFromScheduler() {
+        public string GetScriptsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
         }
