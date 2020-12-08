@@ -1,6 +1,6 @@
-﻿@*@{ 
-    Layout = "_Layout";
-}*@
+﻿@*@{
+        Layout = "_Layout";
+    }*@
 
 <!DOCTYPE html>
 <head>
@@ -38,62 +38,59 @@
 </header>
 <html>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-4">
-                <div class="left">
-                    <div class="custom-select">
-                        <select>
-                            <option value="0">Choose scripting language</option>
-                            <option value="1">Python</option>
-                            <option value="2">Ruby</option>
-                            <option value="3">JavaScript</option>
-                        </select>
+    <section class="funcSection">
+        <div class="container">
+            <div class="row">
+                <div class="col-4">
+                    <div class="left">
+                            <select class="custom-select">
+                                <option value="0">Choose scripting language</option>
+                                <option value="1">Python</option>
+                                <option value="2">Ruby</option>
+                                <option value="3">JavaScript</option>
+                            </select>
+                        <p>Or</p>
+                        <button class="bg" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button>
+
+                        <p>Save this script</p>
+                        <button class="bg2" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
                     </div>
-
-                    <p>Or</p>
-                    <button class="bg-primary" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open a list of scripts</button>
-
-                    <p>Save this script</p>
-                    <button class="bg-success" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
                 </div>
-            </div>
-            <div class="col-8">
-                <div class="right">
-                    This is where the text editor should be
-                    <textarea name="my-xml-editor" data-editor="xml" data-gutter="1"></textarea>
-                    <br>
-                    <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>
+                <div class="col-8">
+                    <div class="right">
+                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15"></textarea>
+                        @*<br>
+                        <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
 
-                    <script>
-                        $(function () {
-                            $('textarea[data-editor]').each(function () {
-                                var textarea = $(this);
-                                var mode = textarea.data('editor');
-                                var editDiv = $('<div>', {
-                                    position: 'absolute',
-                                    width: textarea.width(),
-                                    height: textarea.height(),
-                                    'class': textarea.attr('class')
-                                }).insertBefore(textarea);
-                                textarea.css('display', 'none');
-                                var editor = ace.edit(editDiv[0]);
-                                editor.renderer.setShowGutter(textarea.data('gutter'));
-                                editor.getSession().setValue(textarea.val());
-                                editor.getSession().setMode("ace/mode/" + mode);
-                                editor.setTheme("ace/theme/idle_fingers");
+                        <script>
+                            $(function () {
+                                $('textarea[data-editor]').each(function () {
+                                    var textarea = $(this);
+                                    var mode = textarea.data('editor');
+                                    var editDiv = $('<div>', {
+                                        position: 'absolute',
+                                        //width: textarea.width(),
+                                        height: textarea.height(),
+                                        'class': textarea.attr('class')
+                                    }).insertBefore(textarea);
+                                    textarea.css('display', 'none');
+                                    var editor = ace.edit(editDiv[0]);
+                                    editor.renderer.setShowGutter(textarea.data('gutter'));
+                                    editor.getSession().setValue(textarea.val());
+                                    editor.getSession().setMode("ace/mode/" + mode);
+                                    editor.setTheme("ace/theme/dawn");
 
-                                // copy back to textarea on form submit...
-                                textarea.closest('form').submit(function () {
-                                    textarea.val(editor.getSession().getValue());
-                                })
+                                    // copy back to textarea on form submit...
+                                    textarea.closest('form').submit(function () {
+                                        textarea.val(editor.getSession().getValue());
+                                    })
+                                });
                             });
-                        });
-                    </script>
+                        </script>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </body>
-
 </html>

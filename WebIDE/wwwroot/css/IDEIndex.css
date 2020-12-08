@@ -1,26 +1,28 @@
-﻿
-
-header {
+﻿header {
     text-align: center;
     background-color: cadetblue;
 }
 
-body {
+.funcSection {
     background-color: cadetblue;
 }
 
-.button {
-    font-size: 40px;
+.bg {
+    font-size: 25px;
+    width: 160px;
+    height: 60px;
+    background-color: blue;
 }
 
-.right {
-    /*text-align: left;*/
-    background-color: white;
+.bg2 {
+    font-size: 25px;
+    width: 160px;
+    height: 60px;
+    background-color: lawngreen;
 }
 
 .left {
     text-align: center;
-    background-color: cadetblue;
 }
 
 .custom-select {
@@ -28,14 +30,10 @@ body {
     font-family: Arial;
 }
 
-/*            .custom-select select {
-                display: none;
-            }*/
+    .custom-select select {
+        display: none;
+    }
 
 .select-selected {
     background-color: DodgerBlue;
-}
-
-.textarea {
-    width: 100%;
 }
