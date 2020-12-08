@@ -7,6 +7,7 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Core/Core.csproj", "Core/"]
 COPY ["Models/Models.csproj", "Models/"]
+COPY ["MessageBroker/MessageBroker.csproj", "MessageBroker/"]
 COPY ["Database/Database.csproj", "Database/"]
 RUN dotnet restore "Core/Core.csproj"
 COPY . .

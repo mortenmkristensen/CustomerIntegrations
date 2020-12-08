@@ -18,7 +18,7 @@ namespace MessageBroker {
         public string Receive(string queueName) {
             string message = null;
             try {
-                var factory = new ConnectionFactory() { HostName = "localhost" };
+                var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
                     channel.QueueDeclare(queue: queueName,
