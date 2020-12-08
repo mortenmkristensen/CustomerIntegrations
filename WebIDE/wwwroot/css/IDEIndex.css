@@ -35,3 +35,7 @@ body {
 .select-selected {
     background-color: DodgerBlue;
 }
+
+.textarea {
+    width: 100%;
+}

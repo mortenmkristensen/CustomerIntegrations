@@ -1,4 +1,6 @@
-﻿
+﻿@*@{ 
+    Layout = "_Layout";
+}*@
 
 <!DOCTYPE html>
 <head>
@@ -9,19 +11,18 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
-    <!-- Optional JavaScript -->
-    <!--<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-            crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-            crossorigin="anonymous"></script>-->
-    @*<script src="~static/src-min/ace.js" type="text/javascript" charset="utf-8"></script>*@
-    <script src="~/static/src-min/ace.js"></script>-->
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
+
+
 </head>
 @{
     ViewBag.Title = "Index";
@@ -60,101 +61,34 @@
             <div class="col-8">
                 <div class="right">
                     This is where the text editor should be
-                    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-                            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-                            crossorigin="anonymous"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-                            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-                            crossorigin="anonymous"></script>
-                    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-                            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-                            crossorigin="anonymous"></script>
-                    <script src="~/static/src-min/ace.js"></script>
+                    <textarea name="my-xml-editor" data-editor="xml" data-gutter="1"></textarea>
+                    <br>
+                    <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>
+
                     <script>
-                        // initialize the content of the text editor to some Javascript
-                        $("#editor").text(`function echo(m) {\n\treturn m;\n}\nconsole.log(echo("Hello World"));`);
+                        $(function () {
+                            $('textarea[data-editor]').each(function () {
+                                var textarea = $(this);
+                                var mode = textarea.data('editor');
+                                var editDiv = $('<div>', {
+                                    position: 'absolute',
+                                    width: textarea.width(),
+                                    height: textarea.height(),
+                                    'class': textarea.attr('class')
+                                }).insertBefore(textarea);
+                                textarea.css('display', 'none');
+                                var editor = ace.edit(editDiv[0]);
+                                editor.renderer.setShowGutter(textarea.data('gutter'));
+                                editor.getSession().setValue(textarea.val());
+                                editor.getSession().setMode("ace/mode/" + mode);
+                                editor.setTheme("ace/theme/idle_fingers");
 
-                        // initialize the editor environment using the ace library
-                        var editor = ace.edit("editor");
-                        editor.session.setMode("ace/mode/javascript"); // editor language
-                        editor.setTheme("ace/theme/dawn"); // editor theme
-                        editor.session.setTabSize(4);
-                        editor.session.setUseWrapMode(true);
-
-                        // Override default console functions for our custom Dev Console
-                        (function () {
-                            // store default console functionality before changing them
-                            default_log = console.log;
-                            default_clear = console.clear;
-                            default_error = console.error;
-                            default_warn = console.warn;
-
-                            console.log = function (...args) {
-                                for (let arg of args) {
-                                    if (typeof arg == 'object') {
-                                        $("#console").append((JSON && JSON.stringify ? JSON.stringify(arg, undefined, 2) : arg) + ' ');
-                                    } else {
-                                        $("#console").append(arg + ' ');
-                                    }
-                                }
-                                // Console prompt
-                                $("#console").append('\n&raquo;  ');
-
-                                // So console is always scrolled to the bottom
-                                $("#console").get(0).scrollTop = $("#console").get(0).scrollHeight;
-
-                                // Allow the default console action to happen
-                                default_log(...args)
-                            }
-                            console.error = function (e) {
-
-                                $("#console").append("Error: " + e);
-
-                                // Console prompt
-                                $("#console").append('\n&raquo;  ');
-
-                                // So console is always scrolled to the bottom
-                                $("#console").get(0).scrollTop = $("#console").get(0).scrollHeight;
-
-                                // Allow the default console action to happen
-                                default_error(e)
-                            }
-                            console.warn = function (w) {
-                                $("#console").append("Warning: " + w);
-
-                                // Console prompt
-                                $("#console").append('\n&raquo;  ');
-
-                                // So console is always scrolled to the bottom
-                                $("#console").get(0).scrollTop = $("#console").get(0).scrollHeight;
-
-                                // Allow the default console action to happen
-                                default_warn(w)
-                            }
-                            console.clear = function () {
-                                // Console prompt
-                                $("#console").html("&raquo;  ");
-                                // Allow the default console action to happen
-                                default_clear();
-                            }
-                            clear = console.clear;
-                        })();
-
-                        // For our custom clear and execute shortcuts Ctrl-Enter and Ctrl-I
-                        function kbd(e) {
-                            if (e.key === "i") console.clear();
-                            if (e.key === "Enter") eval(editor.getValue());
-                        }
-
-                        window.addEventListener('keydown', function (e) {
-                            if (e.key === "Control") window.addEventListener('keydown', kbd);
+                                // copy back to textarea on form submit...
+                                textarea.closest('form').submit(function () {
+                                    textarea.val(editor.getSession().getValue());
+                                })
+                            });
                         });
-                        window.addEventListener('keyup', function (e) {
-                            if (e.key === "Control") window.removeEventListener('keydown', kbd);
-                        })
-                        // For phones and devices without a control key
-                        $("[action]").get(0).addEventListener('click', function () { eval(editor.getValue()); });
-                        $("[action]").get(1).addEventListener('click', function () { console.clear(); });
                     </script>
                 </div>
             </div>
