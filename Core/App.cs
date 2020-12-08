@@ -30,8 +30,9 @@ namespace Core {
                 return;
             }
             List<Script> scripts = DeserializeIds(scriptsJson);
+            Dictionary<string, string> paths = new Dictionary<string, string>();
             try {
-                Dictionary<string, string> paths = Stager.GetPaths(scripts);
+                paths = Stager.GetPaths(scripts);
             }catch(Exception e) {
                 Console.WriteLine("Error occured while getting paths, Error:", e.Message);
             }
