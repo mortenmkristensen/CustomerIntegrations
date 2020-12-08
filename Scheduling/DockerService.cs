@@ -28,6 +28,7 @@ namespace Scheduling {
                     string name = container.Names[0].Split("/")[1];
                     if (name == queuename) {
                         await _client.Containers.StartContainerAsync(container.ID, null);
+                        return;
                     }
                 }
             }
