@@ -4,6 +4,7 @@ using RabbitMQ.Client.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Models;
 
 namespace MessageBroker {
     public class RabbitBroker:IMessageBroker {
@@ -50,7 +51,7 @@ namespace MessageBroker {
             return message;
         }
 
-        public void Send(string queueName, List<string> scripts) {
+        public void Send(string queueName, List<Script> scripts) {
             try {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())

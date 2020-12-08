@@ -25,16 +25,14 @@ namespace Core {
         }
 
         public void Run(string interpreterPath) {
-            string ids = GetIdsFromScheduler();
-            Dictionary<string, string> paths = new Dictionary<string, string>();
-            if (ids == null) {
+            string scriptsJson = GetScriptsFromScheduler();
+            if(scriptsJson == null) {
                 return;
             }
-            List<Script> scripts = (List<Script>)GetScriptsByIds(DeserializeIds(ids));
+            List<Script> scripts = DeserializeIds(scriptsJson);
             try {
-                paths = Stager.GetPaths(scripts);
-            }
-            catch (Exception e) {
+                Dictionary<string, string> paths = Stager.GetPaths(scripts);
+            }catch(Exception e) {
                 Console.WriteLine("Error occured while getting paths, Error:", e.Message);
             }
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
@@ -63,8 +61,8 @@ namespace Core {
 
         }
 
-        private List<string> DeserializeIds(string ids) {
-            return JsonConvert.DeserializeObject<List<string>>(ids);
+        private List<Script> DeserializeIds(string scripts) {
+            return JsonConvert.DeserializeObject<List<Script>>(scripts);
         }
 
         private IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
@@ -75,7 +73,7 @@ namespace Core {
             return scripts;
         }
 
-        public string GetIdsFromScheduler() {
+        public string GetScriptsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
         }

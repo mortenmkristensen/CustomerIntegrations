@@ -4,6 +4,6 @@ using System.Collections.Generic;
 namespace Core {
     interface IApp {
         void Run(string interpreterPath);
-        string GetIdsFromScheduler();
+        string GetScriptsFromScheduler();
     }
 }
