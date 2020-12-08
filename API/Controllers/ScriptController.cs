@@ -85,6 +85,20 @@ namespace API.Controllers
             return Ok();
         }
 
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Script> GetAllScripts() {
+            IEnumerable<Script> scripts = new List<Script>();
+            try {
+
+                scripts = dbAccess.GetAll();
+            } catch (Exception e) {
+                return StatusCode(500);
+            }
+            return Ok(scripts);
+        }
+
         private Script Deserialize(string json) {
             return JsonConvert.DeserializeObject<Script>(json);
         }
