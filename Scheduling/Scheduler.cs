@@ -9,19 +9,22 @@ using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
+using MessageBroker;
 
 namespace Scheduling {
     public class Scheduler : IHostedService {
         private IDBAccess _dbAccess;
         private IDockerService _dockerService;
+        private IMessageBroker _messageBroker;
         private Timer _timer;
         private List<string> rubyIds = new List<string>();
         private List<string> pythonIds = new List<string>();
         private List<string> javaScriptIds = new List<string>();
 
-        public Scheduler(IDBAccess dBAccess, IDockerService dockerService) {
+        public Scheduler(IDBAccess dBAccess, IDockerService dockerService, IMessageBroker messageBroker) {
             _dbAccess = dBAccess;
             _dockerService = dockerService;
+            _messageBroker = messageBroker;
         }
         public async Task StartAsync(CancellationToken cancellationToken) {
             await PullDockerImage();
@@ -61,43 +64,8 @@ namespace Scheduling {
             }
         }
 
-        private void SendWithRabbitMQ(string queueName, List<string> ids) {               
-            try {
-                var factory = new ConnectionFactory() { HostName = "localhost", UserName = "abc", Password = "123" };
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel()) {
-                    channel.QueueDeclare(queue: queueName,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
-                    var message = JsonConvert.SerializeObject(ids);
-                    var body = Encoding.UTF8.GetBytes(message);
-                    var properties = channel.CreateBasicProperties();
-                    properties.Persistent = true;
-                    channel.BasicPublish(exchange: "",
-                                         routingKey: queueName,
-                                         basicProperties: properties,
-                                         body: body);
-                    Console.WriteLine(message);
-                    Console.WriteLine();
-                    Console.WriteLine();
-
-                }
-            } catch (Exception e) {
-                if (e is AlreadyClosedException) {
-                    Console.WriteLine("The connectionis already closed");
-                } else if (e is BrokerUnreachableException) {
-                    Console.WriteLine("The broker cannot be reached");
-                } else if (e is OperationInterruptedException) {
-                    Console.WriteLine("The operation was interupted");
-                } else if (e is ConnectFailureException) {
-                    Console.WriteLine("Could not connect to the broker broker");
-                } else {
-                    Console.WriteLine("Something went wrong");
-                }
-            }
+        private void SendWithRabbitMQ(string queueName, List<string> scripts) {
+            _messageBroker.Send(queueName, scripts);
         }
 
         private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
@@ -117,7 +85,7 @@ namespace Scheduling {
             var pythonLists = SplitList<string>(pythonIds, 1);
             i = 0;
             foreach (var list in pythonLists) {
-                string queueName = "PythonIds_Queue" + i++;
+                string queueName = "Python_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
                 StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
             }
@@ -125,7 +93,7 @@ namespace Scheduling {
             var jsLists = SplitList<string>(javaScriptIds, 1);
             i = 0;
             foreach (var list in jsLists) {
-                string queueName = "JavaScriptIds_Queue" + i++;
+                string queueName = "JavaScript_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
                 StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
             }

@@ -8,17 +8,20 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using RabbitMQ.Client.Exceptions;
+using MessageBroker;
 
 namespace Core {
     class App : IApp {
 
         private IStager Stager { get; set; }
         private IScriptRunner ScriptRunner { get; set; }
-        IDBAccess DBAccess { get; set; }
-        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner) {
+        private IDBAccess DBAccess { get; set; }
+        private IMessageBroker MessageBroker { get; set; }
+        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker) {
             Stager = stager;
             ScriptRunner = scriptRunner;
             DBAccess = dbAccess;
+            MessageBroker = messageBroker;
         }
 
         public void Run(string interpreterPath) {
@@ -67,38 +70,7 @@ namespace Core {
 
         public string GetIdsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
-            string message = null;
-            try {
-                var factory = new ConnectionFactory() { HostName = "localhost" };
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel()) {
-                    channel.QueueDeclare(queue: queueName,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-                    var data = channel.BasicGet(queueName, false);
-                    if (data != null) {
-                        message = Encoding.UTF8.GetString(data.Body.Span);
-                        // ack the message, ie. confirm that we have processed it
-                        // otherwise it will be requeued a bit later
-                        channel.BasicAck(data.DeliveryTag, false);
-                    }
-                }
-            } catch (Exception e) {
-                if (e is AlreadyClosedException) {
-                    Console.WriteLine("The connectionis already closed");
-                } else if (e is BrokerUnreachableException) {
-                    Console.WriteLine("The broker cannot be reached");
-                } else if (e is OperationInterruptedException) {
-                    Console.WriteLine("The operation was interupted");
-                } else if (e is ConnectFailureException) {
-                    Console.WriteLine("Could not connect to the broker broker");
-                } else {
-                    Console.WriteLine("Something went wrong");
-                }
-            }
-            return message;
+            return MessageBroker.Receive(queueName);
         }
     }
 }
