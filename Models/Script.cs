@@ -2,7 +2,7 @@
 
 namespace Models {
     public class Script {
-        public string Id { get; set; }
+        public string _id { get; set; }
         public string Name { get; set; }
         public string Customer { get; set; }
         public double ScriptVersion { get; set; }
