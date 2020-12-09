@@ -13,7 +13,7 @@ namespace MessageBroker {
         public RabbitBroker(IMessageBrokerConfig config ) {
             _config = config;
         }
-        public void Listen(string queueName) {
+        public void Listen(string queueName, EventingBasicConsumer consumer) {
             try {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
@@ -28,16 +28,8 @@ namespace MessageBroker {
 
                     Console.WriteLine(" [*] Waiting for messages.");
 
-                    var consumer = new EventingBasicConsumer(channel);
-                    consumer.Received += (sender, ea) => {
-                        var body = ea.Body;
-                        var message = Encoding.UTF8.GetString(body.Span);
-                        if (message != null) {
-                            //The message is converted from JSON to IEnumerable<Script>.
-                            var deserializedMessage = JsonConvert.DeserializeObject<IEnumerable<Script>>(message);
-                        }
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                    };
+                    consumer.Model = channel;
+
                     channel.BasicConsume(queue: queueName,
                                          autoAck: false,
                                          consumer: consumer);

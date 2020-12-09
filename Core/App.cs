@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using Models;
 using Core.Exceptions;
 using Database;
-using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using RabbitMQ.Client.Exceptions;
 using MessageBroker;
 
 namespace Core {
@@ -71,21 +69,7 @@ namespace Core {
         }
         public void Listen(string interpreterPath) {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
-            try {
-                var factory = new ConnectionFactory() { HostName = Config.HostName, UserName = Config.UserName, Password = Config.Password };
-                using (var connection = factory.CreateConnection())
-                using (var channel = connection.CreateModel()) {
-                    channel.QueueDeclare(queue: queueName,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
-                    channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
-
-                    Console.WriteLine(" [*] Waiting for messages.");
-
-                    var consumer = new EventingBasicConsumer(channel);
+                    var consumer = new EventingBasicConsumer(null);
                     consumer.Received += (sender, ea) => {
                         var body = ea.Body;
                         var message = Encoding.UTF8.GetString(body.Span);
@@ -94,27 +78,9 @@ namespace Core {
                             var deserializedMessage = JsonConvert.DeserializeObject<IEnumerable<Script>>(message);
                             Run(interpreterPath, (List<Script>)deserializedMessage);
                         }
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        consumer.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                     };
-                    channel.BasicConsume(queue: queueName,
-                                         autoAck: false,
-                                         consumer: consumer);
-                    Console.ReadLine();
-                }
-            }
-            catch (Exception e) {
-                if (e is AlreadyClosedException) {
-                    Console.WriteLine("The connectionis already closed");
-                } else if (e is BrokerUnreachableException) {
-                    Console.WriteLine("The broker cannot be reached");
-                } else if (e is OperationInterruptedException) {
-                    Console.WriteLine("The operation was interupted");
-                } else if (e is ConnectFailureException) {
-                    Console.WriteLine("Could not connect to the broker broker");
-                } else {
-                    Console.WriteLine("Something went wrong");
-                }
-            }
+            MessageBroker.Listen(queueName, consumer);
         }
     }
 }
