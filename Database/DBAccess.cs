@@ -54,7 +54,7 @@ namespace Database {
 
             public void Upsert(Script script) {
                 try {
-                    var filter = Builders<Script>.Filter.Eq("_id", script.Id);
+                    var filter = Builders<Script>.Filter.Eq("_id", script._id);
                     Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
                 } catch (MongoException me) {
                     throw new Exception("Something went wrong when trying to insert a script", me);
