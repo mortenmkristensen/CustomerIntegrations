@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Text;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace Core.Database {
     class DBAccess : IDBAccess {
@@ -17,8 +18,7 @@ namespace Core.Database {
                 Client = new MongoClient("mongodb://localhost:27017");
                 Database = Client.GetDatabase("MapsPeople");
                 Collection = Database.GetCollection<Script>("Scripts");
-            }
-            catch (MongoException me) {
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
             }
         }
@@ -28,8 +28,7 @@ namespace Core.Database {
                 Client = new MongoClient(Config.ConnectionString);
                 Database = Client.GetDatabase(Config.Database);
                 Collection = Database.GetCollection<Script>(Config.Collection);
-            }
-            catch (MongoException me) {
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
             }
         }
@@ -47,11 +46,11 @@ namespace Core.Database {
             Script script = null;
             try {
                 if (id != null) {
-                    var filter = Builders<Script>.Filter.Eq("_id", id);
+                    var oId = new ObjectId(id);
+                    var filter = Builders<Script>.Filter.Eq("_id", oId);
                     script = Collection.Find(filter).FirstOrDefault();
                 }
-            }
-            catch (MongoException me) {
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to get a script", me);
             }
             return script;
@@ -59,11 +58,14 @@ namespace Core.Database {
 
         public void Upsert(Script script) {
             try {
-                var filter = Builders<Script>.Filter.Eq("_id", script.Id);
-                Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
-                //Collection.InsertOne(script);
-            }
-            catch (MongoException me) {
+                if (script.Id == null || script.Id == "") {
+                    Collection.InsertOne(script);
+                } else {
+                    var id = new ObjectId(script.Id);
+                    var filter = Builders<Script>.Filter.Eq("_id", id);
+                    Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
+                }
+            } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
             }
         }
