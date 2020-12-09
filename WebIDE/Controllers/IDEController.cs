@@ -32,6 +32,9 @@ namespace WebIDE.Controllers {
             return View(scripts);
         }
        
+        public ActionResult SaveScript() {
+            return View();
+        }
         private List<Script> GetAllScripts() {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script/");
