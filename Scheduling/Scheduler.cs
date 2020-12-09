@@ -86,14 +86,14 @@ namespace Scheduling {
             foreach (var list in rubyLists) {
                 string queueName = "Ruby_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
+                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.0.117", "abc", "123");
             }
             var pythonLists = SplitList<Script>(pythonScripts, 1);
             i = 0;
             foreach (var list in pythonLists) {
                 string queueName = "Python_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
+                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.0.117", "abc", "123");
             }
 
             var jsLists = SplitList<Script>(jsScripts, 1);
@@ -101,7 +101,7 @@ namespace Scheduling {
             foreach (var list in jsLists) {
                 string queueName = "JavaScript_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
+                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.0.117", "abc", "123");
             }
         }
 
