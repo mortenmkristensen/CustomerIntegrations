@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Newtonsoft.Json;
@@ -33,6 +34,25 @@ namespace WebIDE.Controllers {
         }
        
         public ActionResult SaveScript() {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult SaveScript(IFormCollection collection) {
+            Script script = new Script();
+            string language = collection["language"].ToString();
+            string dateCreatedString = collection["dateCreated"].ToString();
+            string lastModifiedString = collection["lastModified"].ToString();
+            string code = collection["textEditor"].ToString();
+            DateTime dateCreated = DateTime.Parse(dateCreatedString);
+            DateTime lastModified = DateTime.Parse(lastModifiedString);
+            script.Language = language;
+            script.DateCreated = dateCreated;
+            script.LastModified = lastModified;
+            script.Code = code;
+            return View(script);
+        }
+
+        public ActionResult SaveScriptWithMetadata() {
             return View();
         }
         private List<Script> GetAllScripts() {

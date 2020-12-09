@@ -1,4 +1,4 @@
-﻿
+﻿@model Models.Script
 @{
 }
 
@@ -10,17 +10,19 @@
 <body>
     <label>Script Name</label> <input type="text" />
     <br />
-    <label>Language</label>  <label>Ruby</label>
+    <label>Language</label>  <label>@Model.Language</label>
     <br />
     <label>Version</label> <input type="text" />
     <br />
-    <label>Date Created</label> <label>@DateTime.Now</label>
+    <label>Date Created</label> <label>@Model.DateCreated</label>
     <br />
     <label>Author</label> <input type="text" />
     <br />
-    <label>Last Modified</label> <label>@DateTime.Now</label>
+    <label>Last Modified</label> <label>@Model.LastModified</label>
     <br />
-    <button class="bg" onclick=" location.href='@Url.Action("Index", "IDE" )'">Save script</button>
+    <input type="text" value="@Model.Code" />
+    <br />
+    <input type="submit" value="Save Script" class="bg2" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'" />
 
 </body>
 </html>

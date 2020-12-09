@@ -72,7 +72,7 @@
                 </div>
                 <div class="col-8">
                     <div class="right">
-                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15" id="text1" onChange="myTextFunction();"></textarea>
+                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15" id="text1"></textarea>
                         @*<br>
         <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
 
@@ -93,19 +93,18 @@
                                     editor.getSession().setValue(textarea.val());
                                     editor.getSession().setMode("ace/mode/" + mode);
                                     editor.setTheme("ace/theme/dawn");
-
+                                    
                                     // copy back to textarea on form submit...
                                     textarea.closest('form').submit(function () {
                                         textarea.val(editor.getSession().getValue());
-                                    })
+                                    }) 
+                                    var input = document.getElementById('textEditor');
+                                    input.onclick = function () {
+                                        var code = editor.getValue();
+                                        input.value = code;
+                                    }
                                 });
                             });
-                        </script>
-                        <script>
-                            function myTextFunction() {
-                                var message = document.getElementById("text1").value
-                                document.getElementById("textEditor").value = message;
-                            }
                         </script>
                     </div>
                 </div>
