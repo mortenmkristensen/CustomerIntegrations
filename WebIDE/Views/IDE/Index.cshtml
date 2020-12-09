@@ -43,24 +43,38 @@
             <div class="row">
                 <div class="col-4">
                     <div class="left">
-                            <select class="custom-select">
-                                <option value="0">Choose scripting language</option>
-                                <option value="1">Python</option>
-                                <option value="2">Ruby</option>
-                                <option value="3">JavaScript</option>
-                            </select>
+                        <select class="custom-select" id="box1" onChange="myNewFunction(this);">
+                            <option value="0">Choose scripting language</option>
+                            <option value="1">Python</option>
+                            <option value="2">Ruby</option>
+                            <option value="3">JavaScript</option>
+                        </select>
                         <p>Or</p>
                         <button class="bg" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button>
+                   
+                        @*<button class="bg2" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>*@
 
+                    <form id='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
+                        <input type="text" name="language" id="language">
+                        <input type="text" name="dateCreated" id="dateCreated" value="@DateTime.Today">
+                        <input type="text" name="lastModified" id="lastModified" value="@DateTime.Now">
+                        <input type="text" name="textEditor" id="textEditor" >
                         <p>Save this script</p>
-                        <button class="bg2" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
+                        <input type="submit" value="Save Script" class="bg2" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'" />
+                    </form>
+                        <script>
+                            function myNewFunction(element) {
+                                var text = element.options[element.selectedIndex].text;
+                                document.getElementById("language").value = text;
+                            }
+                        </script>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="right">
-                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15"></textarea>
+                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15" id="text1" onChange="myTextFunction();"></textarea>
                         @*<br>
-                        <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
+        <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
 
                         <script>
                             $(function () {
@@ -86,6 +100,12 @@
                                     })
                                 });
                             });
+                        </script>
+                        <script>
+                            function myTextFunction() {
+                                var message = document.getElementById("text1").value
+                                document.getElementById("textEditor").value = message;
+                            }
                         </script>
                     </div>
                 </div>
