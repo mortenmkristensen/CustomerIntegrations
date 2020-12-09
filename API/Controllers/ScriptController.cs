@@ -47,14 +47,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Script> GetScriptById(string id) {
-            string json = "";
+            Script script;
             try {
-                Script script = dbAccess.GetScriptById(id);
-                json = Serialize(script);
+                script = dbAccess.GetScriptById(id);
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok(json);
+            return Ok(script);
         }
 
         //this metod returns an empty list no matter what i send to it and i cant figure out why
@@ -91,7 +90,6 @@ namespace API.Controllers
         public ActionResult<Script> GetAllScripts() {
             IEnumerable<Script> scripts = new List<Script>();
             try {
-
                 scripts = dbAccess.GetAll();
             } catch (Exception e) {
                 return StatusCode(500);
@@ -101,10 +99,6 @@ namespace API.Controllers
 
         private Script Deserialize(string json) {
             return JsonConvert.DeserializeObject<Script>(json);
-        }
-
-        private string Serialize(Script script) {
-            return JsonConvert.SerializeObject(script);
         }
 
     }

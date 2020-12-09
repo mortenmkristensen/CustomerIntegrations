@@ -1,9 +1,7 @@
 ﻿using System;
-using Newtonsoft.Json;
 
 namespace Models {
     public class Script {
-        [JsonProperty("_id")]
         public string Id { get; set; }
         public string Name { get; set; }
         public string Customer { get; set; }
