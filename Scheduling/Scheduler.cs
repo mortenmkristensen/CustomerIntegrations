@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using MessageBroker;
+using System.Linq;
 
 namespace Scheduling {
     public class Scheduler : IHostedService {
@@ -46,22 +47,27 @@ namespace Scheduling {
         private async void Run(object state) {
             GetIds();
             await SendIdsToRabbitMQ();
-            ClearScriptLists();
         }
 
         private void GetIds() {
+            List<Script> tempRuby = new List<Script>();
+            List<Script> tempPython = new List<Script>();
+            List<Script> tempJs = new List<Script>();
             IEnumerable<Script> scripts = _dbAccess.GetAll();
             foreach (var script in scripts) {
                 if (script.Language.Equals("ruby")) {
-                    rubyScripts.Add(script);
+                    tempRuby.Add(script);
                 }
                 if (script.Language.Equals("python")) {
-                    pythonScripts.Add(script);
+                    tempPython.Add(script);
                 }
                 if (script.Language.Equals("javascript")) {
-                    jsScripts.Add(script);
+                    tempJs.Add(script);
                 }
             }
+            rubyScripts = tempRuby.Distinct().ToList();
+            pythonScripts = tempPython.Distinct().ToList();
+            jsScripts = tempJs.Distinct().ToList();
         }
 
         private void SendWithRabbitMQ(string queueName, List<Script> scripts) {
@@ -80,14 +86,14 @@ namespace Scheduling {
             foreach (var list in rubyLists) {
                 string queueName = "Ruby_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
+                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.87.107", "abc", "123");
             }
             var pythonLists = SplitList<Script>(pythonScripts, 1);
             i = 0;
             foreach (var list in pythonLists) {
                 string queueName = "Python_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
+                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.87.107", "abc", "123");
             }
 
             var jsLists = SplitList<Script>(jsScripts, 1);
@@ -95,14 +101,8 @@ namespace Scheduling {
             foreach (var list in jsLists) {
                 string queueName = "JavaScript_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
+                await StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.87.107", "abc", "123");
             }
-        }
-
-        private void ClearScriptLists() {
-            rubyScripts.Clear();
-            pythonScripts.Clear();
-            jsScripts.Clear();
         }
 
         private async Task PullDockerImage() {
