@@ -14,23 +14,24 @@ namespace WebIDE.Controllers {
             return View();
         }
         [HttpPost]
-        public ActionResult Index(string scriptID) {
-            List<Script> scripts = new List<Script>();
-            Script script = GetScriptById(scriptID);
-            scripts.Add(script);
-            return RedirectToAction("OpenScripts", scripts);
-
+        public ActionResult Index(string scriptID2) {
+            Script script = GetScriptById(scriptID2);
+            return View("ScriptState", script);
         }
+
         public ActionResult OpenScripts() {
            List<Script> scripts = GetAllScripts();
             return View(scripts);
 
         }
         [HttpPost]
-        public ActionResult OpenScripts(string scriptID2) {
-            Script script = GetScriptById(scriptID2);
-            return View("ScriptState", script);
+        public ActionResult OpenScripts(string scriptID) {
+            List<Script> scripts = new List<Script>();
+            Script script = GetScriptById(scriptID);
+            scripts.Add(script);
+            return View(scripts);
         }
+       
         private List<Script> GetAllScripts() {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script/");
