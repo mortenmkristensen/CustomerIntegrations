@@ -7,7 +7,7 @@
         "MP_DATABASE": "MapsPeople",
         "MP_QUEUENAME": "queue1",
         "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
-        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe",
+        "MP_INTERPRETERPATH": "C:\\Python38\\python.exe",
         "MP_IDS": "[\"2\"]"
       }
     }

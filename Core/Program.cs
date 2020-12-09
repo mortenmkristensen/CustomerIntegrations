@@ -9,10 +9,9 @@ namespace Core {
         static void Main(string[] args) {
             var app = Container.GetService<IApp>();
             string interpreterPath = Environment.GetEnvironmentVariable("MP_INTERPRETERPATH"); //set with env virables
-            while (true) {
-                app.Run(interpreterPath);
-                Thread.Sleep(5000);
-            }
+            //while (true) {
+                app.Listen(interpreterPath);
+            //}
         }
     }
 }

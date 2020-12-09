@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Models;
+using RabbitMQ.Client.Events;
 
 namespace MessageBroker {
     public class RabbitBroker:IMessageBroker {
@@ -13,7 +14,49 @@ namespace MessageBroker {
             _config = config;
         }
         public void Listen(string queueName) {
-            throw new NotImplementedException();
+            try {
+                var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
+                using (var connection = factory.CreateConnection())
+                using (var channel = connection.CreateModel()) {
+                    channel.QueueDeclare(queue: queueName,
+                                         durable: true,
+                                         exclusive: false,
+                                         autoDelete: false,
+                                         arguments: null);
+
+                    channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+
+                    Console.WriteLine(" [*] Waiting for messages.");
+
+                    var consumer = new EventingBasicConsumer(channel);
+                    consumer.Received += (sender, ea) => {
+                        var body = ea.Body;
+                        var message = Encoding.UTF8.GetString(body.Span);
+                        if (message != null) {
+                            //The message is converted from JSON to IEnumerable<Script>.
+                            var deserializedMessage = JsonConvert.DeserializeObject<IEnumerable<Script>>(message);
+                        }
+                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                    };
+                    channel.BasicConsume(queue: queueName,
+                                         autoAck: false,
+                                         consumer: consumer);
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception e) {
+                if (e is AlreadyClosedException) {
+                    Console.WriteLine("The connectionis already closed");
+                } else if (e is BrokerUnreachableException) {
+                    Console.WriteLine("The broker cannot be reached");
+                } else if (e is OperationInterruptedException) {
+                    Console.WriteLine("The operation was interupted");
+                } else if (e is ConnectFailureException) {
+                    Console.WriteLine("Could not connect to the broker broker");
+                } else {
+                    Console.WriteLine("Something went wrong");
+                }
+            }
         }
 
         public string Receive(string queueName) {
