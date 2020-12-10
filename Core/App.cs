@@ -78,7 +78,6 @@ namespace Core {
                             var deserializedMessage = JsonConvert.DeserializeObject<IEnumerable<Script>>(message);
                             Run(interpreterPath, (List<Script>)deserializedMessage);
                         }
-                        consumer.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                     };
             MessageBroker.Listen(queueName, consumer);
         }

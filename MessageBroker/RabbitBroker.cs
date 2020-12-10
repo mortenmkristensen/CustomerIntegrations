@@ -31,7 +31,7 @@ namespace MessageBroker {
                     consumer.Model = channel;
 
                     channel.BasicConsume(queue: queueName,
-                                         autoAck: false,
+                                         autoAck: true,
                                          consumer: consumer);
                     Console.ReadLine();
                 }
