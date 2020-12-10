@@ -7,6 +7,7 @@ using Database;
 using RabbitMQ.Client.Events;
 using System.Text;
 using MessageBroker;
+using System.Linq;
 
 namespace Core {
     class App : IApp {
@@ -47,8 +48,9 @@ namespace Core {
                 }
             foreach (var script in scriptOutput) {
                 Console.WriteLine(script + "\n\n");
-
             }
+            var messages = scriptOutput.Values.ToList();
+            SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE") ,messages);
         }
 
         private List<Script> DeserializeIds(string scripts) {
@@ -80,6 +82,9 @@ namespace Core {
                         }
                     };
             MessageBroker.Listen(queueName, consumer);
+        }
+        private void SendData(string queueName, IEnumerable<string> messages) {
+            MessageBroker.Send<string>(queueName, messages);
         }
     }
 }

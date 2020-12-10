@@ -86,7 +86,7 @@ namespace MessageBroker {
             return message;
         }
 
-        public void Send(string queueName, List<Script> scripts) {
+        public void Send<T>(string queueName, IEnumerable<T> messages) {
             try {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
@@ -97,7 +97,7 @@ namespace MessageBroker {
                                          autoDelete: false,
                                          arguments: null);
 
-                    var message = JsonConvert.SerializeObject(scripts);
+                    var message = JsonConvert.SerializeObject(messages);
                     var body = Encoding.UTF8.GetBytes(message);
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
@@ -125,5 +125,6 @@ namespace MessageBroker {
             }
 
         }
+
     }
 }

@@ -6,7 +6,7 @@ using RabbitMQ.Client.Events;
 
 namespace MessageBroker {
     public interface IMessageBroker {
-        void Send(string queueName, List<Script> scripts);
+        void Send<T>(string queueName, IEnumerable<T> messages);
         
         string Receive(string queueName);
 
