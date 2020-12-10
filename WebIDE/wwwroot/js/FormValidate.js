@@ -1,31 +1,74 @@
-﻿function validate() {
+﻿// FormValidate.js
+// JavaScript file
+
+// Debug form
+function validate() {
     var error = false;
-    var errorText = "";
-    var errorName = false;
+    var errorScriptName = false;
+    var errorVersion = false;
+    var errorAuthor = false;
     var numberOfErrors = 0;
     var numberOfErrorsProcessed = 0;
-    // name
-    var inputName = "";
+    alert("Something is missing");
+
+    //Script name
+    var inputScriptName = "";
     try {
-        inputName = document.TableCreate.tableName.value;
+        inputScriptName = document.saveScript.scriptName.value;
     }
     catch (err) { return true; }
-    if (inputName.length < 1) {
+    if (inputScriptName.length < 1) {
         error = true;
-        errorName = true;
-        errorText = "Please give the game table a name!";
+        errorScriptName = true;
+        errorText = "Give the script a name";
         numberOfErrors++;
     }
+
+    // Version 
+    var inputVersion = "";
+    try {
+        inputVersion = document.saveScript.version.value;
+    }
+    catch (err) { return true; }
+    if (inputVersion.length < 1) {
+        error = true;
+        errorVersion = true;
+        errorText = "Write the version number";
+        numberOfErrors++;
+    }
+
+    // Author
+    var inputAuthor = "";
+    try {
+        inputAuthor = document.saveScript.author.value;
+    }
+    catch (err) { return true; }
+    if (inputAuthor.length < 1) {
+        error = true;
+        errorAuthor = true;
+        errorText = "Write down the author";
+        numberOfErrors++;
+    }
+    //
     if (error) {
         if (numberOfErrors > 1) {
-            errorText = "Specify a name:";
-            if (errorName) {
-                errorText += " Name";
+            errorText = "Please fill out:";
+            if (errorScriptName) {
+                errorText += " Script name";
                 numberOfErrorsProcessed++;
             }
+            if (errorVersion) {
+                if (numberOfErrorsProcessed < 1) {
+                    errorText += " version";
+                    numberOfErrorsProcessed++;
+                }
+            }
+            if (errorAuthor) {
+                errorText += " author";
+            }
+            alert(errorText);
+            return false;
         }
-        alert(errorText);
-        return false;
+        return true;
     }
-    return true;
 }
