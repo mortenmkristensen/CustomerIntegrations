@@ -51,7 +51,7 @@ function validate() {
     }
     //
     if (error) {
-        if (numberOfErrors > 1) {
+        if (numberOfErrors > 0) {
             errorText = "Please fill out:";
             if (errorScriptName) {
                 errorText += " Script name";
