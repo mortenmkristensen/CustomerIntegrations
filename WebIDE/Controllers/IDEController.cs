@@ -39,22 +39,26 @@ namespace WebIDE.Controllers {
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
             Script script = new Script();
+            string scriptName = collection["scriptName"].ToString();
             string language = collection["language"].ToString();
+            string version = collection["version"].ToString();
             string dateCreatedString = collection["dateCreated"].ToString();
+            string author = collection["author"].ToString();
             string lastModifiedString = collection["lastModified"].ToString();
             string code = collection["textEditor"].ToString();
             DateTime dateCreated = DateTime.Parse(dateCreatedString);
             DateTime lastModified = DateTime.Parse(lastModifiedString);
+            script.Name = scriptName;
             script.Language = language;
+            script.ScriptVersion = Double.Parse(version);
             script.DateCreated = dateCreated;
+            script.Author = author;
             script.LastModified = lastModified;
             script.Code = code;
+            UploadScript(script);
             return View(script);
         }
 
-        public ActionResult SaveScriptWithMetadata() {
-            return View();
-        }
         private List<Script> GetAllScripts() {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script/");
@@ -74,6 +78,16 @@ namespace WebIDE.Controllers {
             Script script = JsonConvert.DeserializeObject<Script>(scriptJson);
             return script;
 
+        }
+
+        private void UploadScript(Script script) {
+            var client = new RestClient();
+            client.BaseUrl = new Uri("https://localhost:44321/api/script");
+            string json = JsonConvert.SerializeObject(script);
+            var request = new RestRequest(Method.POST);
+            request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
+            request.RequestFormat = DataFormat.Json;
+            client.Execute(request);
         }
     }
 }
