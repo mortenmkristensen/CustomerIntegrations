@@ -15,20 +15,18 @@ using System.Linq;
 namespace Scheduling {
     public class Scheduler : IHostedService {
         private IDBAccess _dbAccess;
-        private IDockerService _dockerService;
         private IMessageBroker _messageBroker;
         private Timer _timer;
         private List<Script> rubyScripts = new List<Script>();
         private List<Script> pythonScripts = new List<Script>();
         private List<Script> jsScripts = new List<Script>();
+        private List<Script> scripts = new List<Script>();
 
-        public Scheduler(IDBAccess dBAccess, IDockerService dockerService, IMessageBroker messageBroker) {
+        public Scheduler(IDBAccess dBAccess,  IMessageBroker messageBroker) {
             _dbAccess = dBAccess;
-            _dockerService = dockerService;
             _messageBroker = messageBroker;
         }
         public async Task StartAsync(CancellationToken cancellationToken) {
-            await PullDockerImage();
             _timer = new Timer(
                 Run,
                 null,
@@ -45,15 +43,15 @@ namespace Scheduling {
         }
 
         private async void Run(object state) {
-            GetIds();
+            GetNewScripts();
+            SeparateByLanguage();
             await SendIdsToRabbitMQ();
         }
 
-        private void GetIds() {
+        private void SeparateByLanguage() {
             List<Script> tempRuby = new List<Script>();
             List<Script> tempPython = new List<Script>();
             List<Script> tempJs = new List<Script>();
-            IEnumerable<Script> scripts = _dbAccess.GetAll();
             foreach (var script in scripts) {
                 if (script.Language.Equals("ruby")) {
                     tempRuby.Add(script);
@@ -81,36 +79,27 @@ namespace Scheduling {
         }
 
         private async Task SendIdsToRabbitMQ() {
-            var rubyLists = SplitList<Script>(rubyScripts, 1);
-            int i = 0;
+            var rubyLists = SplitList<Script>(rubyScripts, 100);
+            string queueName = "Ruby_Queue";
             foreach (var list in rubyLists) {
-                string queueName = "Ruby_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", queueName, "ruby", "192.168.0.117", "abc", "123");
             }
-            var pythonLists = SplitList<Script>(pythonScripts, 1);
-            i = 0;
+            var pythonLists = SplitList<Script>(pythonScripts, 100);
+            queueName = "Python_Queue";
             foreach (var list in pythonLists) {
-                string queueName = "Python_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", queueName, "python", "192.168.0.117", "abc", "123");
             }
 
-            var jsLists = SplitList<Script>(jsScripts, 1);
-            i = 0;
+            var jsLists = SplitList<Script>(jsScripts, 100);
+            queueName = "JavaScript_Queue";
             foreach (var list in jsLists) {
-                string queueName = "JavaScript_Queue" + i++;
                 SendWithRabbitMQ(queueName, list);
-                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", queueName, "node", "192.168.0.117", "abc", "123");
             }
         }
 
-        private async Task PullDockerImage() {
-            await _dockerService.PullImage();
-        }
-        private async Task StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
-                                            string messageBroker, string queueUser, string queuePassword) {
-           await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword);
+        private void GetNewScripts() {
+            List<Script> allScripts = _dbAccess.GetAll().ToList();
+            scripts = allScripts.Except(scripts).ToList();
         }
     }
 }

@@ -15,7 +15,6 @@ namespace Scheduling {
                     .ConfigureServices((_, services) => {
                         services.AddSingleton<IDBAccess, DBAccess>();
                         services.AddSingleton<IDBConfig, DBConfig>();
-                        services.AddSingleton<IDockerService, DockerService>();
                         services.AddSingleton<IMessageBroker, RabbitBroker>();
                         services.AddSingleton<IMessageBrokerConfig, RabbitMQConfig>();
                         services.AddHostedService<Scheduler>();

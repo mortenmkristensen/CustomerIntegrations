@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Scheduling {
+namespace Runner {
     public interface IDockerService {
         Task PullImage();
         Task StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
