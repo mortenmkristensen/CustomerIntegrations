@@ -25,6 +25,11 @@
     background-color: DodgerBlue;
 }
 
+.inputCustom {
+    border-radius: 4px;
+    border: none;
+}
+
 p {
     color: white;
     font-size: 18px;
