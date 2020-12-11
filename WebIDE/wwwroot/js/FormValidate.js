@@ -4,12 +4,26 @@
 // Debug form
 function validate() {
     var error = false;
+    var errorId = false;
     var errorScriptName = false;
     var errorVersion = false;
     var errorAuthor = false;
     var numberOfErrors = 0;
     var numberOfErrorsProcessed = 0;
     alert("Something is missing");
+
+    //ID
+    var inputId = "";
+    try {
+        inputId = document.saveScript.id.value;
+    }
+    catch (err) { return true; }
+    if (inputId.length < 1) {
+        error = true;
+        errorId = true;
+        errorText = "Provide an ID";
+        numberOfErrors++;
+    }
 
     //Script name
     var inputScriptName = "";
@@ -49,26 +63,36 @@ function validate() {
         errorText = "Write down the author";
         numberOfErrors++;
     }
-    //
+
     if (error) {
-        if (numberOfErrors > 0) {
+        if (numberOfErrors > 1) {
             errorText = "Please fill out:";
+            if (errorId) {
+                errorText += " ID";
+                numberOfErrorsProcessed++;
+            }
             if (errorScriptName) {
-                errorText += " Script name";
+                if (numberOfErrorsProcessed < 1) {
+                    errorText += " Script name";
+                } else {
+                    errorText += ", Script name";
+                }
                 numberOfErrorsProcessed++;
             }
             if (errorVersion) {
                 if (numberOfErrorsProcessed < 1) {
-                    errorText += " version";
-                    numberOfErrorsProcessed++;
+                    errorText += " Version";
+                } else {
+                    errorText += ", Version";
                 }
+                numberOfErrorsProcessed++;
             }
             if (errorAuthor) {
-                errorText += " author";
+                errorText += ", Author";
             }
-            alert(errorText);
-            return false;
         }
-        return true;
+        alert(errorText);
+        return false;
     }
+    return true;
 }
