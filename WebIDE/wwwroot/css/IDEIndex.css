@@ -4,18 +4,15 @@
 
 .bg {
     font-size: 25px;
-    width: 160px;
-    height: 40px;
-    background-color: blue;
+    border-radius: 8px;
 }
 
 .bg2 {
     font-size: 25px;
-    width: 160px;
-    height: 40px;
-    background-color: lawngreen;
+    border-radius: 8px;
 }
-.textEditorField{
+
+.textEditorField {
     visibility: hidden;
 }
 

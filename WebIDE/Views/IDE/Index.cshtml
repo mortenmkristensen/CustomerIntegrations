@@ -33,40 +33,41 @@
         <div class="container">
             <div class="row">
                 <div class="col-4 justify-content-center">
+                    <p>Open an existing script: <button class="bg btn-primary" onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button></p>
+                    <p>Or start writing a new script:</p>
+                    
                     <select class="custom-select" id="box1" onChange="myNewFunction(this);">
                         <option value="0">Choose scripting language</option>
                         <option value="1">Python</option>
                         <option value="2">Ruby</option>
                         <option value="3">JavaScript</option>
                     </select>
-                    <p>Or</p>
-                    <button class="bg" onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button>
-                    <br />
-
+                    
                     <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
-                        <label>ID</label>
-                        <input type="text" name="id" id="id"/>
                         <br />
-                        <label>Script Name</label>
+                        <label>ID:</label>
+                        <input type="text" name="id" id="id" />
+                        <br />
+                        <label>Script name:</label>
                         <input type="text" name="scriptName" id="scriptName">
                         <br />
-                        <label>Language</label>
+                        <label>Language:</label>
                         <input type="text" name="language" id="language">
                         <br />
-                        <label>Version</label> <input type="text" name="version" id="version" />
+                        <label>Version:</label> <input type="text" name="version" id="version" />
                         <br />
-                        <label>Date Created</label>
+                        <label>Date created:</label>
                         <input type="text" name="dateCreated" id="dateCreated" value="@DateTime.Today">
                         <br />
-                        <label>Author</label> <input type="text" name="author" id="author" />
+                        <label>Author:</label> <input type="text" name="author" id="author" />
                         <br />
-                        <label>Last Modified</label>
+                        <label>Last modified:</label>
                         <input type="text" name="lastModified" id="lastModified" value="@DateTime.Now">
                         <br />
                         <input type="text" name="textEditor" id="textEditor" class="textEditorField">
-                        <p>Save this script</p>
-                        <input type="submit" id="submit" value="Save Script" class="bg2" onclick="if ( ! validate()) return false;" language="javascript" />
+                        <p>Save this script: <input type="submit" id="submit" value="Save Script" class="bg2 btn-success" onclick="if ( ! validate()) return false;" language="javascript" /></p>
                     </form>
+
                     <script>
                         function myNewFunction(element) {
                             var text = element.options[element.selectedIndex].text;
@@ -112,7 +113,7 @@
                                         editor.getSession().setMode("ace/mode/" + mode);
                                     }
                                 }
-                                
+
                                 // copy back to textarea on form submit...
                                 textarea.closest('form').submit(function () {
                                     textarea.val(editor.getSession().getValue());
