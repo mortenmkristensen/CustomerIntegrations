@@ -58,8 +58,16 @@ namespace WebIDE.Controllers {
             script.Author = author;
             script.LastModified = lastModified;
             script.Code = code;
-            UploadScript(script);
-            return View(script);
+            string response= UploadScript(script);
+            Console.WriteLine(response);
+            if (response.Contains("error")) {
+                ViewBag.Situation = 1;
+                return View();
+            } else {
+                ViewBag.Situation = 0;
+                return View(script);
+            }       
+            
         }
 
         private List<Script> GetAllScripts() {
@@ -83,13 +91,14 @@ namespace WebIDE.Controllers {
 
         }
 
-        private void UploadScript(Script script) {
+        private string UploadScript(Script script) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest(Method.POST);
             request.AddJsonBody(script);
             request.RequestFormat = DataFormat.Json;
-            client.Execute(request);
+            var response = client.Execute(request);
+            return response.Content;
         }
     }
 }

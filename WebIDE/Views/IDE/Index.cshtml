@@ -95,9 +95,24 @@
                                 var editor = ace.edit(editDiv[0]);
                                 editor.renderer.setShowGutter(textarea.data('gutter'));
                                 editor.getSession().setValue(textarea.val());
-                                editor.getSession().setMode("ace/mode/" + mode);
+                                //editor.getSession().setMode("ace/mode/" + mode);
                                 editor.setTheme("ace/theme/dawn");
-
+                                var language = document.getElementById("language")
+                                language.onchange = function () {
+                                    if (language.value.Equals("Python")) {
+                                        editor.session.setMode("ace/mode/python");
+                                    }
+                                    if (language.value.Equals("Ruby")) {
+                                        editor.session.setMode("ace/mode/ruby");
+                                    }
+                                    if (language.value.Equals("JavaScript")) {
+                                        editor.session.setMode("ace/mode/javascript");
+                                    }
+                                    else {
+                                        editor.getSession().setMode("ace/mode/" + mode);
+                                    }
+                                }
+                                
                                 // copy back to textarea on form submit...
                                 textarea.closest('form').submit(function () {
                                     textarea.val(editor.getSession().getValue());
