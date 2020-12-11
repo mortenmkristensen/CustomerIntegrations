@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Controllers;
@@ -42,7 +43,7 @@ namespace WebIDE.Controllers {
             string id = collection["id"].ToString();
             string scriptName = collection["scriptName"].ToString();
             string language = collection["language"].ToString();
-            string version = collection["version"];
+            string version = collection["version"].ToString();
             string dateCreatedString = collection["dateCreated"].ToString();
             string author = collection["author"].ToString();
             string lastModifiedString = collection["lastModified"].ToString();
@@ -52,7 +53,7 @@ namespace WebIDE.Controllers {
             script._id = id;
             script.Name = scriptName;
             script.Language = language;
-            script.ScriptVersion = Convert.ToDouble(version);
+            script.ScriptVersion = Convert.ToDouble(version, CultureInfo.GetCultureInfo("en-US").NumberFormat);
             script.DateCreated = dateCreated;
             script.Author = author;
             script.LastModified = lastModified;

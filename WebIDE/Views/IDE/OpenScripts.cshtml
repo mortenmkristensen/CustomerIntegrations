@@ -32,22 +32,24 @@
              <th>Script Id</th>
              <th>Script name</th>
              <th>Language</th>
-             <th>Version</th>
+             <th>Language Version</th>
+             <th>Script Version</th>
              <th>Date created</th>
              <th>Author</th>
              <th>Last modified</th>
          </tr>
          <tr>
              @foreach (var item in Model) {
-             <tr>
-                 <td>@item._id</td>
-                 <td>@item.Name</td>
-                 <td>@item.Language</td>
-                 <td>@item.LanguageVersion</td>
-                 <td>@item.DateCreated</td>
-                 <td>@item.Author</td>
-                 <td>@item.LastModified</td>
-             </tr>
+         <tr>
+             <td>@item._id</td>
+             <td>@item.Name</td>
+             <td>@item.Language</td>
+             <td>@item.LanguageVersion</td>
+             <td>@item.ScriptVersion</td>
+             <td>@item.DateCreated</td>
+             <td>@item.Author</td>
+             <td>@item.LastModified</td>
+         </tr>
          }
          </table>
          <script>
