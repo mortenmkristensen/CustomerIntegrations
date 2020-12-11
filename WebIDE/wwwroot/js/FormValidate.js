@@ -10,7 +10,6 @@ function validate() {
     var errorAuthor = false;
     var numberOfErrors = 0;
     var numberOfErrorsProcessed = 0;
-    alert("Something is missing");
 
     //ID
     var inputId = "";
