@@ -6,6 +6,7 @@ function validate() {
     var error = false;
     var errorId = false;
     var errorScriptName = false;
+    var errorLanguage = false;
     var errorVersion = false;
     var errorAuthor = false;
     var numberOfErrors = 0;
@@ -34,6 +35,19 @@ function validate() {
         error = true;
         errorScriptName = true;
         errorText = "Give the script a name";
+        numberOfErrors++;
+    }
+
+    //Script language
+    var inputLanguage = "";
+    try {
+        inputLanguage = document.saveScript.language.value;
+    }
+    catch (err) { return true; }
+    if (inputLanguage.length < 1) {
+        error = true;
+        errorLanguage = true;
+        errorText = "Select a script language from the dropdown list";
         numberOfErrors++;
     }
 
@@ -75,6 +89,14 @@ function validate() {
                     errorText += " Script name";
                 } else {
                     errorText += ", Script name";
+                }
+                numberOfErrorsProcessed++;
+            }
+            if (errorLanguage) {
+                if (numberOfErrorsProcessed < 1) {
+                    errorText += " Language";
+                } else {
+                    errorText += ", Language";
                 }
                 numberOfErrorsProcessed++;
             }
