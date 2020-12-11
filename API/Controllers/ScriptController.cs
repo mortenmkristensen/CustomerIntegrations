@@ -20,10 +20,9 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult UploadScript([FromBody] string script) {
+        public ActionResult UploadScript([FromBody] Script script) {
             try {
-                Script deserialzedScript = Deserialize(script);
-                dbAccess.Upsert(deserialzedScript);
+                dbAccess.Upsert(script);
             } catch (Exception e) {
                 return StatusCode(500);
             }
@@ -33,10 +32,9 @@ namespace API.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult UpdateScript([FromBody]string script) {
+        public ActionResult UpdateScript([FromBody]Script script) {
             try {
-                Script deserialzedScript = Deserialize(script);
-                dbAccess.Upsert(deserialzedScript);
+                dbAccess.Upsert(script);
             } catch (Exception e) {
                 return StatusCode(500);
             }
