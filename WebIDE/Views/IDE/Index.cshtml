@@ -41,11 +41,12 @@
                     </select>
                     <p>Or</p>
                     <button class="bg" onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button>
-
+                    <br />
 
                     <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
                         <label>ID</label>
                         <input type="text" name="id" id="id"/>
+                        <br />
                         <label>Script Name</label>
                         <input type="text" name="scriptName" id="scriptName">
                         <br />
