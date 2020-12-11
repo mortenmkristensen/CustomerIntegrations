@@ -39,18 +39,20 @@ namespace WebIDE.Controllers {
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
             Script script = new Script();
+            string id = collection["id"].ToString();
             string scriptName = collection["scriptName"].ToString();
             string language = collection["language"].ToString();
-            string version = collection["version"].ToString();
+            string version = collection["version"];
             string dateCreatedString = collection["dateCreated"].ToString();
             string author = collection["author"].ToString();
             string lastModifiedString = collection["lastModified"].ToString();
             string code = collection["textEditor"].ToString();
             DateTime dateCreated = DateTime.Parse(dateCreatedString);
             DateTime lastModified = DateTime.Parse(lastModifiedString);
+            script._id = id;
             script.Name = scriptName;
             script.Language = language;
-            script.ScriptVersion = Double.Parse(version);
+            script.ScriptVersion = Convert.ToDouble(version);
             script.DateCreated = dateCreated;
             script.Author = author;
             script.LastModified = lastModified;
@@ -83,9 +85,8 @@ namespace WebIDE.Controllers {
         private void UploadScript(Script script) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
-            string json = JsonConvert.SerializeObject(script);
             var request = new RestRequest(Method.POST);
-            request.AddParameter("application/json; charset=utf-8", json, ParameterType.RequestBody);
+            request.AddJsonBody(script);
             request.RequestFormat = DataFormat.Json;
             client.Execute(request);
         }
