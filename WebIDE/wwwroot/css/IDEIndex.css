@@ -2,14 +2,10 @@
     background-color: cadetblue !important;
 }
 
-.bg {
-    font-size: 25px;
+.buttonCustom {
+    font-size: 23px;
     border-radius: 8px;
-}
-
-.bg2 {
-    font-size: 25px;
-    border-radius: 8px;
+    border: hidden;
 }
 
 .textEditorField {
@@ -27,4 +23,13 @@
 
 .select-selected {
     background-color: DodgerBlue;
+}
+
+p {
+    color: white;
+    font-size: 18px;
+}
+
+footer {
+    visibility: hidden;
 }
