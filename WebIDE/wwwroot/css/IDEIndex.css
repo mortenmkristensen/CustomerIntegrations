@@ -20,6 +20,9 @@
     height: 60px;
     background-color: lawngreen;
 }
+.textEditorField{
+    visibility: hidden;
+}
 
 .left {
     text-align: center;

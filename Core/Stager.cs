@@ -12,7 +12,7 @@ namespace Core {
         public Dictionary<string, string> GetPaths(IEnumerable<Script> scripts) {
             Dictionary<string, string> paths = new Dictionary<string, string>();
             foreach(var script in scripts) {
-                paths.Add(script.Id,GetPath(script));
+                paths.Add(script._id,GetPath(script));
             }
             return paths;
         }
@@ -20,13 +20,13 @@ namespace Core {
             string path = "";
             switch (script.Language.ToLower()) {
                 case "javascript":
-                    path = $@"c:\scripts\javascript\{script.Id}.js";
+                    path = $@"c:\scripts\javascript\{script._id}.js";
                     break;
                 case "python":
-                    path = $@"c:\scripts\python\{script.Id}.py";
+                    path = $@"c:\scripts\python\{script._id}.py";
                     break;
                 case "ruby":
-                    path = $@"c:\scripts\ruby\{script.Id}.rb";
+                    path = $@"c:\scripts\ruby\{script._id}.rb";
                     break;
             }
             File.WriteAllText(path, script.Code);

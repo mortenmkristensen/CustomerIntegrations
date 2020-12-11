@@ -19,12 +19,12 @@
 </header>
  <html>
  <body>
-     <form id='search' action='@Url.Action("Index","IDE")' method="post">
-         <input type="text" name="scriptID" id="ID">
+     <form id='search' action='@Url.Action("OpenScripts","IDE")' method="post">
+         <input type="text" name="scriptID" id="scriptID">
          <input type="submit" value="Search ScriptID" class="button" />
      </form>
-     <form id='open' action='@Url.Action("OpenScripts","IDE")' method="post">
-         <input class="openScriptInput" type="text" name="scriptID2" id="ID">
+     <form id='open' action='@Url.Action("Index","IDE")' method="post">
+         <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
          <input type="submit" value="Open Script" class="button" />
      </form>
      <table id="table" border="1">
@@ -40,7 +40,7 @@
          <tr>
              @foreach (var item in Model) {
              <tr>
-                 <td>@item.Id</td>
+                 <td>@item._id</td>
                  <td>@item.Name</td>
                  <td>@item.Language</td>
                  <td>@item.LanguageVersion</td>

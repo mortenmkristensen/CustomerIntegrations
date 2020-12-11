@@ -21,7 +21,7 @@
             crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
-
+    <script src="~/js/FormValidate.js"></script>
 
 </head>
 @{
@@ -43,24 +43,50 @@
             <div class="row">
                 <div class="col-4">
                     <div class="left">
-                            <select class="custom-select">
-                                <option value="0">Choose scripting language</option>
-                                <option value="1">Python</option>
-                                <option value="2">Ruby</option>
-                                <option value="3">JavaScript</option>
-                            </select>
+                        <select class="custom-select" id="box1" onChange="myNewFunction(this);">
+                            <option value="0">Choose scripting language</option>
+                            <option value="1">Python</option>
+                            <option value="2">Ruby</option>
+                            <option value="3">JavaScript</option>
+                        </select>
                         <p>Or</p>
-                        <button class="bg" onclick=" location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button>
+                        <button class="bg" onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button>
+                   
 
+                    <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
+                        <label>Script Name</label>
+                        <input type="text" name="scriptName" id="scriptName">
+                        <br />
+                        <label>Language</label>
+                        <input type="text" name="language" id="language">
+                        <br />
+                        <label>Version</label> <input type="text" name="version" id="version" />
+                        <br />
+                        <label>Date Created</label>
+                        <input type="text" name="dateCreated" id="dateCreated" value="@DateTime.Today">
+                        <br />
+                        <label>Author</label> <input type="text" name="author" id="author" />
+                        <br />
+                        <label>Last Modified</label>
+                        <input type="text" name="lastModified" id="lastModified" value="@DateTime.Now">
+                        <br />
+                        <input type="text" name="textEditor" id="textEditor" class="textEditorField">
                         <p>Save this script</p>
-                        <button class="bg2" onclick=" location.href='@Url.Action("SaveScript", "IDE" )'">Save script</button>
+                        <input type="submit" id="submit" value="Save Script" class="bg2" onclick="if ( ! validate()) return false;" language="javascript"/>
+                    </form>
+                        <script>
+                            function myNewFunction(element) {
+                                var text = element.options[element.selectedIndex].text;
+                                document.getElementById("language").value = text;
+                            }
+                        </script>
                     </div>
                 </div>
                 <div class="col-8">
                     <div class="right">
-                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15"></textarea>
+                        <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="15" id="text1"></textarea>
                         @*<br>
-                        <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
+        <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
 
                         <script>
                             $(function () {
@@ -79,11 +105,22 @@
                                     editor.getSession().setValue(textarea.val());
                                     editor.getSession().setMode("ace/mode/" + mode);
                                     editor.setTheme("ace/theme/dawn");
-
+                                    
                                     // copy back to textarea on form submit...
                                     textarea.closest('form').submit(function () {
                                         textarea.val(editor.getSession().getValue());
-                                    })
+                                    }) 
+                                    //var input = document.getElementById('textEditor');
+                                    //input.onclick = function () {
+                                    //    var code = editor.getValue();
+                                    //    input.value = code;
+                                    //}
+                                    var submit = document.getElementById('submit');
+                                    submit.addEventListener("click", foo);
+                                    function foo() {
+                                        var code = editor.getValue();
+                                        document.getElementById('textEditor').value = code;
+                                    }
                                 });
                             });
                         </script>

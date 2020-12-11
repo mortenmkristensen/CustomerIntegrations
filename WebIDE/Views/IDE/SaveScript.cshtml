@@ -1,0 +1,28 @@
+﻿@model Models.Script
+@{
+}
+
+<!DOCTYPE html>
+<head>
+    
+</head>
+<html>
+<body>
+    <h2>Your script was saved successfully!</h2>
+    <br />
+    <label>Script Name</label> <label>@Model.Name</label>
+    <br />
+    <label>Language</label>  <label>@Model.Language</label>
+    <br />
+    <label>Version</label> <label>@Model.ScriptVersion.ToString()</label>
+    <br />
+    <label>Date Created</label> <label>@Model.DateCreated</label>
+    <br />
+    <label>Author</label> <label>@Model.Author</label>
+    <br />
+    <label>Last Modified</label> <label>@Model.LastModified</label>
+    <br />
+    <label>Script</label> <label>@Model.Code</label>
+    <br />
+</body>
+</html>

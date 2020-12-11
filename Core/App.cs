@@ -27,7 +27,7 @@ namespace Core {
                 scriptOutput = ScriptRunner.RunScripts(paths, interpreterPath);
                 foreach (var script in scripts) {
                     foreach (var output in scriptOutput) {
-                        if(script.Id == output.Key) {
+                        if(script._id == output.Key) {
                             script.LastResult = output.Value;
                             script.HasErrors = false;
                             DBAccess.Upsert(script);
