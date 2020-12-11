@@ -71,7 +71,7 @@ namespace Scheduling {
         }
 
         private void SendWithRabbitMQ(string queueName, List<Script> scripts) {
-            _messageBroker.Send(queueName, scripts);
+            _messageBroker.Send<Script>(queueName, scripts);
         }
 
         private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {

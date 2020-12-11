@@ -11,7 +11,7 @@ namespace Core {
             string interpreterPath = Environment.GetEnvironmentVariable("MP_INTERPRETERPATH"); //set with env virables
             while (true) {
                 app.Run(interpreterPath);
-                Thread.Sleep(5000);
+                Thread.Sleep(1000);
             }
         }
     }

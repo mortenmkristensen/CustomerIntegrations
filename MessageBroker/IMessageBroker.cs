@@ -5,9 +5,9 @@ using Models;
 
 namespace MessageBroker {
     public interface IMessageBroker {
-        void Send(string queueName, List<Script> scripts);
-        
-        string Receive(string queueName);
+        void Send<T>(string queueName, IEnumerable<T> messages);
+
+        List<Script> Receive(string queueName);
 
         void Listen(string queueName);
     }
