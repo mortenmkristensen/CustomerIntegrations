@@ -1,23 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Models;
 using RestSharp;
+using System;
 
-
-namespace TestAPI {
+namespace TestAPI2 {
     class Program {
         static void Main(string[] args) {
             Script script = new Script();
-            script._id = 10;
+            script._id = "10";
             script.Name = "Test";
             string response = UploadScript(script);
             Console.WriteLine(response);
             Console.ReadLine();
         }
-
-        private string UploadScript(Script script) {
+        private static string UploadScript(Script script) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest(Method.POST);
