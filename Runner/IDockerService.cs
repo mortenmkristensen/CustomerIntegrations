@@ -10,6 +10,6 @@ namespace Runner {
         Task StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                         string messageBroker, string queueUser, string queuePassword, string consumerQueue);
         Task<IList<ContainerListResponse>> GetContainers();
-        Task RemoveContainer(string containerName);
+        Task PruneContainers();
     }
 }

@@ -28,10 +28,10 @@ namespace Runner {
             int i = 0;
             foreach (var list in lists) {
                 string name = interpreter + i++;
-                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue");
+                await StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.0.117", "abc", "123", "Consumer_Queue");
                 _messsagebroker.Send<Script>(name, list);
             }
-            await IsContainerIdle();
+            await CheckForIdleContainers();
         }
 
         private async Task PullDockerImage() {
@@ -58,15 +58,15 @@ namespace Runner {
             }
         }
 
-        private async Task RemoveContainer(string containerName) {
-            await _dockerService.RemoveContainer(containerName);
+        private async Task PruneContainers() {
+            await _dockerService.PruneContainers();
         }
 
-        private async Task IsContainerIdle() {
+        private async Task CheckForIdleContainers() {
           var containers =  await _dockerService.GetContainers();
             foreach (var container in containers) {
                 if(container.State == "exited") {
-                    RemoveContainer(container.Names[0]);
+                    await PruneContainers();
                 }
             }
         }

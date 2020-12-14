@@ -13,7 +13,7 @@ namespace Runner {
             await _client.Images
                 .CreateImageAsync(new ImagesCreateParameters {
                     FromImage = "mmkristensen/ucngrp11",
-                    Tag = "latest"
+                    Tag = "idle"
                 },
                     new AuthConfig(),
                     new Progress<JSONMessage>());
@@ -31,7 +31,7 @@ namespace Runner {
                 }
             }
             var response = await _client.Containers.CreateContainerAsync(new CreateContainerParameters {
-                Image = "mmkristensen/ucngrp11",
+                Image = "mmkristensen/ucngrp11:idle",
                 Name = queuename,
                 Env = new List<string>() { $"MP_CONNECTIONSTRING={connectionString}", $"MP_COLLECTION={collection}", $"MP_DATABASE={database}",
                                             $"MP_QUEUENAME={queuename}", $"MP_INTERPRETERPATH={interpreterpath}", $"MP_MESSAGEBROKER={messageBroker}",
@@ -44,15 +44,12 @@ namespace Runner {
             return await _client.Containers.ListContainersAsync(new ContainersListParameters() { All = true });
         }
 
-        public async Task RemoveContainer(string containerName) {
-            var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters() { All = true});
-            foreach (var container in containers) {
-                if (container.Names != null && container.Names.Count > 0) {
-                    string name = container.Names[0].Split("/")[1];
-                    if (name == containerName) {
-                        await _client.Containers.RemoveContainerAsync(container.ID, null);
-                    }
-                }
+        public async Task PruneContainers() {
+            try {
+                await _client.Containers.PruneContainersAsync();
+            }
+            catch (Exception) {
+                //TODO log exceptions.
             }
             
         }
