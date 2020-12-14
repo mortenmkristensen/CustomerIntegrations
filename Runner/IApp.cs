@@ -6,7 +6,6 @@ using Models;
 
 namespace Runner {
     public interface IApp {
-        void Run(List<Script> scripts);
-        Task ListenToQueue(string queueName);
+        Task start(string queueName);
     }
 }

@@ -26,7 +26,7 @@ namespace Runner {
             int i = 0;
             foreach (var list in lists) {
                 string name = interpreter + i++;
-                StartDockerContainer("mongodb://192.168.0.117:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.0.117", "abc", "123");
+                StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue");
                 _messsagebroker.Send<Script>(name, list);
             }
         }
@@ -35,12 +35,15 @@ namespace Runner {
             await _dockerService.PullImage();
         }
         private async Task StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
-                                            string messageBroker, string queueUser, string queuePassword) {
-            await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword);
+                                            string messageBroker, string queueUser, string queuePassword, string consumerQueue) {
+            await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword, consumerQueue);
         }
 
-        public async Task ListenToQueue(string queueName) {
-            await PullDockerImage();
+        public async Task start(string queueName) {
+           await PullDockerImage();
+            ListenToQueue(queueName);
+        }
+        public void ListenToQueue(string queueName) {
             EventHandler<BasicDeliverEventArgs> consumer = Handler;
             _messsagebroker.Listen(queueName, consumer);
         }

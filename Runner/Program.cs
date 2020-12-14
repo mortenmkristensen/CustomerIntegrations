@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Runner {
     class Program {
         public static readonly IServiceProvider Container = new ContainerBuilder().Build();
-        static void Main(string[] args) {
+        static async Task Main(string[] args) {
             var app = Container.GetService<IApp>();
-            app.ListenToQueue("testQueue");
+            await app.start("Scheduling_Queue");
         }
     }
 }

@@ -45,7 +45,9 @@ namespace Scheduling {
         private async void Run(object state) {
             GetNewScripts();
             SeparateByLanguage();
-            await SendIdsToRabbitMQ();
+            SendToRabbitMQ(rubyScripts);
+            SendToRabbitMQ(pythonScripts);
+            SendToRabbitMQ(jsScripts);
         }
 
         private void SeparateByLanguage() {
@@ -78,21 +80,10 @@ namespace Scheduling {
             }
         }
 
-        private async Task SendIdsToRabbitMQ() {
-            var rubyLists = SplitList<Script>(rubyScripts, 100);
-            string queueName = "Ruby_Queue";
-            foreach (var list in rubyLists) {
-                SendWithRabbitMQ(queueName, list);
-            }
-            var pythonLists = SplitList<Script>(pythonScripts, 100);
-            queueName = "Python_Queue";
-            foreach (var list in pythonLists) {
-                SendWithRabbitMQ(queueName, list);
-            }
-
-            var jsLists = SplitList<Script>(jsScripts, 100);
-            queueName = "JavaScript_Queue";
-            foreach (var list in jsLists) {
+        private async Task SendToRabbitMQ(List<Script> scripts) {
+            var scriptLists = SplitList<Script>(scripts, 100);
+            string queueName = "Scheduling_Queue";
+            foreach (var list in scriptLists) {
                 SendWithRabbitMQ(queueName, list);
             }
         }
