@@ -58,14 +58,6 @@ namespace Core {
             }
         }
 
-        private IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
-            List<Script> scripts = new List<Script>();
-            foreach (var id in ids) {
-                scripts.Add(DBAccess.GetScriptById(id));
-            }
-            return scripts;
-        }
-
         public List<Script> GetScriptsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
