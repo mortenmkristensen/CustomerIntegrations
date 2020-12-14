@@ -5,61 +5,51 @@
 <head>
     <link href="~/css/OpenScripts.css" rel="stylesheet" />
 </head>
-<style>
-    table tr:not(:first-child) {
-        cursor: pointer;
-        transition: all .25s ease-in-out;
-    }
-
-        table tr:not(:first-child):hover {
-            background-color: lawngreen;
+<html>
+<body>
+    <form id='search' action='@Url.Action("OpenScripts","IDE")' method="post">
+        <input type="text" name="scriptID" id="scriptID">
+        <input type="submit" value="Search ScriptID" class="buttonCustom btn-secondary shadow-none" />
+    </form>
+    <br />
+    <form id='open' action='@Url.Action("Index","IDE")' method="post">
+        <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
+        <input type="submit" value="Open Script" class="buttonCustom btn-primary shadow-none" />
+    </form>
+    <br />
+    <table id="table" border="1">
+        <tr>
+            <th>Script Id</th>
+            <th>Script name</th>
+            <th>Language</th>
+            <th>Language Version</th>
+            <th>Script Version</th>
+            <th>Date created</th>
+            <th>Author</th>
+            <th>Last modified</th>
+        </tr>
+        <tr>
+            @foreach (var item in Model) {
+            <tr>
+                <td>@item._id</td>
+                <td>@item.Name</td>
+                <td>@item.Language</td>
+                <td>@item.LanguageVersion</td>
+                <td>@item.ScriptVersion</td>
+                <td>@item.DateCreated</td>
+                <td>@item.Author</td>
+                <td>@item.LastModified</td>
+            </tr>
         }
-</style>
-<header>
-</header>
- <html>
- <body>
-     <form id='search' action='@Url.Action("OpenScripts","IDE")' method="post">
-         <input type="text" name="scriptID" id="scriptID">
-         <input type="submit" value="Search ScriptID" class="button" />
-     </form>
-     <form id='open' action='@Url.Action("Index","IDE")' method="post">
-         <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
-         <input type="submit" value="Open Script" class="button" />
-     </form>
-     <table id="table" border="1">
-         <tr>
-             <th>Script Id</th>
-             <th>Script name</th>
-             <th>Language</th>
-             <th>Language Version</th>
-             <th>Script Version</th>
-             <th>Date created</th>
-             <th>Author</th>
-             <th>Last modified</th>
-         </tr>
-         <tr>
-             @foreach (var item in Model) {
-         <tr>
-             <td>@item._id</td>
-             <td>@item.Name</td>
-             <td>@item.Language</td>
-             <td>@item.LanguageVersion</td>
-             <td>@item.ScriptVersion</td>
-             <td>@item.DateCreated</td>
-             <td>@item.Author</td>
-             <td>@item.LastModified</td>
-         </tr>
-         }
-         </table>
-         <script>
-             var table = document.getElementById('table');
-             for (var i = 1; i < table.rows.length; i++) {
-                 table.rows[i].onclick = function () {
-                     //rIndex = this.rowIndex;
-                     document.getElementById("scriptID2").value = this.cells[0].innerHTML;
-                 };
-             }
-         </script>
-     </body>
+        </table>
+        <script>
+            var table = document.getElementById('table');
+            for (var i = 1; i < table.rows.length; i++) {
+                table.rows[i].onclick = function () {
+                    //rIndex = this.rowIndex;
+                    document.getElementById("scriptID2").value = this.cells[0].innerHTML;
+                };
+            }
+        </script>
+    </body>
 </html>
