@@ -1,17 +1,14 @@
-﻿@*@{
-        Layout = "_Layout";
-    }*@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="~/css/IDEIndex.css" rel="stylesheet" />
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
-
+    <style type="text/css">
+        #editor {
+            height: 600px;
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -19,7 +16,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
             crossorigin="anonymous"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
     <script src="~/js/FormValidate.js"></script>
 
@@ -35,14 +31,14 @@
                 <div class="col-4 justify-content-center">
                     <p>Open an existing script: <button class="buttonCustom btn-primary shadow-none" onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button></p>
                     <p>Or start writing a new script:</p>
-                    
-                    <select class="custom-select" id="box1" onChange="myNewFunction(this);">
+
+                    <select class="custom-select" id="box1">
                         <option value="0">Choose scripting language</option>
-                        <option value="1">Python</option>
-                        <option value="2">Ruby</option>
-                        <option value="3">JavaScript</option>
+                        <option value="1">python</option>
+                        <option value="2">ruby</option>
+                        <option value="3">javascript</option>
                     </select>
-                    
+
                     <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
                         <br />
                         <label>ID:</label>
@@ -70,71 +66,31 @@
                         <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
                     </form>
 
-                    <script>
-                        function myNewFunction(element) {
-                            var text = element.options[element.selectedIndex].text;
-                            document.getElementById("language").value = text;
-                        }
-                    </script>
                 </div>
-                <div class="col-8">
+                <div class="col-8" id="editor">
 
-                    <textarea name="my-xml-editor" data-editor="xml" data-gutter="1" rows="20" id="text1"></textarea>
-                    @*<br>
-                        <textarea name="my-markdown-editor" data-editor="markdown" data-gutter="0"></textarea>*@
-
-                    <script>
-                        $(function () {
-                            $('textarea[data-editor]').each(function () {
-                                var textarea = $(this);
-                                var mode = textarea.data('editor');
-                                var editDiv = $('<div>', {
-                                    position: 'absolute',
-                                    //width: textarea.width(),
-                                    height: textarea.height(),
-                                    'class': textarea.attr('class')
-                                }).insertBefore(textarea);
-                                textarea.css('display', 'none');
-                                var editor = ace.edit(editDiv[0]);
-                                editor.renderer.setShowGutter(textarea.data('gutter'));
-                                editor.getSession().setValue(textarea.val());
-                                //editor.getSession().setMode("ace/mode/" + mode);
-                                editor.setTheme("ace/theme/dawn");
-                                var language = document.getElementById("language")
-                                language.onchange = function () {
-                                    if (language.value.Equals("Python")) {
-                                        editor.session.setMode("ace/mode/python");
-                                    }
-                                    if (language.value.Equals("Ruby")) {
-                                        editor.session.setMode("ace/mode/ruby");
-                                    }
-                                    if (language.value.Equals("JavaScript")) {
-                                        editor.session.setMode("ace/mode/javascript");
-                                    }
-                                    else {
-                                        editor.getSession().setMode("ace/mode/" + mode);
-                                    }
-                                }
-
-                                // copy back to textarea on form submit...
-                                textarea.closest('form').submit(function () {
-                                    textarea.val(editor.getSession().getValue());
-                                })
-                                //var input = document.getElementById('textEditor');
-                                //input.onclick = function () {
-                                //    var code = editor.getValue();
-                                //    input.value = code;
-                                //}
-                                var submit = document.getElementById('submit');
-                                submit.addEventListener("click", foo);
-                                function foo() {
-                                    var code = editor.getValue();
-                                    document.getElementById('textEditor').value = code;
-                                }
-                            });
-                        });
-                    </script>
                 </div>
+
+                <script>
+                    var editor = ace.edit("editor");
+                    editor.setTheme("ace/theme/xcode");
+                    var box = document.getElementById("box1")
+                    box.onchange = function () {
+                        var newMode = box.options[box.selectedIndex].text;
+                        document.getElementById("language").value = newMode;
+                        editor.getSession().setMode("ace/mode/" + newMode);
+                    }
+                </script>
+                <script>
+                    var submit = document.getElementById('submit');
+                    submit.addEventListener("click", foo);
+                    function foo() {
+                        var code = editor.getValue();
+                        document.getElementById('textEditor').value = code;
+                    }
+
+                </script>
+
             </div>
         </div>
     </section>
