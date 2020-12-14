@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Models;
+using RabbitMQ.Client.Events;
 
 namespace MessageBroker {
     public interface IMessageBroker {
@@ -9,6 +10,6 @@ namespace MessageBroker {
 
         List<Script> Receive(string queueName);
 
-        void Listen(string queueName);
+        void Listen(string queueName, EventHandler<BasicDeliverEventArgs> handler);
     }
 }
