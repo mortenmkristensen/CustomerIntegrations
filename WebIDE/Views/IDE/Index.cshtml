@@ -38,7 +38,7 @@
                         <option value="2">ruby</option>
                         <option value="3">javascript</option>
                     </select>
-
+                    <textarea id="editorContent" class="textEditorArea"  name="editorContent" form="saveScript"></textarea>
                     <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
                         <br />
                         <label>ID:</label>
@@ -62,7 +62,6 @@
                         <label>Last modified:</label>
                         <input class="inputCustom" type="text" name="lastModified" id="lastModified" value="@DateTime.Now">
                         <br />
-                        <input type="text" name="textEditor" id="textEditor" class="textEditorField">
                         <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
                     </form>
 
@@ -82,15 +81,12 @@
                     }
                 </script>
                 <script>
-                    var submit = document.getElementById('submit');
-                    submit.addEventListener("click", foo);
-                    function foo() {
-                        var code = editor.getValue();
-                        document.getElementById('textEditor').value = code;
-                    }
-
-                </script>
-
+                    var editor = ace.edit("editor");
+                    var textarea = $('#editorContent');
+                    editor.getSession().on('change', function () {
+                        textarea.val(editor.getSession().getValue());
+                    });
+                </script>               
             </div>
         </div>
     </section>

@@ -47,7 +47,7 @@ namespace WebIDE.Controllers {
             string dateCreatedString = collection["dateCreated"].ToString();
             string author = collection["author"].ToString();
             string lastModifiedString = collection["lastModified"].ToString();
-            string code = collection["textEditor"].ToString();
+            string code = collection["editorContent"].ToString();
             DateTime dateCreated = DateTime.Parse(dateCreatedString);
             DateTime lastModified = DateTime.Parse(lastModifiedString);
             script._id = id;
