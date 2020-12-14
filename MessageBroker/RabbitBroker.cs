@@ -16,8 +16,8 @@ namespace MessageBroker {
             throw new NotImplementedException();
         }
 
-        public string Receive(string queueName) {
-            string message = null;
+        public List<Script> Receive(string queueName) {
+            List<Script> scipts = null;
             try {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
@@ -29,7 +29,8 @@ namespace MessageBroker {
                                          arguments: null);
                     var data = channel.BasicGet(queueName, false);
                     if (data != null) {
-                        message = Encoding.UTF8.GetString(data.Body.Span);
+                        var message = Encoding.UTF8.GetString(data.Body.Span);
+                        scipts = JsonConvert.DeserializeObject<List<Script>>(message);
                         // ack the message, ie. confirm that we have processed it
                         // otherwise it will be requeued a bit later
                         channel.BasicAck(data.DeliveryTag, false);
@@ -48,10 +49,10 @@ namespace MessageBroker {
                     Console.WriteLine("Something went wrong");
                 }
             }
-            return message;
+            return scipts;
         }
 
-        public void Send(string queueName, List<Script> scripts) {
+        public void Send<T>(string queueName, IEnumerable<T> messages) {
             try {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
@@ -62,7 +63,7 @@ namespace MessageBroker {
                                          autoDelete: false,
                                          arguments: null);
 
-                    var message = JsonConvert.SerializeObject(scripts);
+                    var message = JsonConvert.SerializeObject(messages);
                     var body = Encoding.UTF8.GetBytes(message);
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
@@ -70,10 +71,6 @@ namespace MessageBroker {
                                          routingKey: queueName,
                                          basicProperties: properties,
                                          body: body);
-                    Console.WriteLine(message);
-                    Console.WriteLine();
-                    Console.WriteLine();
-
                 }
             } catch (Exception e) {
                 if (e is AlreadyClosedException) {

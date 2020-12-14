@@ -6,10 +6,9 @@
         "MP_COLLECTION": "Scripts",
         "MP_DATABASE": "MapsPeople",
         "MP_QUEUENAME": "queue1",
-        "MP_MESSAGEBROKER": "192.168.87.107",
-        "MP_CONNECTIONSTRING": "mongodb://192.168.87.107:27017",
-        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe",
-        "MP_IDS": "[\"2\"]"
+        "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
+        "MP_CONSUMERQUEUE": "Consumer_Queue",
+        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe"
       }
     },
     "Docker": {

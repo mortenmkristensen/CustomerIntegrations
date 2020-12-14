@@ -9,6 +9,7 @@ using RabbitMQ.Client.Events;
 using System.Text;
 using RabbitMQ.Client.Exceptions;
 using MessageBroker;
+using System.Linq;
 
 namespace Core {
     class App : IApp {
@@ -25,17 +26,11 @@ namespace Core {
         }
 
         public void Run(string interpreterPath) {
-            string scriptsJson = GetScriptsFromScheduler();
-            if(scriptsJson == null) {
+            var scripts = GetScriptsFromScheduler();
+            if(scripts == null) {
                 return;
             }
-            List<Script> scripts = DeserializeIds(scriptsJson);
-            Dictionary<string, string> paths = new Dictionary<string, string>();
-            try {
-                paths = Stager.GetPaths(scripts);
-            }catch(Exception e) {
-                Console.WriteLine("Error occured while getting paths, Error:", e.Message);
-            }
+            Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
                 foreach (var script in scripts) {
                     foreach (var path in paths) {
@@ -55,28 +50,22 @@ namespace Core {
                         }
                     }
                 }
-            foreach (var script in scriptOutput) {
-                Console.WriteLine(script + "\n\n");
 
+            var messages = scriptOutput.Values.ToList();
+            SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"), messages);
+            foreach (var id in scriptOutput) {
+                Console.WriteLine($"The Script with id: {id.Key} has been run");
             }
 
         }
 
-        private List<Script> DeserializeIds(string scripts) {
-            return JsonConvert.DeserializeObject<List<Script>>(scripts);
-        }
-
-        private IEnumerable<Script> GetScriptsByIds(IEnumerable<string> ids) {
-            List<Script> scripts = new List<Script>();
-            foreach (var id in ids) {
-                scripts.Add(DBAccess.GetScriptById(id));
-            }
-            return scripts;
-        }
-
-        public string GetScriptsFromScheduler() {
+        public List<Script> GetScriptsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
+        }
+
+        private void SendData(string queueName, IEnumerable<string> messages) {
+            MessageBroker.Send<string>(queueName, messages);
         }
     }
 }
