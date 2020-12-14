@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Runner {
     public class DockerService : IDockerService {
@@ -39,7 +40,11 @@ namespace Runner {
             await _client.Containers.StartContainerAsync(response.ID, null);
         }
 
-        public async Task StopContainer(string containerName) {
+        public async Task<IList<ContainerListResponse>> GetContainers() {
+            return await _client.Containers.ListContainersAsync(new ContainersListParameters() { All = true });
+        }
+
+        public async Task RemoveContainer(string containerName) {
             var containers = await _client.Containers.ListContainersAsync(new ContainersListParameters() { All = true});
             foreach (var container in containers) {
                 if (container.Names != null && container.Names.Count > 0) {

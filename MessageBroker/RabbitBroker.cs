@@ -8,9 +8,9 @@ using Models;
 using RabbitMQ.Client.Events;
 
 namespace MessageBroker {
-    public class RabbitBroker:IMessageBroker {
+    public class RabbitBroker : IMessageBroker {
         private readonly IMessageBrokerConfig _config;
-        public RabbitBroker(IMessageBrokerConfig config ) {
+        public RabbitBroker(IMessageBrokerConfig config) {
             _config = config;
         }
         public void Listen(string queueName, EventHandler<BasicDeliverEventArgs> handler) {

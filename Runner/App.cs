@@ -12,12 +12,14 @@ namespace Runner {
     class App : IApp {
         private IDockerService _dockerService;
         private IMessageBroker _messsagebroker;
+        private Dictionary<string, int> dockerContainers;
         public App(IDockerService dockerService, IMessageBroker messageBroker) {
             _dockerService = dockerService;
             _messsagebroker = messageBroker;
+            dockerContainers = new Dictionary<string, int>();
         }
 
-        public void Run(List<Script> scripts) {
+        public async void Run(List<Script> scripts) {
             string interpreter = scripts.FirstOrDefault().Language;
             if (interpreter == "javascript") {
                 interpreter = "node";
@@ -29,6 +31,7 @@ namespace Runner {
                 StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue");
                 _messsagebroker.Send<Script>(name, list);
             }
+            await IsContainerIdle();
         }
 
         private async Task PullDockerImage() {
@@ -36,7 +39,8 @@ namespace Runner {
         }
         private async Task StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                             string messageBroker, string queueUser, string queuePassword, string consumerQueue) {
-            await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword, consumerQueue);
+             await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword, consumerQueue);
+
         }
 
         public async Task start(string queueName) {
@@ -51,6 +55,19 @@ namespace Runner {
         private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
             for (int i = 0; i < ids.Count; i += nSize) {
                 yield return ids.GetRange(i, Math.Min(nSize, ids.Count - i));
+            }
+        }
+
+        private async Task RemoveContainer(string containerName) {
+            await _dockerService.RemoveContainer(containerName);
+        }
+
+        private async Task IsContainerIdle() {
+          var containers =  await _dockerService.GetContainers();
+            foreach (var container in containers) {
+                if(container.State == "exited") {
+                    RemoveContainer(container.Names[0]);
+                }
             }
         }
 
