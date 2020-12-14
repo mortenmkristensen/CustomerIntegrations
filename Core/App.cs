@@ -59,8 +59,6 @@ namespace Core {
             return 0;
         }
 
-        }
-
         public List<Script> GetScriptsFromScheduler() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
@@ -71,3 +69,4 @@ namespace Core {
         }
     }
 }
+
