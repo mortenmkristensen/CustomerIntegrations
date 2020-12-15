@@ -42,25 +42,25 @@
                     <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
                         <br />
                         <label>ID:</label>
-                        <input class="inputCustom" type="text" name="id" id="id" />
+                        <input class="inputCustom" type="text" name="id" id="id"/>
                         <br />
                         <label>Script name:</label>
                         <input class="inputCustom" type="text" name="scriptName" id="scriptName">
                         <br />
                         <label>Language:</label>
-                        <input class="inputCustom" type="text" name="language" id="language">
+                        <input class="inputCustom" type="text" name="language" id="language" readonly>
                         <br />
                         <label>Version:</label>
-                        <input class="inputCustom" type="text" name="version" id="version" />
+                        <input class="inputCustom" type="text" name="version" id="version"/>
                         <br />
                         <label>Date created:</label>
-                        <input class="inputCustom" type="text" name="dateCreated" id="dateCreated" value="@DateTime.Today">
+                        <input class="inputCustom" type="text" name="dateCreated" id="dateCreated" value="@DateTime.Today" readonly>
                         <br />
                         <label>Author:</label>
-                        <input class="inputCustom" type="text" name="author" id="author" />
+                        <input class="inputCustom" type="text" name="author" id="author"/>
                         <br />
                         <label>Last modified:</label>
-                        <input class="inputCustom" type="text" name="lastModified" id="lastModified" value="@DateTime.Now">
+                        <input class="inputCustom" type="text" name="lastModified" id="lastModified" value="@DateTime.Now" readonly>
                         <br />
                         <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
                     </form>
