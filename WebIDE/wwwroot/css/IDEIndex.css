@@ -11,7 +11,11 @@
 .textEditorArea {
     visibility: hidden;
 }
-
+.table {
+    background-color: cadetblue;
+    border: hidden;
+    border-collapse: collapse;
+}
 .custom-select {
     position: relative;
     font-family: Arial;
