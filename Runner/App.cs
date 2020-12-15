@@ -26,18 +26,24 @@ namespace Runner {
             if (interpreter == "javascript") {
                 interpreter = "node";
             }
-            var lists = SplitList<Script>(scripts, 1);
+            var lists = SplitList<Script>(scripts,int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             int i = 0;
             string containerName = "";
             foreach (var list in lists) {
                 string name = interpreter + i++;
                 try {
                     if (!_dockerContainers.Contains(name)) {
-                        containerName = StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue").Result;
+                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), Environment.GetEnvironmentVariable("MP_COLLECTION"),
+                                                                                                Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter, 
+                                                                                                Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
+                                                                                                Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                     }
                 } catch (DockerApiException) {
                     name = interpreter + ++i;
-                    containerName = StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue").Result;
+                    containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), Environment.GetEnvironmentVariable("MP_COLLECTION"),
+                                                                                               Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
+                                                                                               Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
+                                                                                               Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                 }
                 _messsagebroker.Send<Script>(name, list);
             }

@@ -82,7 +82,7 @@ namespace Scheduling {
         }
 
         private async Task SendToRabbitMQ(List<Script> scripts) {
-            var scriptLists = SplitList<Script>(scripts, 100);
+            var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             string queueName = "Scheduling_Queue";
             foreach (var list in scriptLists) {
                 SendWithRabbitMQ(queueName, list);
@@ -90,8 +90,7 @@ namespace Scheduling {
         }
 
         private void GetNewScripts() {
-            List<Script> allScripts = _dbAccess.GetAll().ToList();
-            scripts = allScripts.Except(scripts).ToList();
+            scripts = _dbAccess.GetAll().ToList();
         }
 
         private void ClearLists() {
