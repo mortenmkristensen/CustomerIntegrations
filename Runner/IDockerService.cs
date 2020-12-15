@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Runner {
     public interface IDockerService {
         Task PullImage();
-        Task StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
+        Task<string> StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                         string messageBroker, string queueUser, string queuePassword, string consumerQueue);
         Task<IList<ContainerListResponse>> GetContainers();
         Task PruneContainers();

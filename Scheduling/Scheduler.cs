@@ -48,6 +48,7 @@ namespace Scheduling {
             SendToRabbitMQ(rubyScripts);
             SendToRabbitMQ(pythonScripts);
             SendToRabbitMQ(jsScripts);
+            ClearLists();
         }
 
         private void SeparateByLanguage() {
@@ -91,6 +92,12 @@ namespace Scheduling {
         private void GetNewScripts() {
             List<Script> allScripts = _dbAccess.GetAll().ToList();
             scripts = allScripts.Except(scripts).ToList();
+        }
+
+        private void ClearLists() {
+            rubyScripts.Clear();
+            pythonScripts.Clear();
+            jsScripts.Clear();
         }
     }
 }
