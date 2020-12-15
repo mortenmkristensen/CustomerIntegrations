@@ -78,6 +78,28 @@
                         var newMode = box.options[box.selectedIndex].text;
                         document.getElementById("language").value = newMode;
                         editor.getSession().setMode("ace/mode/" + newMode);
+                        if (newMode==("javascript")) {
+                            editor.setValue("var data =" + '\u0022' + "hello" + '\u0022' + "\n" + "function say(){" + "\n" + "console.log(data);}");
+                        }
+
+                        if (newMode == ("ruby")) {
+                            editor.setValue("class Location" + "\n"+
+                                "attr_writer :Id,:ParentId,:ExternalId,:ConsumerId,:Sources" + "\n" +
+                                "attr_reader :Id,:ParentId,:ExternalId,:ConsumerId,:Sources" + "\n" +
+
+                                "def to_json(*a)" + "\n" +
+                                "{ 'Id' => @@Id, 'ParentId' => @@ParentId, 'ExternalId' => @@ExternalId, 'ConsumerId'=> @@ConsumerId, 'Sources' => @@Sources}.to_json" + "\n" +
+                                "end" + "\n" +
+
+                                "def self.from_json string" + "\n" +
+                                "data = JSON.load string" + "\n" +
+                                "self.new data['Id'], data['ParentId'], data['ExternalId'], data['ConsumerId'], data['Sources']" + "\n" +
+                                "end" + "\n" +
+                                "end" 
+
+                            )
+
+                        }
                     }
                 </script>
                 <script>
