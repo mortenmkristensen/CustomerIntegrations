@@ -22,7 +22,7 @@ namespace WebIDE.Controllers {
         }
 
         public ActionResult OpenScripts() {
-           List<Script> scripts = GetAllScripts();
+            List<Script> scripts = GetAllScripts();
             return View(scripts);
 
         }
@@ -33,40 +33,31 @@ namespace WebIDE.Controllers {
             scripts.Add(script);
             return View(scripts);
         }
-       
+
         public ActionResult SaveScript() {
             return View();
         }
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
             Script script = new Script();
-            string id = collection["id"].ToString();
-            string scriptName = collection["scriptName"].ToString();
-            string language = collection["language"].ToString();
             string version = collection["version"].ToString();
-            string dateCreatedString = collection["dateCreated"].ToString();
-            string author = collection["author"].ToString();
-            string lastModifiedString = collection["lastModified"].ToString();
-            string code = collection["editorContent"].ToString();
-            DateTime dateCreated = DateTime.Parse(dateCreatedString);
-            DateTime lastModified = DateTime.Parse(lastModifiedString);
-            script._id = id;
-            script.Name = scriptName;
-            script.Language = language;
+            script._id = collection["id"].ToString();
+            script.Name = collection["scriptName"].ToString();
+            script.Language = collection["language"].ToString();
             script.ScriptVersion = Convert.ToDouble(version, CultureInfo.GetCultureInfo("en-US").NumberFormat);
-            script.DateCreated = dateCreated;
-            script.Author = author;
-            script.LastModified = lastModified;
-            script.Code = code;
+            script.DateCreated = DateTime.Parse(collection["dateCreated"].ToString());
+            script.Author = collection["author"].ToString();
+            script.LastModified = DateTime.Parse(collection["lastModified"].ToString());
+            script.Code = collection["editorContent"].ToString();
             UploadScript(script);
-            Script script2= GetScriptById(script._id);
+            Script script2 = GetScriptById(script._id);
             if (script2 != null) {
                 ViewBag.Situation = 0;
                 return View(script);
             } else {
                 ViewBag.Situation = 1;
                 return View();
-            }                     
+            }
         }
 
         private List<Script> GetAllScripts() {
@@ -98,5 +89,7 @@ namespace WebIDE.Controllers {
             request.RequestFormat = DataFormat.Json;
             client.Execute(request);
         }
+
+        //Private void DeleteScript(Script script)
     }
 }
