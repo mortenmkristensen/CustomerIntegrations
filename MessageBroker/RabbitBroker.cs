@@ -18,11 +18,13 @@ namespace MessageBroker {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
+                    Dictionary<string, object> args = new Dictionary<string, object>();
+                    args.Add("x-expires", 30000);
                     channel.QueueDeclare(queue: queueName,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: args);
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -56,11 +58,13 @@ namespace MessageBroker {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
+                    Dictionary<string, object> args = new Dictionary<string, object>();
+                    args.Add("x-expires", 30000);
                     channel.QueueDeclare(queue: queueName,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: args);
                     var data = channel.BasicGet(queueName, false);
                     if (data != null) {
                         var message = Encoding.UTF8.GetString(data.Body.Span);
@@ -91,11 +95,13 @@ namespace MessageBroker {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
+                    Dictionary<string, object> args = new Dictionary<string, object>();
+                    args.Add("x-expires", 30000);
                     channel.QueueDeclare(queue: queueName,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: args);
 
                     var message = JsonConvert.SerializeObject(messages);
                     var body = Encoding.UTF8.GetBytes(message);
