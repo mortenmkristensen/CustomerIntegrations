@@ -65,15 +65,8 @@ namespace Runner {
         public async Task start(string queueName) {
             await PullDockerImage();
             await PruneContainers();
-            //Timer timer = new Timer(
-            //    UpdateFromDocker,
-            //    null,
-            //    TimeSpan.Zero,
-            //    TimeSpan.FromSeconds(10)
-            //    );
             TaskFactory taskFactory = new TaskFactory();
             taskFactory.StartNew(UpdateFromDocker);
-            UpdateFromDocker();
             ListenToQueue(queueName);
         }
 

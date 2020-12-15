@@ -15,7 +15,7 @@ namespace Core {
                 if(i > 30) {
                     return;
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
     }
