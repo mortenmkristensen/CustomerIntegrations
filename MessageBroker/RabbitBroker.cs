@@ -5,15 +5,51 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Models;
+using RabbitMQ.Client.Events;
 
 namespace MessageBroker {
-    public class RabbitBroker:IMessageBroker {
+    public class RabbitBroker : IMessageBroker {
         private readonly IMessageBrokerConfig _config;
-        public RabbitBroker(IMessageBrokerConfig config ) {
+        public RabbitBroker(IMessageBrokerConfig config) {
             _config = config;
         }
-        public void Listen(string queueName) {
-            throw new NotImplementedException();
+        public void Listen(string queueName, EventHandler<BasicDeliverEventArgs> handler) {
+            try {
+                var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
+                using (var connection = factory.CreateConnection())
+                using (var channel = connection.CreateModel()) {
+                    Dictionary<string, object> args = new Dictionary<string, object>();
+                    args.Add("x-expires", 30000);
+                    channel.QueueDeclare(queue: queueName,
+                                         durable: true,
+                                         exclusive: false,
+                                         autoDelete: false,
+                                         arguments: args);
+
+                    channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+
+                    Console.WriteLine(" [*] Waiting for messages.");
+
+                    var consumer = new EventingBasicConsumer(channel);
+                    consumer.Received += handler;
+                    channel.BasicConsume(queue: queueName,
+                                         autoAck: true,
+                                         consumer: consumer);
+                    Console.ReadLine();
+                }
+            } catch (Exception e) {
+                if (e is AlreadyClosedException) {
+                    Console.WriteLine("The connectionis already closed");
+                } else if (e is BrokerUnreachableException) {
+                    Console.WriteLine("The broker cannot be reached");
+                } else if (e is OperationInterruptedException) {
+                    Console.WriteLine("The operation was interupted");
+                } else if (e is ConnectFailureException) {
+                    Console.WriteLine("Could not connect to the broker broker");
+                } else {
+                    Console.WriteLine("Something went wrong");
+                }
+            }
         }
 
         public List<Script> Receive(string queueName) {
@@ -22,11 +58,13 @@ namespace MessageBroker {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
+                    Dictionary<string, object> args = new Dictionary<string, object>();
+                    args.Add("x-expires", 30000);
                     channel.QueueDeclare(queue: queueName,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: args);
                     var data = channel.BasicGet(queueName, false);
                     if (data != null) {
                         var message = Encoding.UTF8.GetString(data.Body.Span);
@@ -57,11 +95,13 @@ namespace MessageBroker {
                 var factory = new ConnectionFactory() { HostName = _config.HostName, UserName = _config.UserName, Password = _config.Password };
                 using (var connection = factory.CreateConnection())
                 using (var channel = connection.CreateModel()) {
+                    Dictionary<string, object> args = new Dictionary<string, object>();
+                    args.Add("x-expires", 30000);
                     channel.QueueDeclare(queue: queueName,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: args);
 
                     var message = JsonConvert.SerializeObject(messages);
                     var body = Encoding.UTF8.GetBytes(message);

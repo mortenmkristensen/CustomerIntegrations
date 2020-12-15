@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scheduling", "Scheduling\Scheduling.csproj", "{12D6191D-9729-4675-A2D4-21D9899195DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageBroker", "MessageBroker\MessageBroker.csproj", "{7B0A0999-1FF1-453C-B840-8189F9D08471}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBroker", "MessageBroker\MessageBroker.csproj", "{7B0A0999-1FF1-453C-B840-8189F9D08471}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Runner", "Runner\Runner.csproj", "{EAAA2580-90D7-49AB-98E3-D7DC71F810D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{7B0A0999-1FF1-453C-B840-8189F9D08471}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B0A0999-1FF1-453C-B840-8189F9D08471}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B0A0999-1FF1-453C-B840-8189F9D08471}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAAA2580-90D7-49AB-98E3-D7DC71F810D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAAA2580-90D7-49AB-98E3-D7DC71F810D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAAA2580-90D7-49AB-98E3-D7DC71F810D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAAA2580-90D7-49AB-98E3-D7DC71F810D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

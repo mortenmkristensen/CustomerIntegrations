@@ -1,0 +1,18 @@
+{
+  "profiles": {
+    "Runner": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "MP_COLLECTION": "Scripts",
+        "MP_DATABASE": "MapsPeople",
+        "MP_CONNECTIONSTRING": "mongodb://192.168.0.117:27017",
+        "MP_CONSUMERQUEUE": "Consumer_Queue",
+        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe",
+        "MP_MESSAGEBROKER": "192.168.0.117",
+        "MP_QUEUEUSER": "abc",
+        "MP_QUEUEPASSWORD": "123",
+        "MP_CHUNKSIZE": "10"
+      }
+    }
+  }
+}

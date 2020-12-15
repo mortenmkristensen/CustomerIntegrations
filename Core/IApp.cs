@@ -3,6 +3,6 @@ using System.Collections.Generic;
 
 namespace Core {
     interface IApp {
-        void Run(string interpreterPath);
+        int Run(string interpreterPath, int count);
     }
 }

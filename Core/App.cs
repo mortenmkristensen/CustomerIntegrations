@@ -25,10 +25,10 @@ namespace Core {
             MessageBroker = messageBroker;
         }
 
-        public void Run(string interpreterPath) {
+        public int Run(string interpreterPath, int count) {
             var scripts = GetScriptsFromScheduler();
             if(scripts == null) {
-                return;
+                return ++count;
             }
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
@@ -56,6 +56,7 @@ namespace Core {
             foreach (var id in scriptOutput) {
                 Console.WriteLine($"The Script with id: {id.Key} has been run");
             }
+            return 0;
         }
 
         public List<Script> GetScriptsFromScheduler() {
