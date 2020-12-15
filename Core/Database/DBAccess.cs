@@ -61,8 +61,8 @@ namespace Core.Database {
                 if (script.Id == null || script.Id == "") {
                     Collection.InsertOne(script);
                 } else {
-                    var id = new ObjectId(script.Id);
-                    var filter = Builders<Script>.Filter.Eq("_id", id);
+                    //var id = new ObjectId(script.Id);
+                    var filter = Builders<Script>.Filter.Eq("_id", script.Id);
                     Collection.ReplaceOne(filter, script, new ReplaceOptions { IsUpsert = true });
                 }
             } catch (MongoException me) {

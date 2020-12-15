@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Core.Models {
     class Script {
-        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
-        [BsonRepresentation(BsonType.ObjectId)]
-        [BsonIgnoreIfDefault]
+        //[BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
+        //[BsonRepresentation(BsonType.ObjectId)]
+        //[BsonIgnoreIfDefault]
         public string Id { get; set; }
         public string Name { get; set; }
         public string Customer { get; set; }
