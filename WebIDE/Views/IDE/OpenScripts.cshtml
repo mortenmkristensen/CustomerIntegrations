@@ -4,6 +4,7 @@
 <!DOCTYPE html>
 <head>
     <link href="~/css/OpenScripts.css" rel="stylesheet" />
+    <script src="~/js/OpenScriptViewValidate.js"></script>
 </head>
 <html>
 <body>
@@ -12,7 +13,7 @@
             <div class="col-6">
                 <form id='search' action='@Url.Action("OpenScripts","IDE")' method="post">
                     <input type="text" name="scriptID" id="scriptID">
-                    <input type="submit" value="Search ScriptID" class="buttonCustom btn-secondary shadow-none" />
+                    <input type="submit" value="Search ScriptID" class="buttonCustom btn-secondary shadow-none" onclick="if ( ! validate()) return false;" language="javascript" />
                 </form>
                 <br />
                 <form id='open' action='@Url.Action("Index","IDE")' method="post">
