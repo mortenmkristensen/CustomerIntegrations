@@ -4,11 +4,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="~/css/IDEIndex.css" rel="stylesheet" />
     <!-- Bootstrap CSS -->
-    <style type="text/css">
-        #editor {
-            height: 600px;
-        }
-    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
@@ -18,7 +13,6 @@
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
     <script src="~/js/FormValidate.js"></script>
-
 </head>
 @{
     ViewBag.Title = "Index";
@@ -40,14 +34,14 @@
                     </select>
                     <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript"></textarea>
                     <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript","IDE")' method="post">
-                        <table width="80%"  class="table" cellpadding="4" align="left">
+                        <table width="80%" class="table" cellpadding="4" align="left">
                             <tr>
                                 <td><label>ID:</label></td>
                                 <td><input class="inputCustom" type="text" name="id" id="id" /></td>
                             </tr>
                             <tr>
                                 <td><label>Script name:</label></td>
-                                <td><input class="inputCustom" type="text" name="scriptName" id="scriptName"></td>
+                                <td><input class="inputCustom" type="text" name="scriptName" id="scriptName" /></td>
                             </tr>
                             <tr>
                                 <td><label>Language:</label></td>
@@ -70,105 +64,13 @@
                                 <td><input class="inputCustom" type="text" name="lastModified" id="lastModified" value="@DateTime.Now" readonly></td>
                             </tr>
                         </table>
-                            <br />
-                            <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
+                        <br />
+                        <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
                     </form>
-
                 </div>
                 <div class="col-8" id="editor">
-
+                    <script src="~/js/AceEditor.js"></script>
                 </div>
-
-                <script>
-                    var editor = ace.edit("editor");
-                    editor.setTheme("ace/theme/xcode");
-                    var box = document.getElementById("box1")
-                    box.onchange = function () {
-                        var newMode = box.options[box.selectedIndex].text;
-                        document.getElementById("language").value = newMode;
-                        editor.getSession().setMode("ace/mode/" + newMode);
-                        if (newMode == ("javascript")) {
-                            editor.setValue("//This is the datamodel for Location, Source, and State." + "\n" +
-                                "let location = {" + "\n" +
-                                "   Id:" + '\u0022' + "" + '\u0022' + "," + "\n" +
-                                "   ParentId:" + '\u0022' + "" + '\u0022' + "," + "\n" +
-                                "   ExternalId:" + '\u0022' + "" + '\u0022' + "," + "\n" +
-                                "   customerId: 1," + "\n" +
-                                "   Sources: []" + "\n" +
-                                "};" + "\n" +
-
-                                "let source = {" + "\n" +
-                                "   Type:" + '\u0022' + "" + '\u0022' + "," + "\n" +
-                                "   TimeStamp:" + '\u0022' + "" + '\u0022' + "\n" +
-                                "};" + "\n" +
-
-                                "let state = {" + "\n" +
-                                "   Property:" + '\u0022' + "" + '\u0022' + "," + "\n" +
-                                "   Value:" + '\u0022' + "" + '\u0022' + "\n" +
-                                "};"
-                            );
-                        }
-                        if (newMode == ("ruby")) {
-                            editor.setValue("#This is the datamodel for Location, Source, and State." + "\n" + "class Location" + "\n" +
-                                " attr_writer :Id,:ParentId,:ExternalId,:ConsumerId,:Sources" + "\n" +
-                                " attr_reader :Id,:ParentId,:ExternalId,:ConsumerId,:Sources" + "\n" +
-
-                                " def to_json(*a)" + "\n" +
-                                "  { 'Id' => @@Id, 'ParentId' => @@ParentId, 'ExternalId' => @@ExternalId, 'ConsumerId'=> @@ConsumerId, 'Sources' => @@Sources}.to_json" + "\n" +
-                                " end" + "\n" +
-
-                                " def self.from_json string" + "\n" +
-                                "  data = JSON.load string" + "\n" +
-                                "  self.new data['Id'], data['ParentId'], data['ExternalId'], data['ConsumerId'], data['Sources']" + "\n" +
-                                " end" + "\n" +
-                                "end" + "\n" + "\n" +
-
-                                "class Source" + "\n" +
-                                " attr_writer :Type,:State,:TimeStamp" + "\n" +
-                                " attr_reader :Type,:State,:TimeStamp" + "\n" +
-
-                                " def to_json(*a)" + "\n" +
-                                "  { 'Type' => @@Type, 'State' => @@State, 'TimeStamp' => @@TimeStamp}.to_json" + "\n" +
-                                " end" + "\n" +
-
-                                " def self.from_json string" + "\n" +
-                                "  data = JSON.load string" + "\n" +
-                                "  self.new data['Type'], data['State'], data['TimeStamp']" + "\n" +
-                                " end" + "\n" +
-                                "end" + "\n" + "\n" +
-
-                                "class State" + "\n" +
-                                " attr_writer :Property,:Value" + "\n" +
-                                " attr_reader :Property,:Value" + "\n" +
-
-                                " def to_json(*a)" + "\n" +
-                                "  { 'Property' => @@Property, 'Value' => @@Value}.to_json" + "\n" +
-                                " end" + "\n" +
-
-                                " def self.from_json string" + "\n" +
-                                "  data = JSON.load string" + "\n" +
-                                "  self.new data['Property'], data['Value']" + "\n" +
-                                " end" + "\n" +
-
-                                "end"
-                            );
-                        }
-                        if (newMode == ("python")) {
-                            editor.setValue("#This is the datamodel for Location, Source, and State." + "\n" +
-                                "location = { 'Id':" + '\u0022' + "" + '\u0022' + "," + "'ParentId':" + '\u0022' + "" + '\u0022' + "," + "'ExternalId':" + '\u0022' + "" + '\u0022' + "," + "'ConsumerId': 2, 'Sources': [] }" + "\n" +
-                                "source = { 'Type':" + '\u0022' + "" + '\u0022' + "," + "'TimeStamp':" + '\u0022' + "" + '\u0022' + "," + "'State': [] }" + "\n" +
-                                "state = { 'Property':" + '\u0022' + "" + '\u0022' + "," + "'Value':" + '\u0022' + "" + '\u0022' + "," + "}"
-                            );
-                        }
-                    }
-                </script>
-                <script>
-                    var editor = ace.edit("editor");
-                    var textarea = $('#editorContent');
-                    editor.getSession().on('change', function () {
-                        textarea.val(editor.getSession().getValue());
-                    });
-                </script>
             </div>
         </div>
     </section>
