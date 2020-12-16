@@ -21,23 +21,29 @@ namespace Runner {
             _dockerContainers = new List<string>();
         }
 
-        public async Task Run(List<Script> scripts) {
+        private async Task Run(List<Script> scripts) {
             string interpreter = scripts.FirstOrDefault().Language;
             if (interpreter == "javascript") {
                 interpreter = "node";
             }
-            var lists = SplitList<Script>(scripts, 1);
+            var lists = SplitList<Script>(scripts,int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             int i = 0;
             string containerName = "";
             foreach (var list in lists) {
                 string name = interpreter + i++;
                 try {
                     if (!_dockerContainers.Contains(name)) {
-                        containerName = StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue").Result;
+                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), Environment.GetEnvironmentVariable("MP_COLLECTION"),
+                                                                                                Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter, 
+                                                                                                Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
+                                                                                                Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                     }
                 } catch (DockerApiException) {
                     name = interpreter + ++i;
-                    containerName = StartDockerContainer("mongodb://192.168.87.107:27017", "Scripts", "MapsPeople", name, interpreter, "192.168.87.107", "abc", "123", "Consumer_Queue").Result;
+                    containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), Environment.GetEnvironmentVariable("MP_COLLECTION"),
+                                                                                               Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
+                                                                                               Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
+                                                                                               Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                 }
                 _messsagebroker.Send<Script>(name, list);
             }
@@ -59,15 +65,8 @@ namespace Runner {
         public async Task start(string queueName) {
             await PullDockerImage();
             await PruneContainers();
-            //Timer timer = new Timer(
-            //    UpdateFromDocker,
-            //    null,
-            //    TimeSpan.Zero,
-            //    TimeSpan.FromSeconds(10)
-            //    );
             TaskFactory taskFactory = new TaskFactory();
             taskFactory.StartNew(UpdateFromDocker);
-            UpdateFromDocker();
             ListenToQueue(queueName);
         }
 
@@ -84,13 +83,13 @@ namespace Runner {
         }
 
         public void ListenToQueue(string queueName) {
-            EventHandler<BasicDeliverEventArgs> consumer = Handler;
+            EventHandler<BasicDeliverEventArgs> consumer = MessageReceivedHandler;
             _messsagebroker.Listen(queueName, consumer);
         }
 
-        private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
-            for (int i = 0; i < ids.Count; i += nSize) {
-                yield return ids.GetRange(i, Math.Min(nSize, ids.Count - i));
+        private IEnumerable<List<T>> SplitList<T>(List<T> items, int nSize) {
+            for (int i = 0; i < items.Count; i += nSize) {
+                yield return items.GetRange(i, Math.Min(nSize, items.Count - i));
 
             }
         }
@@ -109,7 +108,7 @@ namespace Runner {
             }
         }
 
-        private void Handler(object sender, BasicDeliverEventArgs ea) {
+        private void MessageReceivedHandler(object sender, BasicDeliverEventArgs ea) {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body.Span);
             if (message != null) {
