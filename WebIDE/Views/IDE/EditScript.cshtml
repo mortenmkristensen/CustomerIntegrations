@@ -14,11 +14,6 @@
             crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.9/ace.js"></script>
     <script src="~/js/FormValidate.js"></script>
-    <style type="text/css">
-        #editor {
-            height: 500px;
-        }
-    </style>
 </head>
 @{
     ViewBag.Title = "Index";
@@ -30,15 +25,6 @@
             <div class="container">
                 <div class="row">
                     <div class="col-4 justify-content-center">
-                        @*<p>Open an existing script: <button class="buttonCustom btn-primary shadow-none" onclick="location.href='@Url.Action("OpenScripts", "IDE")'">Open scripts</button></p>
-            <p>Or start writing a new script:</p>
-
-            <select class="custom-select" id="box1">
-                <option value="0">Choose scripting language</option>
-                <option value="1">python</option>
-                <option value="2">ruby</option>
-                <option value="3">javascript</option>
-            </select>*@
                         <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript"></textarea>
                         <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript", "IDE")' method="post">
                             <table width="80%" class="table" cellpadding="4" align="left">
@@ -76,29 +62,12 @@
                         </form>
                     </div>
                     <div class="col-8" id="editor">
-                        @*<script src="~/js/AceEditor.js"></script>*@
-                        <script>
-                            var editor = ace.edit("editor");
-                            var textarea = $('#editorContent');
-                            editor.getSession().on('change', function () {
-                                textarea.val(editor.getSession().getValue());
-                            });
-
-                            var editor = ace.edit("editor");
-                            editor.setTheme("ace/theme/xcode");
-                            var input = document.getElementById("language");
-                            input.onclick = function () {
-                                var newMode = input.getValue();
-                                editor.getSession().setMode("ace/mode/" + newMode);
-                            }
-                            editor.setValue(@Model.Code);
-                        </script>
-
+                        @Model.Code
                     </div>
-                    
-
+                    <script src="~/js/AceEditorEdit.js"></script>
                 </div>
-            </div>} else if (ViewBag.Situation == 1) {
+            </div>
+        } else if (ViewBag.Situation == 1) {
 
             <h2>Something went wrong, can not open the script! </h2>
         }

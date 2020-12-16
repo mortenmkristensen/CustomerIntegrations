@@ -1,5 +1,4 @@
-﻿
-var editor = ace.edit("editor");
+﻿var editor = ace.edit("editor");
 var textarea = $('#editorContent');
 editor.getSession().on('change', function () {
     textarea.val(editor.getSession().getValue());
@@ -8,7 +7,5 @@ editor.getSession().on('change', function () {
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/xcode");
 var input = document.getElementById("language");
-input.onchange = function () {
-    var newMode = input.getValue();
-    editor.getSession().setMode("ace/mode/" + newMode);
-}
+var newMode = input.getValue();
+editor.getSession().setMode("ace/mode/" + newMode);
