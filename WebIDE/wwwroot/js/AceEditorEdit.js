@@ -7,5 +7,5 @@ editor.getSession().on('change', function () {
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/xcode");
 var input = document.getElementById("language");
-var newMode = input.getValue();
+var newMode = input.value;
 editor.getSession().setMode("ace/mode/" + newMode);
