@@ -21,7 +21,7 @@ namespace Runner {
             _dockerContainers = new List<string>();
         }
 
-        public async Task Run(List<Script> scripts) {
+        private async Task Run(List<Script> scripts) {
             string interpreter = scripts.FirstOrDefault().Language;
             if (interpreter == "javascript") {
                 interpreter = "node";
