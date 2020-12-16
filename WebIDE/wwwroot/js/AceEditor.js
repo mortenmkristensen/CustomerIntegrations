@@ -38,7 +38,7 @@ box.onchange = function () {
             " attr_reader :Id,:ParentId,:ExternalId,:ConsumerId,:Sources" + "\n" +
 
             " def to_json(*a)" + "\n" +
-            "  { 'Id' => @@Id, 'ParentId' => @@ParentId, 'ExternalId' => @@ExternalId, 'ConsumerId'=> @@ConsumerId, 'Sources' => @@Sources}.to_json" + "\n" +
+            "  { 'Id' => @Id, 'ParentId' => @ParentId, 'ExternalId' => @ExternalId, 'ConsumerId'=> @ConsumerId, 'Sources' => @Sources}.to_json" + "\n" +
             " end" + "\n" +
 
             " def self.from_json string" + "\n" +
@@ -52,7 +52,7 @@ box.onchange = function () {
             " attr_reader :Type,:State,:TimeStamp" + "\n" +
 
             " def to_json(*a)" + "\n" +
-            "  { 'Type' => @@Type, 'State' => @@State, 'TimeStamp' => @@TimeStamp}.to_json" + "\n" +
+            "  { 'Type' => @Type, 'State' => @State, 'TimeStamp' => @TimeStamp}.to_json" + "\n" +
             " end" + "\n" +
 
             " def self.from_json string" + "\n" +
@@ -66,7 +66,7 @@ box.onchange = function () {
             " attr_reader :Property,:Value" + "\n" +
 
             " def to_json(*a)" + "\n" +
-            "  { 'Property' => @@Property, 'Value' => @@Value}.to_json" + "\n" +
+            "  { 'Property' => @Property, 'Value' => @Value}.to_json" + "\n" +
             " end" + "\n" +
 
             " def self.from_json string" + "\n" +
