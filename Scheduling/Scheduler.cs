@@ -26,13 +26,15 @@ namespace Scheduling {
             _dbAccess = dBAccess;
             _messageBroker = messageBroker;
         }
-        public async Task StartAsync(CancellationToken cancellationToken) {
+        public Task StartAsync(CancellationToken cancellationToken) {
             _timer = new Timer(
                 Run,
                 null,
                 TimeSpan.Zero,
                 TimeSpan.FromSeconds(5)
                 );
+
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken) {
@@ -42,7 +44,7 @@ namespace Scheduling {
 
         }
 
-        private async void Run(object state) {
+        private void Run(object state) {
             GetNewScripts();
             SeparateByLanguage();
             SendToRabbitMQ(rubyScripts);
@@ -71,21 +73,18 @@ namespace Scheduling {
             jsScripts = tempJs.Distinct().ToList();
         }
 
-        private void SendWithRabbitMQ(string queueName, List<Script> scripts) {
-            _messageBroker.Send<Script>(queueName, scripts);
-        }
 
-        private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
-            for (int i = 0; i < ids.Count; i += nSize) {
-                yield return ids.GetRange(i, Math.Min(nSize, ids.Count - i));
+        private IEnumerable<List<T>> SplitList<T>(List<T> itmes, int nSize) {
+            for (int i = 0; i < itmes.Count; i += nSize) {
+                yield return itmes.GetRange(i, Math.Min(nSize, itmes.Count - i));
             }
         }
 
-        private async Task SendToRabbitMQ(List<Script> scripts) {
+        private void SendToRabbitMQ(List<Script> scripts) {
             var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             string queueName = "Scheduling_Queue";
             foreach (var list in scriptLists) {
-                SendWithRabbitMQ(queueName, list);
+                _messageBroker.Send<Script>(queueName, list);
             }
         }
 

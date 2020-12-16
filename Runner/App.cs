@@ -21,7 +21,7 @@ namespace Runner {
             _dockerContainers = new List<string>();
         }
 
-        public async Task Run(List<Script> scripts) {
+        private async Task Run(List<Script> scripts) {
             string interpreter = scripts.FirstOrDefault().Language;
             if (interpreter == "javascript") {
                 interpreter = "node";
@@ -83,13 +83,13 @@ namespace Runner {
         }
 
         public void ListenToQueue(string queueName) {
-            EventHandler<BasicDeliverEventArgs> consumer = Handler;
+            EventHandler<BasicDeliverEventArgs> consumer = MessageReceivedHandler;
             _messsagebroker.Listen(queueName, consumer);
         }
 
-        private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
-            for (int i = 0; i < ids.Count; i += nSize) {
-                yield return ids.GetRange(i, Math.Min(nSize, ids.Count - i));
+        private IEnumerable<List<T>> SplitList<T>(List<T> items, int nSize) {
+            for (int i = 0; i < items.Count; i += nSize) {
+                yield return items.GetRange(i, Math.Min(nSize, items.Count - i));
 
             }
         }
@@ -108,7 +108,7 @@ namespace Runner {
             }
         }
 
-        private void Handler(object sender, BasicDeliverEventArgs ea) {
+        private void MessageReceivedHandler(object sender, BasicDeliverEventArgs ea) {
             var body = ea.Body;
             var message = Encoding.UTF8.GetString(body.Span);
             if (message != null) {
