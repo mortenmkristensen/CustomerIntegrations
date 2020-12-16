@@ -17,10 +17,17 @@ namespace WebIDE.Controllers {
             return View();
         }
         [HttpPost]
-        public ActionResult Index(string scriptID2) {
+        public ActionResult ScriptState(string scriptID2) {
             APIAccess aPIAccess = new APIAccess();
-            Script script = aPIAccess.GetScriptById(scriptID2);
-            return View("ScriptState", script);
+            Script script = null;
+            if (scriptID2 != "" && scriptID2 != null) {
+                script = aPIAccess.GetScriptById(scriptID2);
+                return View(script);
+            } else {
+                ViewBag.Message = "Provide an Id!";
+                List<Script> scripts = aPIAccess.GetAllScripts();
+                return View("OpenScripts", scripts);
+            }
         }
 
         public ActionResult OpenScripts() {
@@ -30,12 +37,19 @@ namespace WebIDE.Controllers {
 
         }
         [HttpPost]
-        public ActionResult OpenScripts(string scriptID) {
+        public ActionResult SearchScriptById(string scriptID) {
             APIAccess aPIAccess = new APIAccess();
-            List<Script> scripts = new List<Script>();
-            Script script = aPIAccess.GetScriptById(scriptID);
-            scripts.Add(script);
-            return View(scripts);
+            Script script = null;
+            if (scriptID != "" && scriptID != null) {
+                List<Script> scripts = new List<Script>();
+                script = aPIAccess.GetScriptById(scriptID);
+                scripts.Add(script);
+                return View("OpenScripts", scripts);
+            } else {
+                ViewBag.Message = "Provide an Id!";
+                List<Script> scripts = aPIAccess.GetAllScripts();
+                return View("OpenScripts", scripts);
+            }
         }
 
         [HttpPost]
@@ -87,13 +101,20 @@ namespace WebIDE.Controllers {
         [HttpPost]
         public ActionResult EditScript(string scriptID3) {
             APIAccess aPIAccess = new APIAccess();
-            Script script = aPIAccess.GetScriptById(scriptID3);
-            if(script != null) {
-                ViewBag.Situation = 0;
-                return View(script); ;
+            Script script = null;
+            if(scriptID3 != "" && scriptID3 != null) {
+                script = aPIAccess.GetScriptById(scriptID3);
+                if (script != null) {
+                    ViewBag.Situation = 0;
+                    return View(script); ;
+                } else {
+                    ViewBag.Situation = 1;
+                    return View();
+                }
             } else {
-                ViewBag.Situation = 1;
-                return View();
+                ViewBag.Message = "Select one script!";
+                List<Script> scripts = aPIAccess.GetAllScripts();
+                return View("OpenScripts", scripts);
             }
         }
     }

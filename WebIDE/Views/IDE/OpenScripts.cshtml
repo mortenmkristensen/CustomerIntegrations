@@ -4,19 +4,18 @@
 <!DOCTYPE html>
 <head>
     <link href="~/css/OpenScripts.css" rel="stylesheet" />
-    <script src="~/js/OpenScriptViewValidate.js"></script>
 </head>
 <html>
 <body>
     <div class="container">
         <div class="row">
             <div class="col-6">
-                <form id='search' action='@Url.Action("OpenScripts","IDE")' method="post">
+                <form id='search' action='@Url.Action("SearchScriptById","IDE")' method="post">
                     <input type="text" name="scriptID" id="scriptID">
-                    <input type="submit" value="Search ScriptID" class="buttonCustom btn-secondary shadow-none" onclick="if ( ! validate()) return false;" language="javascript" />
+                    <input type="submit" value="Search ScriptID" class="buttonCustom btn-secondary shadow-none"/>
                 </form>
                 <br />
-                <form id='open' action='@Url.Action("Index","IDE")' method="post">
+                <form id='open' action='@Url.Action("ScriptState","IDE")' method="post">
                     <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
                     <input type="submit" value="See Script State" class="buttonCustom btn-primary shadow-none" />
                 </form>
