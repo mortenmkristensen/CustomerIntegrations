@@ -13,7 +13,7 @@ namespace Runner {
             await _client.Images
                 .CreateImageAsync(new ImagesCreateParameters {
                     FromImage = "mmkristensen/ucngrp11",
-                    Tag = "idle"
+                    Tag = "latest"
                 },
                     new AuthConfig(),
                     new Progress<JSONMessage>());
@@ -21,7 +21,7 @@ namespace Runner {
         public async Task<string> StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                         string messageBroker, string queueUser, string queuePassword, string consumerQueue) {
             var response = await _client.Containers.CreateContainerAsync(new CreateContainerParameters {
-                Image = "mmkristensen/ucngrp11:idle",
+                Image = "mmkristensen/ucngrp11:latest",
                 Name = queuename,
                 Env = new List<string>() { $"MP_CONNECTIONSTRING={connectionString}", $"MP_COLLECTION={collection}", $"MP_DATABASE={database}",
                                             $"MP_QUEUENAME={queuename}", $"MP_INTERPRETERPATH={interpreterpath}", $"MP_MESSAGEBROKER={messageBroker}",
