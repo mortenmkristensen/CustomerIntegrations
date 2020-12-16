@@ -1,0 +1,35 @@
+﻿@model Models.Script
+@{
+}
+<!DOCTYPE html>
+<head>
+    <link href="~/css/SaveScript.css" rel="stylesheet" />
+</head>
+<html>
+<body>
+    @if (ViewBag.Situation < 1) {
+
+        <h2>Your script was deleted successfully!</h2>
+        <br />
+        <label class="customLabel">Script Name:</label> <label>@Model.Name</label>
+        <br />
+        <label class="customLabel">Language:</label> <label>@Model.Language</label>
+        <br />
+        <label class="customLabel">Version:</label> <label>@Model.ScriptVersion</label>
+        <br />
+        <label class="customLabel">Date Created:</label> <label>@Model.DateCreated</label>
+        <br />
+        <label class="customLabel">Author:</label> <label>@Model.Author</label>
+        <br />
+        <label class="customLabel">Last Modified:</label> <label>@Model.LastModified</label>
+        <br />
+        <label class="customLabel">Script:</label> <br />
+        <textarea class="form-control">@Model.Code</textarea>
+        <br />
+
+    } else if (ViewBag.Situation == 1) {
+
+        <h2>Something went wrong, the script was not deleted! </h2>
+    }
+</body>
+</html>

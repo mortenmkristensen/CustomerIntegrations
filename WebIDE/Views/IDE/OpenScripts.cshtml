@@ -14,16 +14,16 @@
     <br />
     <form id='open' action='@Url.Action("Index","IDE")' method="post">
         <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
+        <input type="submit" value="See Script State" class="buttonCustom btn-primary shadow-none" />
+    </form>
+    <br />
+    <form id='openEditor' action='@Url.Action("EditScript","IDE")' method="post">
+        <input class="" type="text" name="scriptID3" id="scriptID3">
         <input type="submit" value="Open script in editor" class="buttonCustom btn-primary shadow-none" />
     </form>
     <br />
-    <form id='state' action='@Url.Action("","")' method="">
-        <input class="" type="text" name="scriptID2" id="scriptID3">
-        <input type="submit" value="See ScriptState" class="buttonCustom btn-primary shadow-none" />
-    </form>
-    <br />
-    <form id='delete' action='@Url.Action("","")' method="">
-        <input class="" type="text" name="scriptID2" id="scriptID4">
+    <form id='delete' action='@Url.Action("DeleteScript","IDE")' method="post">
+        <input type="text" name="scriptID4" id="scriptID4">
         <input type="submit" value="Delete Script" class="buttonCustom btn-warning shadow-none" />
     </form>
     <br />
@@ -58,6 +58,8 @@
                 table.rows[i].onclick = function () {
                     //rIndex = this.rowIndex;
                     document.getElementById("scriptID2").value = this.cells[0].innerHTML;
+                    document.getElementById("scriptID3").value = this.cells[0].innerHTML;
+                    document.getElementById("scriptID4").value = this.cells[0].innerHTML;
                 };
             }
         </script>
