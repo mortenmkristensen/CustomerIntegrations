@@ -3,18 +3,16 @@
 }
 <!DOCTYPE html>
 <head>
+    <link href="~/css/SaveScript.css" rel="stylesheet" />
 </head>
 <html>
 <body>
-    <table id="table" border="1">
-        <tr>
-            <th>Last result</th>
-            <th>Has error</th>
-        </tr>
-        <tr>
-            <td>@Model.LastResult</td>
-            <td>@Model.HasErrors</td>
-        </tr>
-        </table>
-    </body>
+    <label class="customLabel">Has errors:</label> <label>@Model.HasErrors</label>
+    <br />
+    <label class="customLabel">Last result:</label> <br />
+    <textarea class="form-control">@Model.LastResult</textarea>
+    <br />
+    <label class="customLabel">Script:</label> <br />
+    <textarea class="form-control">@Model.Code</textarea>
+</body>
 </html>
