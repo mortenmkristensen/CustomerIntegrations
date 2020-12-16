@@ -14,11 +14,18 @@
     <br />
     <form id='open' action='@Url.Action("Index","IDE")' method="post">
         <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
-        <input type="submit" value="Open Script" class="buttonCustom btn-primary shadow-none" />
+        <input type="submit" value="Open script in editor" class="buttonCustom btn-primary shadow-none" />
     </form>
-
-    <!--ADD "SEE DETAILS/STATE BUTTON-->
-
+    <br />
+    <form id='state' action='@Url.Action("","")' method="">
+        <input class="" type="text" name="scriptID2" id="scriptID3">
+        <input type="submit" value="See ScriptState" class="buttonCustom btn-primary shadow-none" />
+    </form>
+    <br />
+    <form id='delete' action='@Url.Action("","")' method="">
+        <input class="" type="text" name="scriptID2" id="scriptID4">
+        <input type="submit" value="Delete Script" class="buttonCustom btn-warning shadow-none" />
+    </form>
     <br />
     <table id="table" border="1">
         <tr>
