@@ -26,6 +26,8 @@
                 <div class="row">
                     <div class="col-4 justify-content-center">
                         <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript"></textarea>
+                        <p>You can now edit the script: </p>
+                        <br />
                         <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript", "IDE")' method="post">
                             <table width="80%" class="table" cellpadding="4" align="left">
                                 <tr>
@@ -54,11 +56,11 @@
                                 </tr>
                                 <tr>
                                     <td><label>Last modified:</label></td>
-                                    <td><input class="inputCustom" type="text" name="lastModified" id="lastModified" value="@Model.LastModified" readonly></td>
+                                    <td><input class="inputCustom" type="text" name="lastModified" id="lastModified" value="@Model.LastModified"></td>
                                 </tr>
                             </table>
                             <br />
-                            <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
+                            <p>Save changes to this script: <input type="submit" id="submit" value="Save" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
                         </form>
                     </div>
                     <div class="col-8" id="editor">
