@@ -42,11 +42,10 @@ namespace WebIDE.Controllers {
         public ActionResult SaveScript(IFormCollection collection) {
             APIAccess aPIAccess = new APIAccess();
             Script script = new Script();
-            string version = collection["version"].ToString();
             script._id = collection["id"].ToString();
             script.Name = collection["scriptName"].ToString();
             script.Language = collection["language"].ToString();
-            script.ScriptVersion = Convert.ToDouble(version, CultureInfo.GetCultureInfo("en-US").NumberFormat);
+            script.ScriptVersion = collection["version"].ToString();
             script.DateCreated = DateTime.Parse(collection["dateCreated"].ToString());
             script.Author = collection["author"].ToString();
             script.LastModified = DateTime.Parse(collection["lastModified"].ToString());
