@@ -74,9 +74,9 @@ namespace Scheduling {
         }
 
 
-        private IEnumerable<List<T>> SplitList<T>(List<T> ids, int nSize) {
-            for (int i = 0; i < ids.Count; i += nSize) {
-                yield return ids.GetRange(i, Math.Min(nSize, ids.Count - i));
+        private IEnumerable<List<T>> SplitList<T>(List<T> itmes, int nSize) {
+            for (int i = 0; i < itmes.Count; i += nSize) {
+                yield return itmes.GetRange(i, Math.Min(nSize, itmes.Count - i));
             }
         }
 
