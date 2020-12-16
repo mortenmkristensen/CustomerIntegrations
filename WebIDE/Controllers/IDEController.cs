@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Newtonsoft.Json;
 using RestSharp;
+using WebIDE.ServiceAccess;
 
 namespace WebIDE.Controllers {
     public class IDEController : Controller {
@@ -17,19 +18,22 @@ namespace WebIDE.Controllers {
         }
         [HttpPost]
         public ActionResult Index(string scriptID2) {
-            Script script = GetScriptById(scriptID2);
+            APIAccess aPIAccess = new APIAccess();
+            Script script = aPIAccess.GetScriptById(scriptID2);
             return View("ScriptState", script);
         }
 
         public ActionResult OpenScripts() {
-            List<Script> scripts = GetAllScripts();
+            APIAccess aPIAccess = new APIAccess();
+            List<Script> scripts = aPIAccess.GetAllScripts();
             return View(scripts);
 
         }
         [HttpPost]
         public ActionResult OpenScripts(string scriptID) {
+            APIAccess aPIAccess = new APIAccess();
             List<Script> scripts = new List<Script>();
-            Script script = GetScriptById(scriptID);
+            Script script = aPIAccess.GetScriptById(scriptID);
             scripts.Add(script);
             return View(scripts);
         }
@@ -39,6 +43,7 @@ namespace WebIDE.Controllers {
         }
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
+            APIAccess aPIAccess = new APIAccess();
             Script script = new Script();
             string version = collection["version"].ToString();
             script._id = collection["id"].ToString();
@@ -49,8 +54,8 @@ namespace WebIDE.Controllers {
             script.Author = collection["author"].ToString();
             script.LastModified = DateTime.Parse(collection["lastModified"].ToString());
             script.Code = collection["editorContent"].ToString();
-            UploadScript(script);
-            Script script2 = GetScriptById(script._id);
+            aPIAccess.UploadScript(script);
+            Script script2 = aPIAccess.GetScriptById(script._id);
             if (script2 != null) {
                 ViewBag.Situation = 0;
                 return View(script);
@@ -60,35 +65,7 @@ namespace WebIDE.Controllers {
             }
         }
 
-        private List<Script> GetAllScripts() {
-            var client = new RestClient();
-            client.BaseUrl = new Uri("https://localhost:44321/api/script/");
-            var request = new RestRequest("all", Method.GET);
-            var response = client.Execute(request);
-            string scriptsJson = response.Content;
-            List<Script> scripts = JsonConvert.DeserializeObject<List<Script>>(scriptsJson);
-            return scripts;
-        }
-
-        private Script GetScriptById(string id) {
-            var client = new RestClient();
-            client.BaseUrl = new Uri("https://localhost:44321/api/script");
-            var request = new RestRequest($"?id={id}", Method.GET);
-            var response = client.Execute(request);
-            string scriptJson = response.Content;
-            Script script = JsonConvert.DeserializeObject<Script>(scriptJson);
-            return script;
-
-        }
-
-        private void UploadScript(Script script) {
-            var client = new RestClient();
-            client.BaseUrl = new Uri("https://localhost:44321/api/script");
-            var request = new RestRequest(Method.POST);
-            request.AddJsonBody(script);
-            request.RequestFormat = DataFormat.Json;
-            client.Execute(request);
-        }
+       
 
         //Private void DeleteScript(Script script)
     }
