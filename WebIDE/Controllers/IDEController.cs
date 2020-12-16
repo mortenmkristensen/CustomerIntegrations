@@ -22,7 +22,13 @@ namespace WebIDE.Controllers {
             Script script = null;
             if (scriptID2 != "" && scriptID2 != null) {
                 script = aPIAccess.GetScriptById(scriptID2);
-                return View(script);
+                if (script != null) {
+                    return View(script);
+                } else {
+                    ViewBag.Message = "Id is wrong , provide an correct Id!";
+                    List<Script> scripts2 = aPIAccess.GetAllScripts();
+                    return View("OpenScripts", scripts2);
+                }
             } else {
                 ViewBag.Message = "Provide an Id!";
                 List<Script> scripts = aPIAccess.GetAllScripts();
@@ -43,8 +49,15 @@ namespace WebIDE.Controllers {
             if (scriptID != "" && scriptID != null) {
                 List<Script> scripts = new List<Script>();
                 script = aPIAccess.GetScriptById(scriptID);
-                scripts.Add(script);
-                return View("OpenScripts", scripts);
+                if (script != null) {
+                    scripts.Add(script);
+                    return View("OpenScripts", scripts);
+                } else {
+                    ViewBag.Message = "Id is wrong , provide an correct Id!";
+                    List<Script> scripts2 = aPIAccess.GetAllScripts();
+                    return View("OpenScripts", scripts2);
+                }
+                
             } else {
                 ViewBag.Message = "Provide an Id!";
                 List<Script> scripts = aPIAccess.GetAllScripts();
