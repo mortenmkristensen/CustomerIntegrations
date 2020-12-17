@@ -94,10 +94,5 @@ namespace API.Controllers
             }
             return Ok(scripts);
         }
-
-        private Script Deserialize(string json) {
-            return JsonConvert.DeserializeObject<Script>(json);
-        }
-
     }
 }

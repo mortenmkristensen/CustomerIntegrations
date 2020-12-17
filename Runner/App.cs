@@ -33,17 +33,23 @@ namespace Runner {
                 string name = interpreter + i++;
                 try {
                     if (!_dockerContainers.Contains(name)) {
-                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), Environment.GetEnvironmentVariable("MP_COLLECTION"),
-                                                                                                Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter, 
-                                                                                                Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
-                                                                                                Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
+                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), 
+                                                             Environment.GetEnvironmentVariable("MP_COLLECTION"),
+                                                             Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter, 
+                                                             Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), 
+                                                             Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
+                                                             Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), 
+                                                             Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                     }
                 } catch (DockerApiException) {
                     name = interpreter + ++i;
-                    containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), Environment.GetEnvironmentVariable("MP_COLLECTION"),
-                                                                                               Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
-                                                                                               Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
-                                                                                               Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
+                    containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), 
+                                                         Environment.GetEnvironmentVariable("MP_COLLECTION"),
+                                                         Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
+                                                         Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), 
+                                                         Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
+                                                         Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), 
+                                                         Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                 }
                 _messsagebroker.Send<Script>(name, list);
             }
@@ -62,7 +68,7 @@ namespace Runner {
 
         }
 
-        public async Task start(string queueName) {
+        public async Task Start(string queueName) {
             await PullDockerImage();
             await PruneContainers();
             TaskFactory taskFactory = new TaskFactory();
