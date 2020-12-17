@@ -1,0 +1,24 @@
+﻿body {
+}
+.buttonCustom {
+    font-size: 23px;
+    border-radius: 8px;
+    border: hidden;
+}
+.openScriptInput {
+    /*visibility: hidden;*/
+}
+
+table tr:not(:first-child) {
+    cursor: pointer;
+    transition: all .25s ease-in-out;
+}
+
+    table tr:not(:first-child):hover {
+        background-color: lightgrey;
+    }
+
+    th {
+        font-size: 21px;
+        color: limegreen;
+    }

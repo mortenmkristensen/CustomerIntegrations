@@ -20,10 +20,9 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult UploadScript([FromBody] string script) {
+        public ActionResult UploadScript([FromBody] Script script) {
             try {
-                Script deserialzedScript = Deserialize(script);
-                dbAccess.Upsert(deserialzedScript);
+                dbAccess.Upsert(script);
             } catch (Exception e) {
                 return StatusCode(500);
             }
@@ -33,10 +32,9 @@ namespace API.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult UpdateScript([FromBody]string script) {
+        public ActionResult UpdateScript([FromBody]Script script) {
             try {
-                Script deserialzedScript = Deserialize(script);
-                dbAccess.Upsert(deserialzedScript);
+                dbAccess.Upsert(script);
             } catch (Exception e) {
                 return StatusCode(500);
             }
@@ -47,14 +45,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Script> GetScriptById(string id) {
-            string json = "";
+            Script script;
             try {
-                Script script = dbAccess.GetScriptById(id);
-                json = Serialize(script);
+                script = dbAccess.GetScriptById(id);
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok(json);
+            return Ok(script);
         }
 
         //this metod returns an empty list no matter what i send to it and i cant figure out why
@@ -85,12 +82,21 @@ namespace API.Controllers
             return Ok();
         }
 
-        private Script Deserialize(string json) {
-            return JsonConvert.DeserializeObject<Script>(json);
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<Script> GetAllScripts() {
+            IEnumerable<Script> scripts = new List<Script>();
+            try {
+                scripts = dbAccess.GetAll();
+            } catch (Exception e) {
+                return StatusCode(500);
+            }
+            return Ok(scripts);
         }
 
-        private string Serialize(Script script) {
-            return JsonConvert.SerializeObject(script);
+        private Script Deserialize(string json) {
+            return JsonConvert.DeserializeObject<Script>(json);
         }
 
     }

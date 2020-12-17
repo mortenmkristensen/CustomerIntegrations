@@ -1,0 +1,9 @@
+﻿.form-control {
+    height: 400px !important;
+}
+
+.customLabel {
+    font-weight: 400;
+    font-size: 21px;
+    color: limegreen;
+}
