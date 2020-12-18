@@ -21,18 +21,18 @@
                 <br />
                 <form id='openScriptState'  name="openScriptState" action='@Url.Action("ScriptState","IDE")' method="post">
                     <input class="openScriptInput" type="text" name="scriptID2" id="scriptID2">
-                    <input type="submit" value="See Script State" class="buttonCustom btn-primary shadow-none" onclick="if ( ! validate()) return false;" language="javascript"/>
+                    <input type="submit" value="See Script State" class="buttonCustom btn-primary shadow-none" onclick="if ( ! validate2()) return false;" language="javascript"/>
                 </form>
             </div>
             <div class="col-6">
                 <form id='openEditor' name="openEditor" action='@Url.Action("EditScript","IDE")' method="post">
                     <input class="" type="text" name="scriptID3" id="scriptID3">
-                    <input type="submit" value="Open script in editor" class="buttonCustom btn-primary shadow-none" onclick="if ( ! validate()) return false;" language="javascript"/>
+                    <input type="submit" value="Open script in editor" class="buttonCustom btn-primary shadow-none" onclick="if ( ! validate3()) return false;" language="javascript"/>
                 </form>
                 <br />
                 <form id='delete' name="delete" action='@Url.Action("DeleteScript","IDE")' method="post">
                     <input type="text" name="scriptID4" id="scriptID4">
-                    <input type="submit" value="Delete Script" class="buttonCustom btn-warning shadow-none" onclick="if ( ! validate2()) return false;" language="javascript" />
+                    <input type="submit" value="Delete Script" class="buttonCustom btn-warning shadow-none" onclick="if ( ! validate4()) return false;" language="javascript" />
                 </form>
             </div>
         </div>
