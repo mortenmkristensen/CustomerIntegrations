@@ -82,7 +82,7 @@ namespace Scheduling {
 
         private void SendToRabbitMQ(List<Script> scripts) {
             var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
-            string queueName = "Scheduling_Queue";
+            string queueName = Environment.GetEnvironmentVariable("MP_SCHEDULINGQUEUE");
             foreach (var list in scriptLists) {
                 _messageBroker.Send<Script>(queueName, list);
             }

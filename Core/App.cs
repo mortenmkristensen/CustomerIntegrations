@@ -26,7 +26,7 @@ namespace Core {
         }
 
         public int Run(string interpreterPath, int count) {
-            var scripts = GetScriptsFromScheduler();
+            var scripts = GetScriptsFromQueue();
             if(scripts == null) {
                 return ++count;
             }
@@ -45,7 +45,6 @@ namespace Core {
                                 script.HasErrors = true;
                                 script.LastResult = sfe.Message;
                                 DBAccess.Upsert(script);
-                                scriptOutput.Add(sfe.ScriptId, sfe.Message); //this is to print out errors while developing
                             }
                         }
                     }
@@ -59,7 +58,7 @@ namespace Core {
             return 0;
         }
 
-        public List<Script> GetScriptsFromScheduler() {
+        private List<Script> GetScriptsFromQueue() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
         }
