@@ -20,19 +20,13 @@ namespace WebIDE.Controllers {
         public ActionResult ScriptState(string scriptID2) {
             APIAccess aPIAccess = new APIAccess();
             Script script = null;
-            if (scriptID2 != "" && scriptID2 != null) {
-                script = aPIAccess.GetScriptById(scriptID2);
-                if (script != null) {
-                    return View(script);
-                } else {
-                    ViewBag.Message = "Id is wrong , provide an correct Id!";
-                    List<Script> scripts2 = aPIAccess.GetAllScripts();
-                    return View("OpenScripts", scripts2);
-                }
+            script = aPIAccess.GetScriptById(scriptID2);
+            if (script != null) {
+                return View(script);
             } else {
-                ViewBag.Message = "Provide an Id!";
-                List<Script> scripts = aPIAccess.GetAllScripts();
-                return View("OpenScripts", scripts);
+                ViewBag.Message = "Id is wrong , provide an correct Id!";
+                List<Script> scripts2 = aPIAccess.GetAllScripts();
+                return View("OpenScripts", scripts2);
             }
         }
 
@@ -46,24 +40,18 @@ namespace WebIDE.Controllers {
         public ActionResult SearchScriptById(string scriptID) {
             APIAccess aPIAccess = new APIAccess();
             Script script = null;
-            if (scriptID != "" && scriptID != null) {
-                List<Script> scripts = new List<Script>();
-                script = aPIAccess.GetScriptById(scriptID);
-                if (script != null) {
-                    scripts.Add(script);
-                    return View("OpenScripts", scripts);
-                } else {
-                    ViewBag.Message = "Id is wrong , provide an correct Id!";
-                    List<Script> scripts2 = aPIAccess.GetAllScripts();
-                    return View("OpenScripts", scripts2);
-                }
-                
-            } else {
-                ViewBag.Message = "Provide an Id!";
-                List<Script> scripts = aPIAccess.GetAllScripts();
+            List<Script> scripts = new List<Script>();
+            script = aPIAccess.GetScriptById(scriptID);
+            if (script != null) {
+                scripts.Add(script);
                 return View("OpenScripts", scripts);
+            } else {
+                ViewBag.Message = "Id is wrong , provide an correct Id!";
+                List<Script> scripts2 = aPIAccess.GetAllScripts();
+                return View("OpenScripts", scripts2);
             }
         }
+
 
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
@@ -93,36 +81,29 @@ namespace WebIDE.Controllers {
        public ActionResult DeleteScript(string scriptID4) {
             APIAccess aPIAccess = new APIAccess();
             Script script = null;
-          
-                script = aPIAccess.GetScriptById(scriptID4);
-                aPIAccess.DeleteScript(scriptID4);
-                Script script1 = aPIAccess.GetScriptById(scriptID4);
-                if (script != null && script1 == null) {
-                    ViewBag.Situation = 0;
-                    return View(script);
-                } else {
-                    ViewBag.Situation = 1;
-                    return View();
-                }
+            script = aPIAccess.GetScriptById(scriptID4);
+            aPIAccess.DeleteScript(scriptID4);
+            Script script1 = aPIAccess.GetScriptById(scriptID4);
+            if (script != null && script1 == null) {
+                ViewBag.Situation = 0;
+                return View(script);
+            } else {
+                ViewBag.Situation = 1;
+                return View();
+            }
         }
 
         [HttpPost]
         public ActionResult EditScript(string scriptID3) {
             APIAccess aPIAccess = new APIAccess();
             Script script = null;
-            if(scriptID3 != "" && scriptID3 != null) {
-                script = aPIAccess.GetScriptById(scriptID3);
-                if (script != null) {
-                    ViewBag.Situation = 0;
-                    return View(script); ;
-                } else {
-                    ViewBag.Situation = 1;
-                    return View();
-                }
+            script = aPIAccess.GetScriptById(scriptID3);
+            if (script != null) {
+                ViewBag.Situation = 0;
+                return View(script); ;
             } else {
-                ViewBag.Message = "Select one script!";
-                List<Script> scripts = aPIAccess.GetAllScripts();
-                return View("OpenScripts", scripts);
+                ViewBag.Situation = 1;
+                return View();
             }
         }
     }
