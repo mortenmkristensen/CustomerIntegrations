@@ -12,7 +12,7 @@
     if (inputId.length < 1) {
         error = true;
         errorId = true;
-        errorText = "Please give the script ID!";
+        errorText = "Please input a script ID!";
         alert(errorText);
         return false;
     }
