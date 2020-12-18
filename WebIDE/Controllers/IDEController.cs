@@ -24,9 +24,8 @@ namespace WebIDE.Controllers {
             if (script != null) {
                 return View(script);
             } else {
-                ViewBag.Message = "Id is wrong , provide an correct Id!";
-                List<Script> scripts2 = aPIAccess.GetAllScripts();
-                return View("OpenScripts", scripts2);
+                ViewBag.Situation = 1;
+                return View("EditScript");
             }
         }
 
@@ -46,9 +45,8 @@ namespace WebIDE.Controllers {
                 scripts.Add(script);
                 return View("OpenScripts", scripts);
             } else {
-                ViewBag.Message = "Id is wrong , provide an correct Id!";
-                List<Script> scripts2 = aPIAccess.GetAllScripts();
-                return View("OpenScripts", scripts2);
+                ViewBag.Situation = 1;
+                return View("EditScript");
             }
         }
 
