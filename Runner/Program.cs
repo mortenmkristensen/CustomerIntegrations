@@ -7,7 +7,7 @@ namespace Runner {
         public static readonly IServiceProvider Container = new ContainerBuilder().Build();
         static async Task Main(string[] args) {
             var app = Container.GetService<IApp>();
-            await app.start("Scheduling_Queue");
+            await app.Start("Scheduling_Queue");
         }
     }
 }
