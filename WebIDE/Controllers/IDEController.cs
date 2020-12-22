@@ -55,7 +55,7 @@ namespace WebIDE.Controllers {
         public ActionResult SaveScript(IFormCollection collection) {
             APIAccess aPIAccess = new APIAccess();
             Script script = new Script();
-            script._id = collection["id"].ToString();
+            script.Id = collection["id"].ToString();
             script.Name = collection["scriptName"].ToString();
             script.Language = collection["language"].ToString();
             script.ScriptVersion = collection["version"].ToString();
@@ -64,7 +64,7 @@ namespace WebIDE.Controllers {
             script.LastModified = DateTime.Parse(collection["lastModified"].ToString());
             script.Code = collection["editorContent"].ToString();
             aPIAccess.UploadScript(script);
-            Script script2 = aPIAccess.GetScriptById(script._id);
+            Script script2 = aPIAccess.GetScriptById(script.Id);
             if (script2 != null) {
                 ViewBag.Situation = 0;
                 return View(script);

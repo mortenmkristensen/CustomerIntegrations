@@ -1,8 +1,14 @@
 ﻿using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson.Serialization.IdGenerators;
 
 namespace Models {
     public class Script {
-        public string _id { get; set; }
+        [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
+        [BsonRepresentation(BsonType.ObjectId)]
+        [BsonIgnoreIfDefault]
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Customer { get; set; }
         public string ScriptVersion { get; set; }
@@ -17,11 +23,11 @@ namespace Models {
 
         public override bool Equals(object obj) {
             return obj is Script script &&
-                   _id == script._id;
+                   Id == script.Id;
         }
 
         public override int GetHashCode() {
-            return HashCode.Combine(_id);
+            return HashCode.Combine(Id);
         }
     }
 }
