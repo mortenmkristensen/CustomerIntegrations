@@ -18,11 +18,13 @@ namespace Core {
         private IScriptRunner ScriptRunner { get; set; }
         private IDBAccess DBAccess { get; set; }
         private IMessageBroker MessageBroker { get; set; }
-        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker) {
+        private IDataValidation DataValidation { get; set; }
+        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker, IDataValidation dataValidation) {
             Stager = stager;
             ScriptRunner = scriptRunner;
             DBAccess = dbAccess;
             MessageBroker = messageBroker;
+            DataValidation = dataValidation;
         }
 
         public int Run(string interpreterPath, int count) {
@@ -37,10 +39,12 @@ namespace Core {
                         if (script._id == path.Key) {
                             try {
                                 var result = ScriptRunner.RunScript(script._id, path.Value, interpreterPath);
+                            if (DataValidation.validateScriptOutput(result) == true) {
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 DBAccess.Upsert(script);
                                 scriptOutput.Add(script._id, result);
+                            }
                             } catch (ScriptFailedException sfe) {
                                 script.HasErrors = true;
                                 script.LastResult = sfe.Message;
