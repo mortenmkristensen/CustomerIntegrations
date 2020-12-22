@@ -6,6 +6,6 @@ using Models;
 
 namespace Runner {
     public interface IApp {
-        Task start(string queueName);
+        Task Start(string queueName);
     }
 }

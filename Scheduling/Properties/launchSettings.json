@@ -7,7 +7,8 @@
         "MP_DATABASE": "MapsPeople",
         "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
         "MP_INTERPRETERPATH": "C:\\Python39\\python.exe",
-        "MP_CHUNKSIZE": "100"
+        "MP_CHUNKSIZE": "100",
+        "MP_SCHEDULINGQUEUE": "Scheduling_Queue"
       }
     }
   }

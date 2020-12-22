@@ -12,7 +12,7 @@ namespace Core {
         public Dictionary<string, string> GetPaths(IEnumerable<Script> scripts) {
             Dictionary<string, string> paths = new Dictionary<string, string>();
             foreach(var script in scripts) {
-                paths.Add(script._id,GetPath(script));
+                paths.Add(script.Id,GetPath(script));
             }
             return paths;
         }

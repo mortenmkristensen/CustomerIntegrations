@@ -26,7 +26,7 @@ namespace Core {
         }
 
         public int Run(string interpreterPath, int count) {
-            var scripts = GetScriptsFromScheduler();
+            var scripts = GetScriptsFromQueue();
             if(scripts == null) {
                 return ++count;
             }
@@ -34,18 +34,17 @@ namespace Core {
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
                 foreach (var script in scripts) {
                     foreach (var path in paths) {
-                        if (script._id == path.Key) {
+                        if (script.Id == path.Key) {
                             try {
-                                var result = ScriptRunner.RunScript(script._id, path.Value, interpreterPath);
+                                var result = ScriptRunner.RunScript(script.Id, path.Value, interpreterPath);
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 DBAccess.Upsert(script);
-                                scriptOutput.Add(script._id, result);
+                                scriptOutput.Add(script.Id, result);
                             } catch (ScriptFailedException sfe) {
                                 script.HasErrors = true;
                                 script.LastResult = sfe.Message;
                                 DBAccess.Upsert(script);
-                                scriptOutput.Add(sfe.ScriptId, sfe.Message); //this is to print out errors while developing
                             }
                         }
                     }
@@ -59,7 +58,7 @@ namespace Core {
             return 0;
         }
 
-        public List<Script> GetScriptsFromScheduler() {
+        private List<Script> GetScriptsFromQueue() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
             return MessageBroker.Receive(queueName);
         }

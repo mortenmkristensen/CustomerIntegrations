@@ -74,15 +74,15 @@ namespace Scheduling {
         }
 
 
-        private IEnumerable<List<T>> SplitList<T>(List<T> itmes, int nSize) {
-            for (int i = 0; i < itmes.Count; i += nSize) {
-                yield return itmes.GetRange(i, Math.Min(nSize, itmes.Count - i));
+        private IEnumerable<List<T>> SplitList<T>(List<T> items, int nSize) {
+            for (int i = 0; i < items.Count; i += nSize) {
+                yield return items.GetRange(i, Math.Min(nSize, items.Count - i));
             }
         }
 
         private void SendToRabbitMQ(List<Script> scripts) {
             var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
-            string queueName = "Scheduling_Queue";
+            string queueName = Environment.GetEnvironmentVariable("MP_SCHEDULINGQUEUE");
             foreach (var list in scriptLists) {
                 _messageBroker.Send<Script>(queueName, list);
             }

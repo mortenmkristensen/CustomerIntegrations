@@ -1,0 +1,18 @@
+﻿@model Models.Script
+@{
+}
+<!DOCTYPE html>
+<head>
+    <link href="~/css/SaveScript.css" rel="stylesheet" />
+</head>
+<html>
+<body>
+    <label class="customLabel">Has errors:</label> <label>@Model.HasErrors</label>
+    <br />
+    <label class="customLabel">Last result:</label> <br />
+    <textarea class="form-control">@Model.LastResult</textarea>
+    <br />
+    <label class="customLabel">Script:</label> <br />
+    <textarea class="form-control">@Model.Code</textarea>
+</body>
+</html>
