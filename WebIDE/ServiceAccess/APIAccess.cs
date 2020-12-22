@@ -30,20 +30,26 @@ namespace WebIDE.ServiceAccess {
 
         }
 
-        public void UploadScript(Script script) {
+        public Script UploadScript(Script script) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest(Method.POST);
             request.AddJsonBody(script);
             request.RequestFormat = DataFormat.Json;
-            client.Execute(request);
+            var response = client.Execute(request);
+            string scriptJson = response.Content;
+            Script script2 = JsonConvert.DeserializeObject<Script>(scriptJson);
+            return script2;
         }
 
-        public void DeleteScript(string id) {
+        public Script DeleteScript(string id) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest($"?id={id}", Method.DELETE);
-            client.Execute(request);
+            var response= client.Execute(request);
+            string scriptJson = response.Content;
+            Script script = JsonConvert.DeserializeObject<Script>(scriptJson);
+            return script;
         }
     }
 }

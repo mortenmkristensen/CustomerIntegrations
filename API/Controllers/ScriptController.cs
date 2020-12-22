@@ -21,12 +21,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult UploadScript([FromBody] Script script) {
+            Script script2;
             try {
                 dbAccess.Upsert(script);
+                script2 = dbAccess.GetScriptById(script._id);
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok();
+            return Ok(script2);
         }
 
         [HttpPut]
@@ -74,12 +76,14 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult DeleteScript(string id) {
+            Script script;
             try {
+                script = dbAccess.GetScriptById(id);
                 dbAccess.Delete(id);
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok();
+            return Ok(script);
         }
 
         [HttpGet("All")]
