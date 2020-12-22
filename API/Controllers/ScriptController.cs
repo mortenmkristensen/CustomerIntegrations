@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult UploadScript([FromBody] Script script) {
+        public ActionResult<Script> UploadScript([FromBody] Script script) {
             Script script2;
             try {
                 dbAccess.Upsert(script);
@@ -75,7 +75,7 @@ namespace API.Controllers
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public ActionResult DeleteScript(string id) {
+        public ActionResult<Script> DeleteScript(string id) {
             Script script;
             try {
                 script = dbAccess.GetScriptById(id);
@@ -98,10 +98,5 @@ namespace API.Controllers
             }
             return Ok(scripts);
         }
-
-        private Script Deserialize(string json) {
-            return JsonConvert.DeserializeObject<Script>(json);
-        }
-
     }
 }
