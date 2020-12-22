@@ -47,24 +47,31 @@ namespace Scheduling {
         private void Run(object state) {
             GetNewScripts();
             SeparateByLanguage();
-            foreach (var scriptList in scriptsSeperetedByLangugage) {
-                SendToRabbitMQ(scriptList.Value);
+            try {
+                foreach (var scriptList in scriptsSeperetedByLangugage) {
+                    SendToRabbitMQ(scriptList.Value);
+                }
+            } catch (InvalidOperationException) {
+                //logging
+            } finally {
+                ClearLists();
             }
-            ClearLists();
         }
 
         private void SeparateByLanguage() {
             foreach (var script in scripts) {
-                if (!scriptsSeperetedByLangugage.ContainsKey(script.Language)) {
+                if (scriptsSeperetedByLangugage.ContainsKey(script.Language)) {
+                    List<Script> scriptList;
+                    scriptsSeperetedByLangugage.TryGetValue(script.Language, out scriptList);
+                    List<Script> temp = new List<Script>(scriptList);
+                    temp.Add(script);
+                    scriptsSeperetedByLangugage[script.Language] = temp.Distinct().ToList();
+                } else {
                     List<Script> scriptList = new List<Script>();
                     scriptList.Add(script);
                     scriptsSeperetedByLangugage.Add(script.Language, scriptList);
-                } else {
-                    List<Script> scriptList;
-                    scriptsSeperetedByLangugage.TryGetValue(script.Language, out scriptList);
-                    scriptList.Add(script);
-                    scriptsSeperetedByLangugage[script.Language] = scriptList;
                 }
+                
             }
         }
 
@@ -98,11 +105,11 @@ namespace Scheduling {
         }
 
         private void SendToRabbitMQ(List<Script> scripts) {
-            var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
+           // var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             string queueName = "Scheduling_Queue";
-            foreach (var list in scriptLists) {
-                _messageBroker.Send<Script>(queueName, list);
-            }
+            //foreach (var list in scriptLists) {
+                _messageBroker.Send<Script>(queueName, scripts);
+            //}
         }
 
         private void GetNewScripts() {
@@ -113,6 +120,7 @@ namespace Scheduling {
             foreach (var scriptList in scriptsSeperetedByLangugage) {
                 scriptList.Value.Clear();
             }
+            //scripts.Clear();
         }
     }
 }
