@@ -20,13 +20,13 @@ namespace Core {
             string path = "";
             switch (script.Language.ToLower()) {
                 case "javascript":
-                    path = $@"/root/scripts/javascript/{script._id}.js";
+                    path = $@"/root/scripts/javascript/{script.Id}.js";
                     break;
                 case "python":
-                    path = $@"/root/scripts/python/{script._id}.py";
+                    path = $@"/root/scripts/python/{script.Id}.py";
                     break;
                 case "ruby":
-                    path = $@"/root/scripts/ruby/{script._id}.rb";
+                    path = $@"/root/scripts/ruby/{script.Id}.rb";
                     break;
             }
             File.WriteAllText(path, script.Code);
