@@ -17,9 +17,7 @@ namespace Scheduling {
         private IDBAccess _dbAccess;
         private IMessageBroker _messageBroker;
         private Timer _timer;
-        private List<Script> rubyScripts = new List<Script>();
-        private List<Script> pythonScripts = new List<Script>();
-        private List<Script> jsScripts = new List<Script>();
+        private List<List<Script>> someScripts = new List<List<Script>>();
         private List<Script> scripts = new List<Script>();
 
         public Scheduler(IDBAccess dBAccess,  IMessageBroker messageBroker) {
@@ -47,16 +45,36 @@ namespace Scheduling {
         private void Run(object state) {
             GetNewScripts();
             SeparateByLanguage();
-            SendToRabbitMQ(rubyScripts);
-            SendToRabbitMQ(pythonScripts);
-            SendToRabbitMQ(jsScripts);
+            SendToRabbitMQ(someScripts);
             ClearLists();
         }
 
+        //private void SeparateByLanguage() {
+        //    List<Script> tempRuby = new List<Script>();
+        //    List<Script> tempPython = new List<Script>();
+        //    List<Script> tempJs = new List<Script>();
+        //    foreach (var script in scripts) {
+        //        if (script.Language.Equals("ruby")) {
+        //           
+        //        }
+        //        if (script.Language.Equals("python")) {
+        //            tempPython.Add(script);
+        //        }
+        //        if (script.Language.Equals("javascript")) {
+        //            tempJs.Add(script);
+        //        }
+        //    }
+        //    rubyScripts = tempRuby.Distinct().ToList();
+        //    pythonScripts = tempPython.Distinct().ToList();
+        //    jsScripts = tempJs.Distinct().ToList();
+        //}
+
         private void SeparateByLanguage() {
+            List<List<Temp>
             List<Script> tempRuby = new List<Script>();
             List<Script> tempPython = new List<Script>();
             List<Script> tempJs = new List<Script>();
+            
             foreach (var script in scripts) {
                 if (script.Language.Equals("ruby")) {
                     tempRuby.Add(script);
@@ -68,9 +86,9 @@ namespace Scheduling {
                     tempJs.Add(script);
                 }
             }
-            rubyScripts = tempRuby.Distinct().ToList();
-            pythonScripts = tempPython.Distinct().ToList();
-            jsScripts = tempJs.Distinct().ToList();
+            someScripts.Add(new List<Script> { tempRuby });
+            someScripts.Add(new List<Script> { tempPython });
+            someScripts.Add(new List<Script> { tempJs });
         }
 
 
@@ -93,9 +111,7 @@ namespace Scheduling {
         }
 
         private void ClearLists() {
-            rubyScripts.Clear();
-            pythonScripts.Clear();
-            jsScripts.Clear();
+            someScripts.Clear();
         }
     }
 }
