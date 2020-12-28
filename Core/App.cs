@@ -36,14 +36,14 @@ namespace Core {
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
             foreach (var script in scripts) {
                 foreach (var path in paths) {
-                    if (script._id == path.Key) {
+                    if (script.Id == path.Key) {
                         try {
-                            var result = ScriptRunner.RunScript(script._id, path.Value, interpreterPath);
+                            var result = ScriptRunner.RunScript(script.Id, path.Value, interpreterPath);
                             if (DataValidation.ValidateScriptOutput(result)) {
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 DBAccess.Upsert(script);
-                                scriptOutput.Add(script._id, result);
+                                scriptOutput.Add(script.Id, result);
                             }
                         } catch (ScriptFailedException sfe) {
                             script.HasErrors = true;
