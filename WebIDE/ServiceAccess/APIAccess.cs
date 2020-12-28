@@ -30,13 +30,16 @@ namespace WebIDE.ServiceAccess {
 
         }
 
-        public void UploadScript(Script script) {
+        public Script UploadScript(Script script) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest(Method.POST);
             request.AddJsonBody(script);
             request.RequestFormat = DataFormat.Json;
-            client.Execute(request);
+            var response = client.Execute(request);
+            string scriptJson = response.Content;
+            Script returnScript = JsonConvert.DeserializeObject<Script>(scriptJson);
+            return returnScript;
         }
 
         public void DeleteScript(string id) {
