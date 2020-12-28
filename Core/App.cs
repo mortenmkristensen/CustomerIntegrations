@@ -18,37 +18,41 @@ namespace Core {
         private IScriptRunner ScriptRunner { get; set; }
         private IDBAccess DBAccess { get; set; }
         private IMessageBroker MessageBroker { get; set; }
-        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker) {
+        private IDataValidation DataValidation { get; set; }
+        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker, IDataValidation dataValidation) {
             Stager = stager;
             ScriptRunner = scriptRunner;
             DBAccess = dbAccess;
             MessageBroker = messageBroker;
+            DataValidation = dataValidation;
         }
 
         public int Run(string interpreterPath, int count) {
             var scripts = GetScriptsFromQueue();
-            if(scripts == null) {
+            if (scripts == null) {
                 return ++count;
             }
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
-                foreach (var script in scripts) {
-                    foreach (var path in paths) {
-                        if (script.Id == path.Key) {
-                            try {
-                                var result = ScriptRunner.RunScript(script.Id, path.Value, interpreterPath);
+            foreach (var script in scripts) {
+                foreach (var path in paths) {
+                    if (script._id == path.Key) {
+                        try {
+                            var result = ScriptRunner.RunScript(script._id, path.Value, interpreterPath);
+                            if (DataValidation.ValidateScriptOutput(result)) {
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 DBAccess.Upsert(script);
-                                scriptOutput.Add(script.Id, result);
-                            } catch (ScriptFailedException sfe) {
-                                script.HasErrors = true;
-                                script.LastResult = sfe.Message;
-                                DBAccess.Upsert(script);
+                                scriptOutput.Add(script._id, result);
                             }
+                        } catch (ScriptFailedException sfe) {
+                            script.HasErrors = true;
+                            script.LastResult = sfe.Message;
+                            DBAccess.Upsert(script);
                         }
                     }
                 }
+            }
 
             var messages = scriptOutput.Values.ToList();
             SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"), messages);

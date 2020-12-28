@@ -16,6 +16,7 @@ namespace Core {
             container.AddTransient<IScriptRunner, ScriptRunner>();
             container.AddSingleton<IMessageBroker, RabbitBroker>();
             container.AddSingleton<IMessageBrokerConfig, RabbitMQConfig>();
+            container.AddTransient<IDataValidation, DataValidation>();
             return container.BuildServiceProvider();
         }
     }
