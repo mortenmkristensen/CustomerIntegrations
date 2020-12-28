@@ -17,14 +17,14 @@ namespace Scheduling {
         private IDBAccess _dbAccess;
         private IMessageBroker _messageBroker;
         private Timer _timer;
-        private List<Script> rubyScripts = new List<Script>();
-        private List<Script> pythonScripts = new List<Script>();
-        private List<Script> jsScripts = new List<Script>();
-        private List<Script> scripts = new List<Script>();
+        private Dictionary<string, List<Script>> scriptsSeperetedByLangugage;
+        private List<Script> scripts;
 
         public Scheduler(IDBAccess dBAccess,  IMessageBroker messageBroker) {
             _dbAccess = dBAccess;
             _messageBroker = messageBroker;
+            scripts = new List<Script>();
+            scriptsSeperetedByLangugage = new Dictionary<string, List<Script>>();
         }
         public Task StartAsync(CancellationToken cancellationToken) {
             _timer = new Timer(
@@ -47,30 +47,32 @@ namespace Scheduling {
         private void Run(object state) {
             GetNewScripts();
             SeparateByLanguage();
-            SendToRabbitMQ(rubyScripts);
-            SendToRabbitMQ(pythonScripts);
-            SendToRabbitMQ(jsScripts);
-            ClearLists();
+            try {
+                foreach (var scriptList in scriptsSeperetedByLangugage) {
+                    SendToRabbitMQ(scriptList.Value);
+                }
+            } catch (InvalidOperationException) {
+                //logging
+            } finally {
+                ClearLists();
+            }
         }
 
         private void SeparateByLanguage() {
-            List<Script> tempRuby = new List<Script>();
-            List<Script> tempPython = new List<Script>();
-            List<Script> tempJs = new List<Script>();
             foreach (var script in scripts) {
-                if (script.Language.Equals("ruby")) {
-                    tempRuby.Add(script);
+                if (scriptsSeperetedByLangugage.ContainsKey(script.Language)) {
+                    List<Script> scriptList;
+                    scriptsSeperetedByLangugage.TryGetValue(script.Language, out scriptList);
+                    List<Script> temp = new List<Script>(scriptList);
+                    temp.Add(script);
+                    scriptsSeperetedByLangugage[script.Language] = temp.Distinct().ToList();
+                } else {
+                    List<Script> scriptList = new List<Script>();
+                    scriptList.Add(script);
+                    scriptsSeperetedByLangugage.Add(script.Language, scriptList);
                 }
-                if (script.Language.Equals("python")) {
-                    tempPython.Add(script);
-                }
-                if (script.Language.Equals("javascript")) {
-                    tempJs.Add(script);
-                }
+                
             }
-            rubyScripts = tempRuby.Distinct().ToList();
-            pythonScripts = tempPython.Distinct().ToList();
-            jsScripts = tempJs.Distinct().ToList();
         }
 
 
@@ -84,7 +86,7 @@ namespace Scheduling {
             var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             string queueName = Environment.GetEnvironmentVariable("MP_SCHEDULINGQUEUE");
             foreach (var list in scriptLists) {
-                _messageBroker.Send<Script>(queueName, list);
+                _messageBroker.Send<Script>(queueName, scripts);
             }
         }
 
@@ -93,9 +95,9 @@ namespace Scheduling {
         }
 
         private void ClearLists() {
-            rubyScripts.Clear();
-            pythonScripts.Clear();
-            jsScripts.Clear();
+            foreach (var scriptList in scriptsSeperetedByLangugage) {
+                scriptList.Value.Clear();
+            }
         }
     }
 }
