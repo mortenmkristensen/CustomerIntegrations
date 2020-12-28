@@ -75,28 +75,6 @@ namespace Scheduling {
             }
         }
 
-        //private void SeparateByLanguage() {
-        //    List<List<Temp>
-        //    List<Script> tempRuby = new List<Script>();
-        //    List<Script> tempPython = new List<Script>();
-        //    List<Script> tempJs = new List<Script>();
-
-        //    foreach (var script in scripts) {
-        //        if (script.Language.Equals("ruby")) {
-        //            tempRuby.Add(script);
-        //        }
-        //        if (script.Language.Equals("python")) {
-        //            tempPython.Add(script);
-        //        }
-        //        if (script.Language.Equals("javascript")) {
-        //            tempJs.Add(script);
-        //        }
-        //    }
-        //    someScripts.Add(new List<Script> { tempRuby });
-        //    someScripts.Add(new List<Script> { tempPython });
-        //    someScripts.Add(new List<Script> { tempJs });
-        //}
-
 
         private IEnumerable<List<T>> SplitList<T>(List<T> itmes, int nSize) {
             for (int i = 0; i < itmes.Count; i += nSize) {
@@ -105,11 +83,11 @@ namespace Scheduling {
         }
 
         private void SendToRabbitMQ(List<Script> scripts) {
-           // var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
+           var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
             string queueName = "Scheduling_Queue";
-            //foreach (var list in scriptLists) {
+            foreach (var list in scriptLists) {
                 _messageBroker.Send<Script>(queueName, scripts);
-            //}
+            }
         }
 
         private void GetNewScripts() {
@@ -120,7 +98,6 @@ namespace Scheduling {
             foreach (var scriptList in scriptsSeperetedByLangugage) {
                 scriptList.Value.Clear();
             }
-            //scripts.Clear();
         }
     }
 }
