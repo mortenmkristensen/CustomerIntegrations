@@ -26,7 +26,7 @@ namespace API.Controllers
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok();
+            return Ok(script);
         }
 
         [HttpPut]
@@ -38,7 +38,7 @@ namespace API.Controllers
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok();
+            return Ok(script);
         }
         // /api/script?id={id}
         [HttpGet]

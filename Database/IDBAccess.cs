@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Database {
     public interface IDBAccess {
-        void Upsert(Script script);
+        Script Upsert(Script script);
         void Delete(string script);
         Script GetScriptById(string id);
         IEnumerable<Script> GetByLanguage(string language);

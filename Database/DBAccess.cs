@@ -57,7 +57,7 @@ namespace Database {
             return script.Result;
         }
 
-        public void Upsert(Script script) {
+        public Script Upsert(Script script) {
             try {
                 if (script.Id == null || script.Id == "") {
                     Collection.InsertOne(script);
@@ -69,6 +69,7 @@ namespace Database {
             } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
             }
+            return script;
         }
 
         public IEnumerable<Script> GetByLanguage(string language) {

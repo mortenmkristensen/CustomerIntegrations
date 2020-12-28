@@ -63,11 +63,11 @@ namespace WebIDE.Controllers {
             script.Author = collection["author"].ToString();
             script.LastModified = DateTime.Parse(collection["lastModified"].ToString());
             script.Code = collection["editorContent"].ToString();
-            aPIAccess.UploadScript(script);
-            Script script2 = aPIAccess.GetScriptById(script.Id);
-            if (script2 != null) {
+            Script insertedScript = aPIAccess.UploadScript(script);
+            //Script script2 = aPIAccess.GetScriptById(script.Id);
+            if (insertedScript != null) {
                 ViewBag.Situation = 0;
-                return View(script);
+                return View(insertedScript);
             } else {
                 ViewBag.Situation = 1;
                 return View();
