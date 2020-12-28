@@ -29,30 +29,30 @@ namespace Core {
 
         public int Run(string interpreterPath, int count) {
             var scripts = GetScriptsFromQueue();
-            if(scripts == null) {
+            if (scripts == null) {
                 return ++count;
             }
             Dictionary<string, string> paths = Stager.GetPaths(scripts);
             Dictionary<string, string> scriptOutput = new Dictionary<string, string>();
-                foreach (var script in scripts) {
-                    foreach (var path in paths) {
-                        if (script._id == path.Key) {
-                            try {
-                                var result = ScriptRunner.RunScript(script._id, path.Value, interpreterPath);
-                            if (DataValidation.validateScriptOutput(result) == true) {
+            foreach (var script in scripts) {
+                foreach (var path in paths) {
+                    if (script._id == path.Key) {
+                        try {
+                            var result = ScriptRunner.RunScript(script._id, path.Value, interpreterPath);
+                            if (DataValidation.ValidateScriptOutput(result)) {
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 DBAccess.Upsert(script);
                                 scriptOutput.Add(script._id, result);
                             }
-                            } catch (ScriptFailedException sfe) {
-                                script.HasErrors = true;
-                                script.LastResult = sfe.Message;
-                                DBAccess.Upsert(script);
-                            }
+                        } catch (ScriptFailedException sfe) {
+                            script.HasErrors = true;
+                            script.LastResult = sfe.Message;
+                            DBAccess.Upsert(script);
                         }
                     }
                 }
+            }
 
             var messages = scriptOutput.Values.ToList();
             SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"), messages);

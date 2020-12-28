@@ -5,6 +5,6 @@ using System.Text;
 namespace Core {
     public interface IDataValidation {
 
-        bool validateScriptOutput(string jsonScript);
+        bool ValidateScriptOutput(string jsonScript);
     }
 }
