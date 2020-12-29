@@ -16,6 +16,10 @@ namespace WebIDE.Controllers {
         public ActionResult Index() {
             return View();
         }
+
+        //This method calls the method GetScriptById from APiAccess to find a script. After that show the state of the script in the view.
+        //Param: a scrpt's id in the form of string.
+        //Return: Is a view.
         [HttpPost]
         public ActionResult ScriptState(string scriptID2) {
             APIAccess aPIAccess = new APIAccess();
@@ -29,12 +33,18 @@ namespace WebIDE.Controllers {
             }
         }
 
+        //This method calls the method GetAllScripts from APiAccess to get the data of all the scripts.
+        //Return: Is a view.
         public ActionResult OpenScripts() {
             APIAccess aPIAccess = new APIAccess();
             List<Script> scripts = aPIAccess.GetAllScripts();
             return View(scripts);
 
         }
+
+        //This method calls the method GetScriptById from APiAccess to find a script.
+        //Param: a scrpt's id in the form of string.
+        //Return: Is a view.
         [HttpPost]
         public ActionResult SearchScriptById(string scriptID) {
             APIAccess aPIAccess = new APIAccess();
@@ -50,7 +60,9 @@ namespace WebIDE.Controllers {
             }
         }
 
-
+        //This method creats a new script and calls the method UploadScript from APiAccess to save the script in the dtatabase.
+        //Param: an IFormCollection object.
+        //Return: Is a view.
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
             APIAccess aPIAccess = new APIAccess();
@@ -64,7 +76,6 @@ namespace WebIDE.Controllers {
             script.LastModified = DateTime.Parse(collection["lastModified"].ToString());
             script.Code = collection["editorContent"].ToString();
             Script insertedScript = aPIAccess.UploadScript(script);
-            //Script script2 = aPIAccess.GetScriptById(script.Id);
             if (insertedScript != null) {
                 ViewBag.Situation = 0;
                 return View(insertedScript);
@@ -74,8 +85,10 @@ namespace WebIDE.Controllers {
             }
         }
 
-      
-       [HttpPost]
+        //This method calls the method DeleteScript from APiAccess to delete the script from the dtatabase.
+        //Param: a scrpt's id in the form of string.
+        //Return: Is a view.
+        [HttpPost]
        public ActionResult DeleteScript(string scriptID4) {
             APIAccess aPIAccess = new APIAccess();
             bool result = aPIAccess.DeleteScript(scriptID4);
@@ -88,6 +101,9 @@ namespace WebIDE.Controllers {
             }
         }
 
+        //This method calls the method GetScriptById from APiAccess to find a script. After that show the data of the script in the view to edit.
+        //Param: a scrpt's id in the form of string.
+        //Return: Is a view.
         [HttpPost]
         public ActionResult EditScript(string scriptID3) {
             APIAccess aPIAccess = new APIAccess();

@@ -8,7 +8,8 @@ using RestSharp;
 
 namespace WebIDE.ServiceAccess {
     public class APIAccess {
-
+        //This method sends a get request to ApI to get data of alle the scripts from API.
+        //Return: Is a list of scripts.
         public List<Script> GetAllScripts() {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script/");
@@ -19,6 +20,9 @@ namespace WebIDE.ServiceAccess {
             return scripts;
         }
 
+        //This method sends a get request to API to get data of a script from API.
+        //Param: an id in the form of string.
+        //Return: Is a script object.
         public Script GetScriptById(string id) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
@@ -30,6 +34,9 @@ namespace WebIDE.ServiceAccess {
 
         }
 
+        //This method sends a post request to API to save data of a script in the database.
+        //Param: a script object.
+        //Return: Is a script object.
         public Script UploadScript(Script script) {
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
@@ -42,6 +49,9 @@ namespace WebIDE.ServiceAccess {
             return returnScript;
         }
 
+        //This method sends a delete request to API to delete data of a script from the database.
+        //Param: an id in the form of string.
+        //Return: Is a boolean.
         public bool DeleteScript(string id) {
             bool result = false;
             var client = new RestClient();
