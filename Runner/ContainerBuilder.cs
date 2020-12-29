@@ -1,11 +1,11 @@
 ﻿using MessageBroker;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Runner {
     class ContainerBuilder {
+
+        //this method makes a service provider which contains all the depencies of the runner
         public IServiceProvider Build() {
             var container = new ServiceCollection();
             container.AddSingleton<IApp, App>();

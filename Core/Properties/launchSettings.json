@@ -8,7 +8,7 @@
         "MP_QUEUENAME": "Scheduling_Queue",
         "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
         "MP_CONSUMERQUEUE": "Consumer_Queue",
-        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe"
+        "MP_INTERPRETERPATH": "C:\\Python39\\python.exe"
       }
     }
   }
