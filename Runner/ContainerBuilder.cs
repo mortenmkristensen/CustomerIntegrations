@@ -5,7 +5,7 @@ using System;
 namespace Runner {
     class ContainerBuilder {
 
-        //this method makes a service provider which contains all the depencies of the runner
+        //This method makes a service provider which contains all the dependencies of the runner
         public IServiceProvider Build() {
             var container = new ServiceCollection();
             container.AddSingleton<IApp, App>();

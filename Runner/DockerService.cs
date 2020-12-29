@@ -8,7 +8,7 @@ namespace Runner {
     public class DockerService : IDockerService {
         private DockerClient _client = new DockerClientConfiguration().CreateClient();
 
-        //this method uses the docker client to pull the specified image from DockerHub
+        //This method uses the docker client to pull the specified image from DockerHub
         public async Task PullImage() {
             await _client.Images
                 .CreateImageAsync(new ImagesCreateParameters {
@@ -19,7 +19,7 @@ namespace Runner {
                     new Progress<JSONMessage>());
         }
 
-        //this method creates a container based on the specied image(the one pulled from DockerHub) sets all the environment variables that are needed in the container
+        //This method creates a container based on the specied image(the one pulled from DockerHub) sets all the environment variables that are needed in the container
         //the container is then started
         public async Task<string> StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
                                         string messageBroker, string queueUser, string queuePassword, string consumerQueue) {
@@ -35,20 +35,19 @@ namespace Runner {
             await _client.Containers.StartContainerAsync(response.ID, null);
             return queuename;
         }
-        //this method gets a list of all the containers in the Docker environment
+        //This method gets a list of all the containers in the Docker environment
         public async Task<IList<ContainerListResponse>> GetContainers() {
             return await _client.Containers.ListContainersAsync(new ContainersListParameters() { All = true });
         }
 
-        //this method removes all containers that are not running
+        //This method removes all containers that are not running
         public async Task PruneContainers() {
             try {
                 await _client.Containers.PruneContainersAsync();
             }
             catch (Exception) {
                 //TODO log exceptions.
-            }
-            
+            } 
         }
     }
 }

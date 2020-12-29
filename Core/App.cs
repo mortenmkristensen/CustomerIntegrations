@@ -53,7 +53,7 @@ namespace Core {
                     }
                 }
             }
-
+            //The result is sent to a messagebroker (the specific queue comes from the environment variablen MP_CONSUMERQUEUE). 
             var messages = scriptOutput.Values.ToList();
             SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"), messages);
             foreach (var id in scriptOutput) {

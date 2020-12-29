@@ -69,7 +69,7 @@ namespace Database {
         //This method inserts a script into the database. 
         public Script Upsert(Script script) {
             try {
-                //If a new script is created that has no Id, it is inserted (and a new Id i given). 
+                //If a new script is created that has no Id, it is inserted (and MongoDB generates a new Id). 
                 if (script.Id == null || script.Id == "") {
                     Collection.InsertOne(script);
                     //If it's a script that already has an Id, the script is replaced. 

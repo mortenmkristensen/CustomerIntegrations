@@ -21,7 +21,6 @@ namespace MessageBroker {
             if (Password == null) {
                 Password = "123";
             }
-
         }
     }
 }

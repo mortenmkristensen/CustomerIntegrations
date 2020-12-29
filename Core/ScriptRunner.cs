@@ -5,7 +5,7 @@ namespace Core {
     //This class excecutes the scripts. 
     class ScriptRunner :IScriptRunner {
         
-        //This method runs a script and returns it in the standard output. 
+        //This method starts a new process where the script is executet and returns the output. 
         //Param: 
         //ScriptId: a script id. 
         //ScriptPath: the path to the script.

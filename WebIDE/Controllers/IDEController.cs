@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Newtonsoft.Json;
-using RestSharp;
 using WebIDE.ServiceAccess;
 
 namespace WebIDE.Controllers {
@@ -17,7 +11,7 @@ namespace WebIDE.Controllers {
             return View();
         }
 
-        //This method calls the method GetScriptById from APiAccess to find a script. After that show the state of the script in the view.
+        //This method calls the method GetScriptById from APIAccess to find a script. After that it shows the state of the script in the view.
         //Param: a scrpt's id in the form of string.
         //Return: Is a view.
         [HttpPost]
@@ -33,17 +27,16 @@ namespace WebIDE.Controllers {
             }
         }
 
-        //This method calls the method GetAllScripts from APiAccess to get the data of all the scripts.
+        //This method calls the method GetAllScripts from APIAccess to get the data of all the scripts.
         //Return: Is a view.
         public ActionResult OpenScripts() {
             APIAccess aPIAccess = new APIAccess();
             List<Script> scripts = aPIAccess.GetAllScripts();
             return View(scripts);
-
         }
 
-        //This method calls the method GetScriptById from APiAccess to find a script.
-        //Param: a scrpt's id in the form of string.
+        //This method calls the method GetScriptById from APIAccess to find a script.
+        //Param: a script's id in the form of string.
         //Return: Is a view.
         [HttpPost]
         public ActionResult SearchScriptById(string scriptID) {
@@ -60,7 +53,7 @@ namespace WebIDE.Controllers {
             }
         }
 
-        //This method creats a new script and calls the method UploadScript from APiAccess to save the script in the dtatabase.
+        //This method creats a new script and calls the method UploadScript from APIAccess to save the script in the database.
         //Param: an IFormCollection object.
         //Return: Is a view.
         [HttpPost]
@@ -85,8 +78,8 @@ namespace WebIDE.Controllers {
             }
         }
 
-        //This method calls the method DeleteScript from APiAccess to delete the script from the dtatabase.
-        //Param: a scrpt's id in the form of string.
+        //This method calls the method DeleteScript from APIAccess to delete the script from the database.
+        //Param: a script's id in the form of string.
         //Return: Is a view.
         [HttpPost]
        public ActionResult DeleteScript(string scriptID4) {
@@ -101,8 +94,8 @@ namespace WebIDE.Controllers {
             }
         }
 
-        //This method calls the method GetScriptById from APiAccess to find a script. After that show the data of the script in the view to edit.
-        //Param: a scrpt's id in the form of string.
+        //This method calls the method GetScriptById from APIAccess to find a script. After that show the data of the script in the view to edit.
+        //Param: a script's id in the form of string.
         //Return: Is a view.
         [HttpPost]
         public ActionResult EditScript(string scriptID3) {

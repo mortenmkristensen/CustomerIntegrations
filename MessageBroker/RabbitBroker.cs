@@ -14,7 +14,7 @@ namespace MessageBroker {
             _config = config;
         }
 
-        //this method takes a queueName and an Eventhandler that is used when a new message is received
+        //This method takes a queueName and an Eventhandler that is used when a new message is received
         public void Listen(string queueName, EventHandler<BasicDeliverEventArgs> handler) {
             try {
                 //the config class is used to configure the host and credetials for the connection
@@ -25,7 +25,7 @@ namespace MessageBroker {
                     Dictionary<string, object> args = new Dictionary<string, object>();
                     //the queue deletes itself after 30 seconds of idle time
                     args.Add("x-expires", 30000);
-                    //a queueu is declared that is durable meaning it can survive a broker restart, non-exclusive meaning multiple connections can use it and that does not delete itself when the last subscriber unsubscribes
+                    //a queue is declared that is durable meaning it can survive a broker restart, non-exclusive meaning multiple connections can use it and that does not delete itself when the last subscriber unsubscribes
                     channel.QueueDeclare(queue: queueName,
                                          durable: true,
                                          exclusive: false,
@@ -60,7 +60,7 @@ namespace MessageBroker {
             }
         }
 
-        //this method pulls one message at a time from the queue without creating a consumer that subscribes to the queue
+        //This method pulls one message at a time from the queue without creating a consumer that subscribes to the queue
         public List<Script> Receive(string queueName) {
             List<Script> scipts = null;
             try {
