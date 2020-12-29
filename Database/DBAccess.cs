@@ -25,18 +25,19 @@ namespace Database {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
             }
         }
-
-        //This method deletes a script. 
-        public void Delete(string id) {
+        //This method deletes a script.
+        public bool Delete(string id) {
+            var result = false;
             try {
                 if (id != null) {
                     var objectId = new ObjectId(id);
                     var filter = Builders<Script>.Filter.Eq("_id", objectId);
-                    Collection.DeleteOne(filter);
+                   result= Collection.DeleteOne(filter).IsAcknowledged;
                 }
             } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to delte a script", me);
             }
+            return result;
         }
 
         //This method gets all scripts from the database, and returns it in a IEnumerable.

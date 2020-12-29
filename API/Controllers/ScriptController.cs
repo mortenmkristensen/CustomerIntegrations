@@ -74,12 +74,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult DeleteScript(string id) {
+            bool result;
             try {
-                dbAccess.Delete(id);
+                result= dbAccess.Delete(id);
             } catch (Exception e) {
                 return StatusCode(500);
             }
-            return Ok();
+            return Ok(result);
         }
 
         [HttpGet("All")]
