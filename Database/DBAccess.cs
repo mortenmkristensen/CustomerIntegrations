@@ -21,16 +21,18 @@ namespace Database {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
             }
         }
-        public void Delete(string id) {
+        public bool Delete(string id) {
+            var result = false;
             try {
                 if (id != null) {
                     var objectId = new ObjectId(id);
                     var filter = Builders<Script>.Filter.Eq("_id", objectId);
-                    Collection.DeleteOne(filter);
+                   result= Collection.DeleteOne(filter).IsAcknowledged;
                 }
             } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to delte a script", me);
             }
+            return result;
         }
 
         public IEnumerable<Script> GetAll() {
