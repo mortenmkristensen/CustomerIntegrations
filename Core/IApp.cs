@@ -1,7 +1,4 @@
-﻿using Models;
-using System.Collections.Generic;
-
-namespace Core {
+﻿namespace Core {
     interface IApp {
         int Run(string interpreterPath, int count);
     }
