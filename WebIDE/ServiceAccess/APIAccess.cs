@@ -59,7 +59,7 @@ namespace WebIDE.ServiceAccess {
             var request = new RestRequest($"?id={id}", Method.DELETE);
             var response = client.Execute(request);
             if (((int)response.StatusCode)!=500){
-                result = true;
+                result = bool.Parse(response.Content);
             }
             return result;
         }
