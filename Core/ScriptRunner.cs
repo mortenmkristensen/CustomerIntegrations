@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Core.Exceptions;
-using Database;
-using Models;
 
 namespace Core {
+    //This class excecutes the scripts. 
     class ScriptRunner :IScriptRunner {
-
-        //remember to set the paths to the interpreters
+        
+        //This method runs a script and returns it in the standard output. 
+        //Param: 
+        //ScriptId: a script id. 
+        //ScriptPath: the path to the script.
+        //interpreterPath: the path to the interpreter. 
         public string RunScript(string scriptId, string scriptPath, string interpreterPath) {
             ProcessStartInfo start = new ProcessStartInfo();
             start.FileName = interpreterPath;
@@ -19,6 +20,7 @@ namespace Core {
             start.RedirectStandardError = true; // Any error in standard output will be redirected back (for example exceptions)
             using (Process process = Process.Start(start)) {
                 string result = process.StandardOutput.ReadToEnd(); // Here is the result of StdOut(for example: print "test")
+                //if standard output is not empty it is returned. 
                 if (result.Length != 0) {
                     return result;
                 } else {

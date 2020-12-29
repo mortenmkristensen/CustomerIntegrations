@@ -1,11 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Database;
 using MessageBroker;
 
 namespace Core {
+    //This class is used for the pattern Dependency Injection 
     class ContainerBuilder {
         public IServiceProvider Build() {
             var container = new ServiceCollection();
