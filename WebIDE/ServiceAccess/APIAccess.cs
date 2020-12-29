@@ -42,11 +42,16 @@ namespace WebIDE.ServiceAccess {
             return returnScript;
         }
 
-        public void DeleteScript(string id) {
+        public bool DeleteScript(string id) {
+            bool result = false;
             var client = new RestClient();
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest($"?id={id}", Method.DELETE);
-            client.Execute(request);
+            var response = client.Execute(request);
+            if (((int)response.StatusCode)!=500){
+                result = true;
+            }
+            return result;
         }
     }
 }
