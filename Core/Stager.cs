@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Core {
     //This class prepares the scripts before they are are used by ScriptRunner, by extracting them from the database and then saving them to disk. 
-    class Stager : IStager {
+   public  class Stager : IStager {
 
         //This method gets the path from the SaveToDisk method. 
         public string GetPath(Script script) {
