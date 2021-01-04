@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Core {
     //This class is the Hub for the system. It runs methods in the correct order.
-    class App : IApp {
+   public class App : IApp {
 
         private IStager Stager { get; set; }
         private IScriptRunner ScriptRunner { get; set; }
