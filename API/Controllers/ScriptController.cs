@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Database;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Models;
 
 namespace API.Controllers
@@ -11,7 +12,12 @@ namespace API.Controllers
     [ApiController]
     public class ScriptController : ControllerBase{
         IDBAccess dbAccess = new DBAccess(new DBConfig());
+        private readonly ILogger<ScriptController> _log;
 
+        public ScriptController(ILogger<ScriptController> log) {
+            _log = log;
+
+        }
         // This method is a POST method that calls the Upsert method from the DBAccess to save the script in the database.
         // Param: a script object.
         // Return: If the script is saved in the database, it will return the help method Ok with the script. If there is an exception, it will return the statuscode 500. 
@@ -22,6 +28,7 @@ namespace API.Controllers
             try {
                 dbAccess.Upsert(script);
             } catch (Exception e) {
+                _log.LogWarning(e, "Unable to upload script");
                 return StatusCode(500);
             }
             return Ok(script);
@@ -37,6 +44,7 @@ namespace API.Controllers
             try {
                 dbAccess.Upsert(script);
             } catch (Exception e) {
+                _log.LogWarning(e, "Unable to update script");
                 return StatusCode(500);
             }
             return Ok(script);
@@ -54,6 +62,7 @@ namespace API.Controllers
             try {
                 script = dbAccess.GetScriptById(id);
             } catch (Exception e) {
+                _log.LogWarning(e, "Unable to find script by id");
                 return StatusCode(500);
             }
             return Ok(script);
@@ -72,6 +81,7 @@ namespace API.Controllers
                 scripts = dbAccess.GetByCustomer(customer);
 
             } catch (Exception e) {
+                _log.LogWarning(e, "Unable to find script by customer");
                 return StatusCode(500);
             }
             return Ok(scripts);
@@ -88,6 +98,7 @@ namespace API.Controllers
             try {
                 result= dbAccess.Delete(id);
             } catch (Exception e) {
+                _log.LogWarning(e, "Unable to delete script");
                 return StatusCode(500);
             }
             return Ok(result);
@@ -103,6 +114,7 @@ namespace API.Controllers
             try {
                 scripts = dbAccess.GetAll();
             } catch (Exception e) {
+                _log.LogWarning(e, "Unable to find any scripts");
                 return StatusCode(500);
             }
             return Ok(scripts);

@@ -9,16 +9,19 @@ using RabbitMQ.Client.Events;
 using System.Linq;
 using Docker.DotNet;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace Runner {
     class App : IApp {
         private IDockerService _dockerService;
         private IMessageBroker _messsagebroker;
         private List<string> _dockerContainers;
-        public App(IDockerService dockerService, IMessageBroker messageBroker) {
+        private ILogger<App> _log;
+        public App(IDockerService dockerService, IMessageBroker messageBroker, ILogger<App> log) {
             _dockerService = dockerService;
             _messsagebroker = messageBroker;
             _dockerContainers = new List<string>();
+            _log = log;
         }
 
         //This method takes a list of scripts that are in the same langauge and sets the interpreter for that language.
@@ -35,27 +38,25 @@ namespace Runner {
             foreach (var list in lists) {
                 string name = interpreter + i++;
                 try {
-                    //if a coantainer does not already exist a new one is started
+                    //if a container does not already exist a new one is started
                     if (!_dockerContainers.Contains(name)) {
-                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), 
+                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"),
                                                              Environment.GetEnvironmentVariable("MP_COLLECTION"),
-                                                             Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter, 
-                                                             Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), 
+                                                             Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
+                                                             Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"),
                                                              Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
-                                                             Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), 
+                                                             Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"),
                                                              Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
+                        _messsagebroker.Send<Script>(name, list);
                     }
-                } catch (DockerApiException) {
-                    name = interpreter + ++i;
-                    containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"), 
-                                                         Environment.GetEnvironmentVariable("MP_COLLECTION"),
-                                                         Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
-                                                         Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"), 
-                                                         Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
-                                                         Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"), 
-                                                         Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
                 }
-                _messsagebroker.Send<Script>(name, list);
+                catch (DockerApiException dae) {
+                    _log.LogWarning(dae, "Unable to start dockercontainer");
+                }
+                catch (Exception e) {
+                    _log.LogError(e, "unable to send scripts to queue: " + name);
+                }
+
             }
             //idle containers are removed
             await CheckForIdleContainers();
@@ -102,7 +103,12 @@ namespace Runner {
         //This method intantiates an EventHandler which is sent to the Listen method in the messagebroker class together with the queueName
         public void ListenToQueue(string queueName) {
             EventHandler<BasicDeliverEventArgs> consumer = MessageReceivedHandler;
-            _messsagebroker.Listen(queueName, consumer);
+            try {
+                _messsagebroker.Listen(queueName, consumer);
+            }
+            catch (Exception e) {
+                _log.LogCritical(e, "Cannot connect to queue: " + queueName);
+            }
         }
 
 
