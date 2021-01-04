@@ -3,7 +3,7 @@ using Core.Exceptions;
 
 namespace Core {
     //This class excecutes the scripts. 
-    class ScriptRunner :IScriptRunner {
+    public class ScriptRunner :IScriptRunner {
         
         //This method starts a new process where the script is executet and returns the output. 
         //Param: 

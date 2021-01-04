@@ -20,8 +20,8 @@ namespace CoreTest {
         [Fact]
         public void RunTest() {
             //Arrange 
-            var interpreterPath = "Python";
-            var interpreterPath2 = "Ruby";
+            var interpreterPath = "python";
+            var interpreterPath2 = "ruby";
             var interpreterPath3 = "node";
             int count = 15;
             //Act
