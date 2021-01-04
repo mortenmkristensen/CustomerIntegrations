@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Runner", "Runner\Runner.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebIDE", "WebIDE\WebIDE.csproj", "{25F60D5F-426B-4719-911B-4FD3CA6E2F4E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coretest", "Coretest\Coretest.csproj", "{A0E49D31-2645-456A-A8C8-3081DAD52F49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coretest", "Coretest\Coretest.csproj", "{A0E49D31-2645-456A-A8C8-3081DAD52F49}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{04B4609E-42F1-4912-AB13-154C2D4E4331}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,6 +68,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A0E49D31-2645-456A-A8C8-3081DAD52F49} = {04B4609E-42F1-4912-AB13-154C2D4E4331}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {05E50956-3E0F-4664-87CA-96AF7EEA9269}
