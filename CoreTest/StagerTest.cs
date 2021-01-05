@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using Core;
 using Models;
+using Moq;
 using Xunit;
 
 namespace CoreTest {
     public class StagerTest {
-        private readonly Stager stager;
-        public StagerTest() {
-            stager = new Stager();
-        }
-
+      
         [Fact]
         public void GetPathsTest() {
             // Arrange
+            var stager = new Mock<IStager>();
             //python
             List<Script> scripts1 = new List<Script>();
             Script script1 = new Script() {
@@ -137,16 +135,30 @@ namespace CoreTest {
             };
             scripts3.Add(script5);
             scripts3.Add(script6);
+            Dictionary<string, string> paths1 = new Dictionary<string, string>();
+            Dictionary<string, string> paths2 = new Dictionary<string, string>();
+            Dictionary<string, string> paths3 = new Dictionary<string, string>();
+            string path1 = $@"c:\scripts\python\{script1.Id}.py";
+            string path2 = $@"c:\scripts\python\{script2.Id}.py";
+            string path3 = $@"c:\scripts\ruby\{script3.Id}.rb";
+            string path4 = $@"c:\scripts\ruby\{script4.Id}.rb";
+            string path5 = $@"c:\scripts\javascript\{script5.Id}.js";
+            string path6 = $@"c:\scripts\javascript\{script6.Id}.js";
+            paths1.Add(script1.Id, path1);
+            paths1.Add(script2.Id, path2);
+            paths2.Add(script3.Id, path3);
+            paths2.Add(script4.Id, path4);
+            paths3.Add(script5.Id, path5);
+            paths3.Add(script6.Id, path6);
 
             //Act
-            var paths1 = stager.GetPaths(scripts1);
-            var paths2 = stager.GetPaths(scripts2);
-            var paths3 = stager.GetPaths(scripts3);
-
+            stager.Setup(x => x.GetPaths(scripts1)).Returns(paths1);
+            stager.Setup(x => x.GetPaths(scripts2)).Returns(paths2);
+            stager.Setup(x => x.GetPaths(scripts3)).Returns(paths3);
             //Assert
-            Assert.True(paths1.Count > 0);
-            Assert.True(paths2.Count > 0);
-            Assert.True(paths3.Count > 0);
+            Assert.True(stager.Object.GetPaths(scripts1).Count > 0);
+            Assert.True(stager.Object.GetPaths(scripts2).Count > 0);
+            Assert.True(stager.Object.GetPaths(scripts3).Count > 0);
         }
     }
 }

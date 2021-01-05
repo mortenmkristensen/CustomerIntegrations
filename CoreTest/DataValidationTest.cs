@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using Core;
 using Core.Exceptions;
+using Moq;
 using Xunit;
 
 namespace CoreTest {
     public class DataValidationTest {
-        private readonly DataValidation dataValidation;
-        public DataValidationTest() {
-            dataValidation = new DataValidation();
-        }
+  
         [Fact]
         public void ValidateScriptOutputTest() {
             //Arrange
+            var dataValidation = new Mock<IDataValidation>();
             string scriptResult = "[{" + '\u0022' + "Id" + '\u0022' + ":" + '\u0022' + "" + '\u0022' +
                 "," + '\u0022' + "ParentId" + '\u0022' + ":" + '\u0022' + "" + '\u0022' + "," + '\u0022' + "ExternalId" + '\u0022'
                 + ":" + '\u0022' + "9894778d - 7ed6 - 4610 - 987a - 033b8125a24e" + '\u0022' + "," +
@@ -27,11 +26,12 @@ namespace CoreTest {
             string scriptResult2 = "try test";
 
             //Act
-            bool isLocation = dataValidation.ValidateScriptOutput(scriptResult);
+            dataValidation.Setup(x => x.ValidateScriptOutput(scriptResult)).Returns(true);
+            dataValidation.Setup(x => x.ValidateScriptOutput(scriptResult2)).Throws(new ScriptFailedException());
 
             //Assert
-            Assert.True(isLocation);
-            Assert.Throws<ScriptFailedException>(() => dataValidation.ValidateScriptOutput(scriptResult2));
+            Assert.True(dataValidation.Object.ValidateScriptOutput(scriptResult));
+            Assert.Throws<ScriptFailedException>(() => dataValidation.Object.ValidateScriptOutput(scriptResult2));
         }
     }
 }
