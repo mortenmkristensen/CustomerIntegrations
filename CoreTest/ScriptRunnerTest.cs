@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using Core;
+using Core.Exceptions;
 using Xunit;
 
 namespace CoreTest {
     public class ScriptRunnerTest {
         private readonly ScriptRunner scriptRunner;
+        public ScriptRunnerTest() {
+            scriptRunner = new ScriptRunner();
+        }
         [Fact]
         public void RunScriptTest() {
             //Arrange
@@ -46,24 +50,21 @@ namespace CoreTest {
             //Act
             string result1 = scriptRunner.RunScript(scriptId, scriptPath, interpreterPath);
             string result2 = scriptRunner.RunScript(scriptId2, scriptPath2, interpreterPath);
-            string result3 = scriptRunner.RunScript(scriptId3, scriptPath3, interpreterPath);
             string result4 = scriptRunner.RunScript(scriptId4, scriptPath4, interpreterPath2);
             string result5 = scriptRunner.RunScript(scriptId5, scriptPath5, interpreterPath2);
-            string result6 = scriptRunner.RunScript(scriptId6, scriptPath6, interpreterPath2);
             string result7 = scriptRunner.RunScript(scriptId7, scriptPath7, interpreterPath3);
-            string result8 = scriptRunner.RunScript(scriptId8, scriptPath7, interpreterPath3);
-            string result9 = scriptRunner.RunScript(scriptId9, scriptPath9, interpreterPath3);
-
+            string result8 = scriptRunner.RunScript(scriptId8, scriptPath8, interpreterPath3);
+           
             //Assert
             Assert.NotNull(result1);
             Assert.NotNull(result2);
-            Assert.Null(result3);
+            Assert.Throws<ScriptFailedException>(() => scriptRunner.RunScript(scriptId3, scriptPath3, interpreterPath));
             Assert.NotNull(result4);
             Assert.NotNull(result5);
-            Assert.Null(result6);
+            Assert.Throws<ScriptFailedException>(() => scriptRunner.RunScript(scriptId6, scriptPath6, interpreterPath2));
             Assert.NotNull(result7);
             Assert.NotNull(result8);
-            Assert.Null(result9);
+            Assert.Throws<ScriptFailedException>(() => scriptRunner.RunScript(scriptId9, scriptPath9, interpreterPath3));
         }
-    
+    }
 }

@@ -8,6 +8,9 @@ using Xunit;
 namespace CoreTest {
     public class StagerTest {
         private readonly Stager stager;
+        public StagerTest() {
+            stager = new Stager();
+        }
 
         [Fact]
         public void GetPathsTest() {

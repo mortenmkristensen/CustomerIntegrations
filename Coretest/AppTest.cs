@@ -7,7 +7,7 @@ using Xunit;
 
 namespace CoreTest {
     public class AppTest {
-        private readonly Mock.Of<IApp> app;
+        private readonly App app;
         private readonly Mock<IStager> stagerMock;
         private readonly Mock<IScriptRunner> scriptRunnerMock;
         private readonly Mock<IDBAccess> dbAccessMock;
