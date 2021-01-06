@@ -10,8 +10,9 @@ using Microsoft.Extensions.Logging;
 namespace Scheduling {
     class Program {
         static async Task Main(string[] args) {
+            //Adding logger with MongoDB Sink and a minimum level of Warning.
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Warning()
                 .WriteTo.MongoDB("mongodb://localhost:27017/MapsPeople", collectionName: "log")
                 .CreateLogger();
 
