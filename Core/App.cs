@@ -24,8 +24,8 @@ namespace Core {
         }
 
         //The first thing this method does is getting a list of scripts from a queue, and if the list is null count is counted up by 1. 
-        public int Run(string interpreterPath, int count) {
-            var scripts = GetScriptsFromQueue(Environment.GetEnvironmentVariable("MP_QUEUENAME"));
+        public int Run(string interpreterPath, int count, string queueName, string consumerQuequeName) {
+            var scripts = GetScriptsFromQueue(queueName);
             if (scripts == null) {
                 return ++count;
             }
@@ -55,7 +55,7 @@ namespace Core {
             }
             //The result is sent to a messagebroker (the specific queue comes from the environment variablen MP_CONSUMERQUEUE). 
             var messages = scriptOutput.Values.ToList();
-            SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"), messages);
+            SendData(consumerQuequeName, messages);
             foreach (var id in scriptOutput) {
                 Console.WriteLine($"The Script with id: {id.Key} has been run");
             }
