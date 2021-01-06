@@ -25,7 +25,7 @@ namespace Core {
 
         //The first thing this method does is getting a list of scripts from a queue, and if the list is null count is counted up by 1. 
         public int Run(string interpreterPath, int count) {
-            var scripts = GetScriptsFromQueue();
+            var scripts = GetScriptsFromQueue(Environment.GetEnvironmentVariable("MP_QUEUENAME"));
             if (scripts == null) {
                 return ++count;
             }
@@ -64,8 +64,7 @@ namespace Core {
         }
 
         //This method gets a queue name from the environment variable MP_QUEUENAME. The queue name is used in MessageBroker.Receive to get the list of Scripts from the queue name.
-        private List<Script> GetScriptsFromQueue() {
-            var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+        private List<Script> GetScriptsFromQueue(string queueName) {     
             return MessageBroker.Receive(queueName);
         }
 

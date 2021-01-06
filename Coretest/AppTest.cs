@@ -42,8 +42,9 @@ namespace CoreTest {
                 Author = "test1",
                 LastModified = DateTime.Now
             };
-            scripts1.Add(script1);          
-            string queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+            scripts1.Add(script1);
+            //string queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+            string queueName = "MP_QUEUENAME";
             messageBrokerMock.Setup(x => x.Receive(queueName)).Returns(scripts1);
             string path1 = $@"c:\scripts\python\{script1.Id}.py";
             Dictionary<string, string> paths = new Dictionary<string, string>();
