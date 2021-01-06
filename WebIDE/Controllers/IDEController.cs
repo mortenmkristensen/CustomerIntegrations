@@ -7,6 +7,15 @@ using WebIDE.ServiceAccess;
 
 namespace WebIDE.Controllers {
     public class IDEController : Controller {
+        private IAPIAccess aPIAccess;
+
+        public IDEController(IAPIAccess aPIAccess2) {
+            aPIAccess = aPIAccess2;
+        }
+
+        public IDEController() {
+            aPIAccess = new APIAccess();
+        }
         public ActionResult Index() {
             return View();
         }
@@ -16,11 +25,10 @@ namespace WebIDE.Controllers {
         //Return: Is a view.
         [HttpPost]
         public ActionResult ScriptState(string scriptID2) {
-            APIAccess aPIAccess = new APIAccess();
             Script script = null;
             script = aPIAccess.GetScriptById(scriptID2);
             if (script != null) {
-                return View(script);
+                return View("ScriptState", script);
             } else {
                 ViewBag.Situation = 1;
                 return View("EditScript");
@@ -30,9 +38,8 @@ namespace WebIDE.Controllers {
         //This method calls the method GetAllScripts from APIAccess to get the data of all the scripts.
         //Return: Is a view.
         public ActionResult OpenScripts() {
-            APIAccess aPIAccess = new APIAccess();
             List<Script> scripts = aPIAccess.GetAllScripts();
-            return View(scripts);
+            return View("OpenScripts", scripts);
         }
 
         //This method calls the method GetScriptById from APIAccess to find a script.
@@ -40,7 +47,6 @@ namespace WebIDE.Controllers {
         //Return: Is a view.
         [HttpPost]
         public ActionResult SearchScriptById(string scriptID) {
-            APIAccess aPIAccess = new APIAccess();
             Script script = null;
             List<Script> scripts = new List<Script>();
             script = aPIAccess.GetScriptById(scriptID);
@@ -58,7 +64,6 @@ namespace WebIDE.Controllers {
         //Return: Is a view.
         [HttpPost]
         public ActionResult SaveScript(IFormCollection collection) {
-            APIAccess aPIAccess = new APIAccess();
             Script script = new Script();
             script.Id = collection["id"].ToString();
             script.Name = collection["scriptName"].ToString();
@@ -71,10 +76,10 @@ namespace WebIDE.Controllers {
             Script insertedScript = aPIAccess.UploadScript(script);
             if (insertedScript != null) {
                 ViewBag.Situation = 0;
-                return View(insertedScript);
+                return View("SaveScript", insertedScript);
             } else {
                 ViewBag.Situation = 1;
-                return View();
+                return View("SaveScript");
             }
         }
 
@@ -83,14 +88,13 @@ namespace WebIDE.Controllers {
         //Return: Is a view.
         [HttpPost]
        public ActionResult DeleteScript(string scriptID4) {
-            APIAccess aPIAccess = new APIAccess();
             bool result = aPIAccess.DeleteScript(scriptID4);
             if (result) {
                 ViewBag.Situation = 0;
-                return View();
+                return View("DeleteScript");
             } else {
                 ViewBag.Situation = 1;
-                return View();
+                return View("DeleteScript");
             }
         }
 
@@ -99,15 +103,14 @@ namespace WebIDE.Controllers {
         //Return: Is a view.
         [HttpPost]
         public ActionResult EditScript(string scriptID3) {
-            APIAccess aPIAccess = new APIAccess();
             Script script = null;
             script = aPIAccess.GetScriptById(scriptID3);
             if (script != null) {
                 ViewBag.Situation = 0;
-                return View(script); ;
+                return View("EditScript", script); ;
             } else {
                 ViewBag.Situation = 1;
-                return View();
+                return View("EditScript");
             }
         }
     }
