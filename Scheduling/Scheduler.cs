@@ -13,14 +13,10 @@ namespace Scheduling {
         private IDBAccess _dbAccess;
         private IMessageBroker _messageBroker;
         private Timer _timer;
-        private Dictionary<string, List<Script>> scriptsSeperetedByLangugage;
-        private List<Script> scripts;
 
         public Scheduler(IDBAccess dBAccess,  IMessageBroker messageBroker) {
             _dbAccess = dBAccess;
             _messageBroker = messageBroker;
-            scripts = new List<Script>();
-            scriptsSeperetedByLangugage = new Dictionary<string, List<Script>>();
         }
         //This method is from the IHostedService interface and is called when the program is started.
         //it makes a timer that executes the run method every 5 seconds. 
@@ -46,38 +42,37 @@ namespace Scheduling {
         //Run takes care of calling the other methods in the right order. It has an object as parameter but it is not used. 
         //this is because it is used as the callback for the timer, and the delegate for that specifies that it has to take an object in its signature.
         private void Run(object state) {
-            GetNewScripts();
-            SeparateByLanguage();
+            var scripts = GetNewScripts();
+            var scriptsSeparetedByLangugage = SeparateByLanguage(scripts);
             try {
                 //each language specific list is sent one at a time to the messagebroker
-                foreach (var scriptList in scriptsSeperetedByLangugage) {
+                foreach (var scriptList in scriptsSeparetedByLangugage) {
                     SendToRabbitMQ(scriptList.Value);
                 }
             } catch (InvalidOperationException) {
                 //logging
-            } finally {
-                ClearLists();
             }
         }
 
         //This method seperates the list of all scripts into smaller lists, one for each language supported by the system
-        private void SeparateByLanguage() {
+        private Dictionary<string, List<Script>> SeparateByLanguage(List<Script> scripts) {
+            Dictionary<string, List<Script>> scriptsSeparetedByLangugage = new Dictionary<string, List<Script>>();
             foreach (var script in scripts) {
                 //a list with scripts written in a specific language already exixts
-                if (scriptsSeperetedByLangugage.ContainsKey(script.Language)) {
+                if (scriptsSeparetedByLangugage.ContainsKey(script.Language)) {
                     List<Script> scriptList;
-                    scriptsSeperetedByLangugage.TryGetValue(script.Language, out scriptList);
+                    scriptsSeparetedByLangugage.TryGetValue(script.Language, out scriptList);
                     List<Script> temp = new List<Script>(scriptList);
                     temp.Add(script);
-                    scriptsSeperetedByLangugage[script.Language] = temp.Distinct().ToList();
+                    scriptsSeparetedByLangugage[script.Language] = temp.Distinct().ToList();
                 //a list with scripts in a specific language does not exist
                 } else {
                     List<Script> scriptList = new List<Script>();
                     scriptList.Add(script);
-                    scriptsSeperetedByLangugage.Add(script.Language, scriptList);
+                    scriptsSeparetedByLangugage.Add(script.Language, scriptList);
                 }
-                
             }
+            return scriptsSeparetedByLangugage;
         }
 
         //This method takes a list of objects that should be split into smaller lists and an integer specifying how many elements should be in each list
@@ -98,15 +93,8 @@ namespace Scheduling {
         }
 
         //This method gets all the scripts from the database
-        private void GetNewScripts() {
-            scripts = _dbAccess.GetAll().ToList();
-        }
-
-        //This method empties each of language specific lists
-        private void ClearLists() {
-            foreach (var scriptList in scriptsSeperetedByLangugage) {
-                scriptList.Value.Clear();
-            }
+        private List<Script> GetNewScripts() {
+            return _dbAccess.GetAll().ToList();
         }
     }
 }
