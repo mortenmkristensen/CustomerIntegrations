@@ -5,6 +5,7 @@ using Core.Exceptions;
 using Database;
 using MessageBroker;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Core {
     //This class is the Hub for the system. It runs methods in the correct order.
@@ -15,12 +16,14 @@ namespace Core {
         private IDBAccess DBAccess { get; set; }
         private IMessageBroker MessageBroker { get; set; }
         private IDataValidation DataValidation { get; set; }
-        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker, IDataValidation dataValidation) {
+        private ILogger<App> _log;
+        public App(IDBAccess dbAccess, IStager stager, IScriptRunner scriptRunner, IMessageBroker messageBroker, IDataValidation dataValidation, ILogger<App> log) {
             Stager = stager;
             ScriptRunner = scriptRunner;
             DBAccess = dbAccess;
             MessageBroker = messageBroker;
             DataValidation = dataValidation;
+            _log = log;
         }
 
         //The first thing this method does is getting a list of scripts from a queue, and if the list is null count is counted up by 1. 
@@ -49,6 +52,7 @@ namespace Core {
                             script.HasErrors = true;
                             script.LastResult = sfe.Message;
                             DBAccess.Upsert(script);
+                            _log.LogWarning(sfe, "Exception");
                         }
                     }
                 }
@@ -66,12 +70,23 @@ namespace Core {
         //This method gets a queue name from the environment variable MP_QUEUENAME. The queue name is used in MessageBroker.Receive to get the list of Scripts from the queue name.
         private List<Script> GetScriptsFromQueue() {
             var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
-            return MessageBroker.Receive(queueName);
+            try {
+                return MessageBroker.Receive(queueName);
+            }
+            catch (Exception e) {
+                _log.LogError(e, "Unable to get scripts from queue");
+                return null;
+            }
         }
 
         //This method takes a queue name and a message (scripts) and sends it into a queue in the messagebroker. 
         private void SendData(string queueName, IEnumerable<string> messages) {
-            MessageBroker.Send<string>(queueName, messages);
+            try {
+                MessageBroker.Send<string>(queueName, messages);
+            }
+            catch (Exception e) {
+                _log.LogError(e, "unable to send results to queue");
+            }
         }
     }
 }

@@ -7,16 +7,19 @@ using Microsoft.Extensions.Hosting;
 using Models;
 using MessageBroker;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace Scheduling {
     public class Scheduler : IHostedService {
         private IDBAccess _dbAccess;
         private IMessageBroker _messageBroker;
         private Timer _timer;
+        private ILogger<Scheduler> _log;
 
-        public Scheduler(IDBAccess dBAccess,  IMessageBroker messageBroker) {
+        public Scheduler(IDBAccess dBAccess,  IMessageBroker messageBroker, ILogger<Scheduler> log) {
             _dbAccess = dBAccess;
             _messageBroker = messageBroker;
+            _log = log;
         }
         //This method is from the IHostedService interface and is called when the program is started.
         //it makes a timer that executes the run method every 5 seconds. 
@@ -49,8 +52,8 @@ namespace Scheduling {
                 foreach (var scriptList in scriptsSeparetedByLangugage) {
                     SendToRabbitMQ(scriptList.Value);
                 }
-            } catch (InvalidOperationException) {
-                //logging
+            } catch (Exception e) {
+                _log.LogError(e, "Unable to send to queue");
             }
         }
 

@@ -135,13 +135,17 @@ namespace MessageBroker {
                 }
             } catch (Exception e) {
                 if (e is AlreadyClosedException) {
-                    Console.WriteLine("The connectionis already closed");
+                    Console.WriteLine("The connection is already closed");
+                    throw;
                 } else if (e is BrokerUnreachableException) {
                     Console.WriteLine("The broker cannot be reached");
+                    throw;
                 } else if (e is OperationInterruptedException) {
                     Console.WriteLine("The operation was interupted");
+                    throw;
                 } else if (e is ConnectFailureException) {
                     Console.WriteLine("Could not connect to the broker broker");
+                    throw;
                 } else {
                     Console.WriteLine("Something went wrong");
                 }
