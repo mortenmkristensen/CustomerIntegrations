@@ -93,7 +93,7 @@ namespace Scheduling {
         }
 
         //This method gets all the scripts from the database
-        private List<Script> GetNewScripts() {
+        public List<Script> GetNewScripts() {
             return _dbAccess.GetAll().ToList();
         }
     }

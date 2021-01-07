@@ -118,17 +118,15 @@ namespace SchedulingTest {
                 LastModified = DateTime.Now
             };
        
-            List<Script> scripts = new List<Script>();
-            scripts.Add(script1);
-            dBAccessMock.Setup(x => x.GetAll()).Returns(scripts);
+            List<Script> scripts1 = new List<Script>();
+            scripts1.Add(script1);
+            dBAccessMock.Setup(x => x.GetAll()).Returns(scripts1);
 
             //Act
-            MethodInfo methodInfo = typeof(Scheduler).GetMethod("GetNewScripts", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = { scripts };
-            var scripts2 = (List<Script>)methodInfo.Invoke(scheduler, parameters);
+            var scripts2 = scheduler.GetNewScripts();
 
             //Assert
-            Assert.Equal(scripts, scripts2);
+            Assert.Equal(scripts1, scripts2);
         }
     }
 }
