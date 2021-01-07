@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Database;
 using MessageBroker;
 using Models;
@@ -15,6 +17,7 @@ namespace SchedulingTest {
         public SchedulerTest() {
             scheduler = new Scheduler(dBAccessMock.Object, messageBrokerMock.Object);
         }
+        //This test tests the private method SeperateByLanguage.
         [Fact]
         public void SeperateByLanguageTest() {
             //Arrange
@@ -82,8 +85,50 @@ namespace SchedulingTest {
             scripts.Add(script3);
 
             //Act
-            var seperateDictionary = scheduler.SeparateByLanguage(scripts);
+            MethodInfo methodInfo = typeof(Scheduler).GetMethod("SeparateByLanguage", BindingFlags.NonPublic | BindingFlags.Instance);
+            object[] parameters = {scripts};
+            var scriptsSeparetedByLangugage = (Dictionary<string, List<Script>>) methodInfo.Invoke(scheduler, parameters);
+            var scriptLists = scriptsSeparetedByLangugage.Values.ToList();
+            var languages = scriptsSeparetedByLangugage.Keys.ToList();
+           
+            //Assert
+            Assert.True(languages[0].Equals("python") && scriptLists[0][0].Language.Equals(languages[0]));
+            Assert.True(languages[1].Equals("ruby") && scriptLists[1][0].Language.Equals(languages[1]));
+            Assert.True(languages[2].Equals("javascript") && scriptLists[2][0].Language.Equals(languages[2]));
+        }
 
+        //This test tests the private method GetNewScripts.
+        [Fact]
+        public void GetNewScriptsTest() {
+            //Arrange
+            //python
+            Script script1 = new Script() {
+                Id = "1",
+                Name = "Python1",
+                Customer = "testCustomer",
+                ScriptVersion = "1.11",
+                Language = "python",
+                LanguageVersion = "1.0.1",
+                Code = "#This is the datamodel for Location, Source, and State." + "\n" +
+                       "location = { 'Id':" + '\u0022' + "" + '\u0022' + "," + "'ParentId':" + '\u0022' + "" + '\u0022' + "," + "'ExternalId':" + '\u0022' + "" + '\u0022' + "," + "'ConsumerId': 2, 'Sources': [] }" + "\n" +
+                        "source = { 'Type':" + '\u0022' + "" + '\u0022' + "," + "'TimeStamp':" + '\u0022' + "" + '\u0022' + "," + "'State': [] }" + "\n" +
+                        "state = { 'Property':" + '\u0022' + "" + '\u0022' + "," + "'Value':" + '\u0022' + "" + '\u0022' + "," + "}",
+                DateCreated = DateTime.Now,
+                Author = "test1",
+                LastModified = DateTime.Now
+            };
+       
+            List<Script> scripts = new List<Script>();
+            scripts.Add(script1);
+            dBAccessMock.Setup(x => x.GetAll()).Returns(scripts);
+
+            //Act
+            MethodInfo methodInfo = typeof(Scheduler).GetMethod("GetNewScripts", BindingFlags.NonPublic | BindingFlags.Instance);
+            object[] parameters = { scripts };
+            var scripts2 = (List<Script>)methodInfo.Invoke(scheduler, parameters);
+
+            //Assert
+            Assert.Equal(scripts, scripts2);
         }
     }
 }

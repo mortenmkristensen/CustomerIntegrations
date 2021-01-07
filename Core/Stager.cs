@@ -4,18 +4,12 @@ using System.IO;
 
 namespace Core {
     //This class prepares the scripts before they are are used by ScriptRunner, by extracting them from the database and then saving them to disk. 
-   public  class Stager : IStager {
-
-        //This method gets the path from the SaveToDisk method. 
-        public string GetPath(Script script) {
-            return SaveToDisk(script);
-        }
-        
+    class Stager : IStager {
         //This method creates a new Dictionary that contains all the paths that SaveToDisk has made, and returns it. 
         public Dictionary<string, string> GetPaths(IEnumerable<Script> scripts) {
             Dictionary<string, string> paths = new Dictionary<string, string>();
-            foreach(var script in scripts) {
-                paths.Add(script.Id,GetPath(script));
+            foreach (var script in scripts) {
+                paths.Add(script.Id, SaveToDisk(script));
             }
             return paths;
         }
@@ -39,3 +33,4 @@ namespace Core {
         }
     }
 }
+
