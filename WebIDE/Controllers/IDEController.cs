@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Models;
 using WebIDE.ServiceAccess;
 
@@ -12,7 +13,7 @@ namespace WebIDE.Controllers {
         public IDEController(IAPIAccess aPIAccess2) {
             aPIAccess = aPIAccess2;
         }
-
+        [ActivatorUtilitiesConstructor]
         public IDEController() {
             aPIAccess = new APIAccess();
         }
