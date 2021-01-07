@@ -27,7 +27,7 @@ namespace WebIDE.ServiceAccess {
             var request = new RestRequest($"?id={id}", Method.GET);
             var response = client.Execute(request);
             string scriptJson = response.Content;
-            if (response.StatusCode == System.Net.HttpStatusCode.InternalServerError) {
+            if (response.StatusCode != System.Net.HttpStatusCode.OK) {
                 return null;
             } else { 
                 Script script = JsonConvert.DeserializeObject<Script>(scriptJson);

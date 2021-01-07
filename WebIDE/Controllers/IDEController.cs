@@ -32,7 +32,12 @@ namespace WebIDE.Controllers {
         public ActionResult OpenScripts() {
             APIAccess aPIAccess = new APIAccess();
             List<Script> scripts = aPIAccess.GetAllScripts();
-            return View(scripts);
+            if (scripts != null) {
+                return View(scripts);
+            } else {
+                ViewBag.Situation = 1;
+                return View("SaveScript");
+            }
         }
 
         //This method calls the method GetScriptById from APIAccess to find a script.
