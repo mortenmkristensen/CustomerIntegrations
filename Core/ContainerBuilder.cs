@@ -13,7 +13,7 @@ namespace Core {
             var providers = new LoggerProviderCollection();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
+                .MinimumLevel.Warning()
                 .WriteTo.MongoDB("mongodb://localhost:27017/MapsPeople", collectionName: "log")
                 .WriteTo.Providers(providers)
                 .CreateLogger();

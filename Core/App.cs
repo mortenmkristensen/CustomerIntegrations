@@ -52,7 +52,7 @@ namespace Core {
                             script.HasErrors = true;
                             script.LastResult = sfe.Message;
                             DBAccess.Upsert(script);
-                            _log.LogWarning("Exception", sfe);
+                            _log.LogWarning(sfe, "Exception");
                         }
                     }
                 }
