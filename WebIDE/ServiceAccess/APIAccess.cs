@@ -44,7 +44,6 @@ namespace WebIDE.ServiceAccess {
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest(Method.POST);
             request.AddJsonBody(script);
-            request.RequestFormat = DataFormat.Json;
             var response = client.Execute(request);
             string scriptJson = response.Content;
             Script returnScript = JsonConvert.DeserializeObject<Script>(scriptJson);
@@ -60,7 +59,7 @@ namespace WebIDE.ServiceAccess {
             client.BaseUrl = new Uri("https://localhost:44321/api/script");
             var request = new RestRequest($"?id={id}", Method.DELETE);
             var response = client.Execute(request);
-            if (((int)response.StatusCode)!=500){
+            if (response.StatusCode == System.Net.HttpStatusCode.OK){
                 result = bool.Parse(response.Content);
             }
             return result;
