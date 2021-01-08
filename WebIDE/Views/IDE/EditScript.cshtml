@@ -25,7 +25,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-4 justify-content-center">
-                        <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript"></textarea>
+                        <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript">@Model.Code</textarea>
                         <p>You can now edit the script: </p>
                         <br />
                         <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript", "IDE")' method="post">
