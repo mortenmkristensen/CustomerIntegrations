@@ -23,7 +23,6 @@ namespace API.Controllers
         // Return: If the script is saved in the database, it will return the help method Ok with the script. If there is an exception, it will return the statuscode 500. 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult UploadScript([FromBody] Script script) {
             try {
                 dbAccess.Upsert(script);
@@ -39,7 +38,6 @@ namespace API.Controllers
         // Return: If the script is updated in the database, it will return the help method Ok with the script. If there is an exception, it will return the statuscode 500. 
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult UpdateScript([FromBody]Script script) {
             try {
                 dbAccess.Upsert(script);
@@ -56,7 +54,6 @@ namespace API.Controllers
         // /api/script?id={id}
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Script> GetScriptById(string id) {
             Script script;
             try {
@@ -74,7 +71,6 @@ namespace API.Controllers
         // api/script/customer?customer={customer}
         [HttpGet("Customer")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Script> GetScriptByCustomer(string customer) {
             IEnumerable<Script> scripts = new List<Script>();
             try {
@@ -92,7 +88,6 @@ namespace API.Controllers
         // Return: If the script is deleted from the database, it will return the help method Ok with a boolean. If there is an exception, it will return the statuscode 500.
         [HttpDelete]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult DeleteScript(string id) {
             bool result;
             try {
@@ -108,7 +103,6 @@ namespace API.Controllers
         // Return: If the scripts are found from the database, it will return the help method Ok with the list of scripts. If there is an exception, it will return the statuscode 500.
         [HttpGet("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public ActionResult<Script> GetAllScripts() {
             IEnumerable<Script> scripts = new List<Script>();
             try {
