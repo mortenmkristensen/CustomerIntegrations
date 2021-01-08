@@ -73,7 +73,7 @@ namespace WebIDETest {
             scripts1.Add(script1);
 
             aPIAccessMock.Setup(x => x.GetAllScripts()).Returns(scripts1);
-
+   
             //Act 
             var result = iDEController.OpenScripts() as ViewResult;
             var scripts = (List<Script>)result.ViewData.Model;
@@ -81,6 +81,20 @@ namespace WebIDETest {
             //Assert
             Assert.Equal("OpenScripts", result.ViewName);
             Assert.Equal("Python1", scripts[0].Name);
+        }
+
+        [Fact]
+        public void OpenScriptsTest2() {
+            //Arrange 
+            List<Script> scripts1 = null;
+  
+            aPIAccessMock.Setup(x => x.GetAllScripts()).Returns(scripts1);
+
+            //Act 
+            var result = iDEController.OpenScripts() as ViewResult;
+       
+            //Assert
+            Assert.Equal("SaveScript", result.ViewName);
         }
 
         [Fact]
@@ -107,7 +121,6 @@ namespace WebIDETest {
 
             aPIAccessMock.Setup(x => x.GetScriptById(scriptId1)).Returns(script1);
             aPIAccessMock.Setup(x => x.GetScriptById(scriptId2)).Returns(script2);
-
 
             //Act
             var result1 = iDEController.SearchScriptById(scriptId1) as ViewResult;

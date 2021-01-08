@@ -4,6 +4,7 @@ using Core;
 using Core.Exceptions;
 using Database;
 using MessageBroker;
+using Microsoft.Extensions.Logging;
 using Models;
 using Moq;
 using Xunit;
@@ -16,9 +17,9 @@ namespace CoreTest {
         private readonly Mock<IScriptRunner> scriptRunnerMock = new Mock<IScriptRunner>();
         private readonly Mock<IDataValidation> dataValidationMock = new Mock<IDataValidation>();
         private readonly Mock<IDBAccess> dbAccessMock = new Mock<IDBAccess>();
-        
+        private readonly Mock<ILogger<App>>_log = new Mock<ILogger<App>>();
         public AppTest() {
-            app = new App(dbAccessMock.Object, stagerMock.Object, scriptRunnerMock.Object, messageBrokerMock.Object, dataValidationMock.Object);
+            app = new App(dbAccessMock.Object, stagerMock.Object, scriptRunnerMock.Object, messageBrokerMock.Object, dataValidationMock.Object, _log.Object);
         }
 
         //This test tests a list with a correct script.
@@ -70,7 +71,7 @@ namespace CoreTest {
             dataValidationMock.Setup(x => x.ValidateScriptOutput(result)).Returns(true);
             dbAccessMock.Setup(x => x.Upsert(script1)).Returns(script1);          
             messageBrokerMock.Setup(x => x.Send<string>(consumerQueueName, messages));
-                  
+                           
             //Act
             int i = app.Run(interpreterPath, count,queueName,consumerQueueName);
            

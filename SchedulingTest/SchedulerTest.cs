@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Database;
 using MessageBroker;
+using Microsoft.Extensions.Logging;
 using Models;
 using Moq;
 using Scheduling;
@@ -14,8 +15,9 @@ namespace SchedulingTest {
         private readonly Scheduler scheduler;
         private readonly  Mock<IDBAccess> dBAccessMock = new Mock<IDBAccess>();
         private readonly Mock<IMessageBroker> messageBrokerMock = new Mock<IMessageBroker>();
+        private readonly Mock<ILogger<Scheduler>> _log = new Mock<ILogger<Scheduler>>();
         public SchedulerTest() {
-            scheduler = new Scheduler(dBAccessMock.Object, messageBrokerMock.Object);
+            scheduler = new Scheduler(dBAccessMock.Object, messageBrokerMock.Object,_log.Object);
         }
         //This test tests the private method SeperateByLanguage.
         [Fact]
