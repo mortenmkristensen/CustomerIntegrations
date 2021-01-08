@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using RestSharp;
 
 namespace WebIDE.ServiceAccess {
-    public class APIAccess {
+    public class APIAccess : IAPIAccess {
         //This method sends a GET request to API to get data of all the scripts from API.
         //Return: Is a list of scripts.
         public List<Script> GetAllScripts() {

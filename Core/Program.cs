@@ -14,7 +14,7 @@ namespace Core {
             int i = 0;
             while (true) {
                 //the container runs the Run method (happens every half second). 
-                i = app.Run(interpreterPath, i);
+                i = app.Run(interpreterPath, i, Environment.GetEnvironmentVariable("MP_QUEUENAME"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"));
                 if(i > 30) {
                     return;
                 }

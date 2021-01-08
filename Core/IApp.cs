@@ -1,5 +1,5 @@
 ﻿namespace Core {
-    interface IApp {
-        int Run(string interpreterPath, int count);
+    public interface IApp {
+        int Run(string interpreterPath, int count, string queueName, string consumerQuequeName);
     }
 }

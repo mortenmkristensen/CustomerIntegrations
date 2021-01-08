@@ -23,6 +23,5 @@
     <ProjectReference Include="..\Database\Database.csproj" />
     <ProjectReference Include="..\MessageBroker\MessageBroker.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
-  </ItemGroup>
-
+  </ItemGroup>	
 </Project>

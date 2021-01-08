@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Core {
     //This class is the Hub for the system. It runs methods in the correct order.
-    class App : IApp {
+   public class App : IApp {
 
         private IStager Stager { get; set; }
         private IScriptRunner ScriptRunner { get; set; }
@@ -27,8 +27,8 @@ namespace Core {
         }
 
         //The first thing this method does is getting a list of scripts from a queue, and if the list is null count is counted up by 1. 
-        public int Run(string interpreterPath, int count) {
-            var scripts = GetScriptsFromQueue();
+        public int Run(string interpreterPath, int count, string queueName, string consumerQuequeName) {
+            var scripts = GetScriptsFromQueue(queueName);
             if (scripts == null) {
                 return ++count;
             }
@@ -59,7 +59,7 @@ namespace Core {
             }
             //The result is sent to a messagebroker (the specific queue comes from the environment variablen MP_CONSUMERQUEUE). 
             var messages = scriptOutput.Values.ToList();
-            SendData(Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"), messages);
+            SendData(consumerQuequeName, messages);
             foreach (var id in scriptOutput) {
                 Console.WriteLine($"The Script with id: {id.Key} has been run");
             }
@@ -68,8 +68,7 @@ namespace Core {
         }
 
         //This method gets a queue name from the environment variable MP_QUEUENAME. The queue name is used in MessageBroker.Receive to get the list of Scripts from the queue name.
-        private List<Script> GetScriptsFromQueue() {
-            var queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+        private List<Script> GetScriptsFromQueue(string queueName) {
             try {
                 return MessageBroker.Receive(queueName);
             }

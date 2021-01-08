@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Core {
-    interface IStager {
+    public interface IStager {
         Dictionary<string, string> GetPaths(IEnumerable<Script> scripts);
     }
 }
