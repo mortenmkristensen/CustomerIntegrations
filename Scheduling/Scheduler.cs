@@ -7,7 +7,9 @@ using Microsoft.Extensions.Hosting;
 using Models;
 using MessageBroker;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("SchedulingTest")]
 namespace Scheduling {
     public class Scheduler : IHostedService {
         private IDBAccess _dbAccess;
@@ -55,7 +57,7 @@ namespace Scheduling {
         }
 
         //This method seperates the list of all scripts into smaller lists, one for each language supported by the system
-        private Dictionary<string, List<Script>> SeparateByLanguage(List<Script> scripts) {
+        internal Dictionary<string, List<Script>> SeparateByLanguage(List<Script> scripts) {
             Dictionary<string, List<Script>> scriptsSeparetedByLangugage = new Dictionary<string, List<Script>>();
             foreach (var script in scripts) {
                 //a list with scripts written in a specific language already exixts
@@ -93,7 +95,7 @@ namespace Scheduling {
         }
 
         //This method gets all the scripts from the database
-        public List<Script> GetNewScripts() {
+        internal List<Script> GetNewScripts() {
             return _dbAccess.GetAll().ToList();
         }
     }

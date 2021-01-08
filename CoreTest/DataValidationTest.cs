@@ -24,14 +24,16 @@ namespace CoreTest {
                 ":" + '\u0022' + "SignsOfLife" + '\u0022' + "," + '\u0022' + "Value" + '\u0022' + ":false}]," + '\u0022' + "TimeStamp" + '\u0022' +
                 ":" + '\u0022' + "2020 - 12 - 30T13: 47:32.767689Z" + '\u0022' + "}]}]";
             string scriptResult2 = "try test";
+            string scriptResult3 = null;
 
-            //Act
             dataValidation.Setup(x => x.ValidateScriptOutput(scriptResult)).Returns(true);
             dataValidation.Setup(x => x.ValidateScriptOutput(scriptResult2)).Throws(new ScriptFailedException());
+            dataValidation.Setup(x => x.ValidateScriptOutput(scriptResult3)).Throws(new ScriptFailedException());
 
-            //Assert
+            //Act and Assert
             Assert.True(dataValidation.Object.ValidateScriptOutput(scriptResult));
             Assert.Throws<ScriptFailedException>(() => dataValidation.Object.ValidateScriptOutput(scriptResult2));
+            Assert.Throws<ScriptFailedException>(() => dataValidation.Object.ValidateScriptOutput(scriptResult3));
         }
     }
 }

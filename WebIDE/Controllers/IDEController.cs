@@ -13,10 +13,7 @@ namespace WebIDE.Controllers {
         public IDEController(IAPIAccess aPIAccess2) {
             aPIAccess = aPIAccess2;
         }
-        [ActivatorUtilitiesConstructor]
-        public IDEController() {
-            aPIAccess = new APIAccess();
-        }
+        
         public ActionResult Index() {
             return View();
         }

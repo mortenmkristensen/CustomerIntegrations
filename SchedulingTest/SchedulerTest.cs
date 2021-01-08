@@ -85,9 +85,7 @@ namespace SchedulingTest {
             scripts.Add(script3);
 
             //Act
-            MethodInfo methodInfo = typeof(Scheduler).GetMethod("SeparateByLanguage", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = {scripts};
-            var scriptsSeparetedByLangugage = (Dictionary<string, List<Script>>) methodInfo.Invoke(scheduler, parameters);
+            var scriptsSeparetedByLangugage = scheduler.SeparateByLanguage(scripts);
             var scriptLists = scriptsSeparetedByLangugage.Values.ToList();
             var languages = scriptsSeparetedByLangugage.Keys.ToList();
            

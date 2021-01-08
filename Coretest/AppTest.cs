@@ -70,13 +70,12 @@ namespace CoreTest {
             dataValidationMock.Setup(x => x.ValidateScriptOutput(result)).Returns(true);
             dbAccessMock.Setup(x => x.Upsert(script1)).Returns(script1);          
             messageBrokerMock.Setup(x => x.Send<string>(consumerQueueName, messages));
-         
-           
+                  
             //Act
             int i = app.Run(interpreterPath, count,queueName,consumerQueueName);
            
             //Assert
-            Assert.True(i==0);
+            Assert.Equal(0, i);
         }
 
         //This test tests a list with a error script.
@@ -126,6 +125,7 @@ namespace CoreTest {
             
             //Assert        
             Assert.True(script2.HasErrors);
+            Assert.Equal(0,i2);
         }
 
         //This test tests a list which is null.
