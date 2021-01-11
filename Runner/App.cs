@@ -53,15 +53,25 @@ namespace Runner {
                                                              Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"),
                                                              Environment.GetEnvironmentVariable("MP_QUEUEUSER"),
                                                              Environment.GetEnvironmentVariable("MP_QUEUEPASSWORD"),
-                                                             Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE")).Result;
-                        _messsagebroker.Send<Script>(name, list);
+                                                             Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"),
+                                                             Environment.GetEnvironmentVariable("MP_LOGCOLLECTION")).Result;
                     }
                 }
                 catch (DockerApiException dae) {
                     _log.LogWarning(dae, "Unable to start dockercontainer");
                 }
+                catch (AggregateException ae) {
+                    _log.LogError(ae, "unable to start docker container: " + name);
+                    _dockerContainers.Add(containerName);
+                }
                 catch (Exception e) {
-                    _log.LogError(e, "unable to send scripts to queue: " + name);
+                    _log.LogError(e, "Problem starting container: " + name);
+                }
+                try {
+                    _messsagebroker.Send<Script>(name, list);
+                }
+                catch (Exception e) {
+                    _log.LogError(e, "Unable to send to queue");
                 }
 
             }
@@ -78,8 +88,8 @@ namespace Runner {
         }
         //this method calls StartContainer on DockerService which creates a container and starts it
         private async Task<string> StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
-                                            string messageBroker, string queueUser, string queuePassword, string consumerQueue) {
-            return await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword, consumerQueue);
+                                            string messageBroker, string queueUser, string queuePassword, string consumerQueue, string logCollection) {
+            return await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword, consumerQueue, logCollection);
 
         }
 
@@ -87,7 +97,7 @@ namespace Runner {
         //it then starts aTaskFactory to make a new thread which UpdateFromDocker runs on independently from the main thread
         //lastly it starts to listen for incoming messages in queue in the messagebroker specified by the queueName parameter
         public async Task Start(string queueName) {
-            await PullDockerImage();
+            //await PullDockerImage();
             await PruneContainers();
             TaskFactory taskFactory = new TaskFactory();
             taskFactory.StartNew(UpdateFromDocker);

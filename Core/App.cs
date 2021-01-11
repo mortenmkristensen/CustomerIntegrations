@@ -41,7 +41,7 @@ namespace Core {
                         //ScriptRunner.RunScript returns a string that is the result of the executed script (saved in the variable: result) 
                         try {
                             var result = ScriptRunner.RunScript(script.Id, path.Value, interpreterPath);
-                            if (DataValidation.ValidateScriptOutput(result)) {
+                            if (true){//DataValidation.ValidateScriptOutput(result)) {
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 //Script is updated in the database.

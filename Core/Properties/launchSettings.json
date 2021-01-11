@@ -8,7 +8,8 @@
         "MP_QUEUENAME": "Scheduling_Queue",
         "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
         "MP_CONSUMERQUEUE": "Consumer_Queue",
-        "MP_INTERPRETERPATH": "C:\\Python38\\python.exe"
+        "MP_INTERPRETERPATH": "C:\\Python38\\python.exe",
+        "MP_LOGCOLLECTION": "log"
       }
     },
     "Docker": {
@@ -21,7 +22,8 @@
         "MP_QUEUENAME": "queue1",
         "MP_PASSWORD": "123",
         "MP_MESSAGEBROKER": "192.168.87.107",
-        "MP_INTERPRETERPATH": "ruby"
+        "MP_INTERPRETERPATH": "ruby",
+        "MP_LOGCOLLECTION": "log"
       }
       
     }

@@ -13,7 +13,7 @@ namespace Runner {
             await _client.Images
                 .CreateImageAsync(new ImagesCreateParameters {
                     FromImage = "mmkristensen/ucngrp11",
-                    Tag = "latest"
+                    Tag = "logging"
                 },
                     new AuthConfig(),
                     new Progress<JSONMessage>());
@@ -22,14 +22,15 @@ namespace Runner {
         //This method creates a container based on the specied image(the one pulled from DockerHub) sets all the environment variables that are needed in the container
         //the container is then started
         public async Task<string> StartContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
-                                        string messageBroker, string queueUser, string queuePassword, string consumerQueue) {
+                                        string messageBroker, string queueUser, string queuePassword, string consumerQueue, string logCollection) {
             //create container
             var response = await _client.Containers.CreateContainerAsync(new CreateContainerParameters {
-                Image = "mmkristensen/ucngrp11:latest",
+                Image = "mmkristensen/ucngrp11:logging",
                 Name = queuename,
                 Env = new List<string>() { $"MP_CONNECTIONSTRING={connectionString}", $"MP_COLLECTION={collection}", $"MP_DATABASE={database}",
                                             $"MP_QUEUENAME={queuename}", $"MP_INTERPRETERPATH={interpreterpath}", $"MP_MESSAGEBROKER={messageBroker}",
-                                            $"MP_QUEUEUSER={queueUser}", $"MP_QUEUEPASSWORD={queuePassword}", $"MP_CONSUMERQUEUE={consumerQueue}"}
+                                            $"MP_QUEUEUSER={queueUser}", $"MP_QUEUEPASSWORD={queuePassword}", $"MP_CONSUMERQUEUE={consumerQueue}",
+                                            $"MP_LOGCOLLECTION={logCollection}"}
             });
             //start container
             await _client.Containers.StartContainerAsync(response.ID, null);

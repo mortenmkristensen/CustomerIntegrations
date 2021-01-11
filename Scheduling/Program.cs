@@ -6,6 +6,7 @@ using MessageBroker;
 using Serilog;
 using Serilog.Extensions.Logging;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace Scheduling {
     class Program {
@@ -13,7 +14,8 @@ namespace Scheduling {
             //Adding logger with MongoDB Sink and a minimum level of Warning.
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Warning()
-                .WriteTo.MongoDB("mongodb://localhost:27017/MapsPeople", collectionName: "log")
+                .WriteTo.MongoDB(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING") + "/" + Environment.GetEnvironmentVariable("MP_DATABASE"),
+                                collectionName: Environment.GetEnvironmentVariable("MP_LOGCOLLECTION"))
                 .CreateLogger();
 
             await CreateHostBuilder(args).Build().RunAsync();
