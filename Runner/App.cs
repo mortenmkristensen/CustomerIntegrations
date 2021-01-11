@@ -97,7 +97,7 @@ namespace Runner {
         //it then starts aTaskFactory to make a new thread which UpdateFromDocker runs on independently from the main thread
         //lastly it starts to listen for incoming messages in queue in the messagebroker specified by the queueName parameter
         public async Task Start(string queueName) {
-            //await PullDockerImage();
+            await PullDockerImage();
             await PruneContainers();
             TaskFactory taskFactory = new TaskFactory();
             taskFactory.StartNew(UpdateFromDocker);
