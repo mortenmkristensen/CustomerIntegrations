@@ -82,7 +82,7 @@ namespace Scheduling {
 
         //This method takes a list of objects that should be split into smaller lists and an integer specifying how many elements should be in each list
         //it returns a list containing all the smaller lists
-        private IEnumerable<List<T>> SplitList<T>(List<T> items, int nSize) {
+        internal IEnumerable<List<T>> SplitList<T>(List<T> items, int nSize) {
             for (int i = 0; i < items.Count; i += nSize) {
                 yield return items.GetRange(i, Math.Min(nSize, items.Count - i));
             }
@@ -90,10 +90,18 @@ namespace Scheduling {
 
         //This method takes a list of scripts and uses split list to split them into smaller lists and send them one at a time to the the queue in the messagebroker specified by the envirnonment variable MP_SCHEDULINGQUEUE
         private void SendToRabbitMQ(List<Script> scripts) {
-            var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
-            string queueName = Environment.GetEnvironmentVariable("MP_SCHEDULINGQUEUE");
-            foreach (var list in scriptLists) {
-                _messageBroker.Send<Script>(queueName, scripts);
+            try {
+                var scriptLists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
+                string queueName = Environment.GetEnvironmentVariable("MP_SCHEDULINGQUEUE");
+                foreach (var list in scriptLists) {
+                    _messageBroker.Send<Script>(queueName, scripts);
+                }
+            }
+            catch (NullReferenceException nre) {
+                _log.LogError(nre, "List cannot be null");
+            }
+            catch (Exception e) {
+                _log.LogError(e, e.Message);
             }
         }
 

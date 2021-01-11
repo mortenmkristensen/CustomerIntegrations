@@ -128,5 +128,27 @@ namespace SchedulingTest {
             //Assert
             Assert.Equal(scripts1, scripts2);
         }
+        [Fact]
+        public void SplitListTest() {
+            //Arrange
+            List<string> list = new List<string>();
+            for (int i = 0; i < 25; i++) {
+                list.Add(@"Entry: {i}");
+            }
+            //Act
+            var result1 = scheduler.SplitList<string>(list, 5).ToList();
+            var result2 = scheduler.SplitList<string>(list.GetRange(0,10), 7).ToList();
+            var result3 = scheduler.SplitList<string>(list, 7).ToList();
+            list.Clear();
+            var result4 = scheduler.SplitList<string>(list, 10).ToList();
+            list = null;
+
+            //Assert
+            Assert.Equal(5, result1.Count);
+            Assert.Equal(2, result2.Count);
+            Assert.Equal(4, result3.Count);
+            Assert.Empty(result4);
+            Assert.Throws<NullReferenceException>(() => scheduler.SplitList<string>(list, 5).ToList());
+        }
     }
 }

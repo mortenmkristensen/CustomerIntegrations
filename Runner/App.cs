@@ -32,7 +32,14 @@ namespace Runner {
                 interpreter = "node";
             }
             //the list is split into smaller lists of a size that is reasonable for a docker container to handle 
-            var lists = SplitList<Script>(scripts,int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
+            IEnumerable<List<Script>> lists = null;
+            try {
+                lists = SplitList<Script>(scripts, int.Parse(Environment.GetEnvironmentVariable("MP_CHUNKSIZE")));
+            }
+            catch (NullReferenceException nre) {
+                _log.LogError(nre, "List cannot be null, when splitting");
+                return;
+            }
             int i = 0;
             string containerName = "";
             foreach (var list in lists) {
