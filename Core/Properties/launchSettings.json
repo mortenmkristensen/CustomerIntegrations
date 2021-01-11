@@ -5,10 +5,10 @@
       "environmentVariables": {
         "MP_COLLECTION": "Scripts",
         "MP_DATABASE": "MapsPeople",
-        "MP_QUEUENAME": "queue1",
+        "MP_QUEUENAME": "Scheduling_Queue",
         "MP_CONNECTIONSTRING": "mongodb://localhost:27017",
         "MP_CONSUMERQUEUE": "Consumer_Queue",
-        "MP_INTERPRETERPATH": "C:\\Ruby27\\bin\\ruby.exe"
+        "MP_INTERPRETERPATH": "C:\\Python38\\python.exe"
       }
     },
     "Docker": {

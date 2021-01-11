@@ -12,19 +12,6 @@ function validate() {
     var numberOfErrors = 0;
     var numberOfErrorsProcessed = 0;
 
-    //ID
-    var inputId = "";
-    try {
-        inputId = document.saveScript.id.value;
-    }
-    catch (err) { return true; }
-    if (inputId.length < 1) {
-        error = true;
-        errorId = true;
-        errorText = "Provide an ID";
-        numberOfErrors++;
-    }
-
     //Script name
     var inputScriptName = "";
     try {
@@ -80,10 +67,6 @@ function validate() {
     if (error) {
         if (numberOfErrors > 1) {
             errorText = "Please fill out:";
-            if (errorId) {
-                errorText += " ID";
-                numberOfErrorsProcessed++;
-            }
             if (errorScriptName) {
                 if (numberOfErrorsProcessed < 1) {
                     errorText += " Script name";

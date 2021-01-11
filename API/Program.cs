@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Database;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace API {
     public class Program {
@@ -16,7 +13,14 @@ namespace API {
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.ConfigureServices((_, services) => {
+                        services.AddSingleton<IDBAccess, DBAccess>();
+                        services.AddSingleton<IDBConfig, DBConfig>();
+                    });
+                    webBuilder.UseStartup<Startup>()
+                    .UseSerilog((context, config) => {
+                        config.ReadFrom.Configuration(context.Configuration);
+                    });
                 });
     }
 }

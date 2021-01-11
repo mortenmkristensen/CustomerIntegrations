@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Core.Exceptions {
-    class ScriptFailedException : Exception{
+    public class ScriptFailedException : Exception{
 
         public string ScriptId { get; }
         public ScriptFailedException() {

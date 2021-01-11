@@ -6,11 +6,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Database {
+
+    //This class uses MongoDB
     public class DBAccess : IDBAccess {
         MongoClient Client { get; set; }
         IMongoDatabase Database { get; set; }
         IMongoCollection<Script> Collection { get; set; }
         public IDBConfig Config { get; set; }
+
+        //The constructor uses the IDBConfig to connect to the database. 
         public DBAccess(IDBConfig dBConfig) {
             try {
                 Config = dBConfig;
@@ -21,18 +25,22 @@ namespace Database {
                 throw new Exception("Something went wrong when trying to connect to the database", me);
             }
         }
-        public void Delete(string id) {
+        //This method deletes a script.
+        public bool Delete(string id) {
+            var result = false;
             try {
                 if (id != null) {
                     var objectId = new ObjectId(id);
                     var filter = Builders<Script>.Filter.Eq("_id", objectId);
-                    Collection.DeleteOne(filter);
+                   result= Collection.DeleteOne(filter).IsAcknowledged;
                 }
             } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to delte a script", me);
             }
+            return result;
         }
 
+        //This method gets all scripts from the database, and returns it in a IEnumerable.
         public IEnumerable<Script> GetAll() {
             Task<List<Script>> scripts = null;
             try {
@@ -43,6 +51,7 @@ namespace Database {
             return scripts.Result;
         }
 
+        //This method gets a specifik script out of the database (based on script Id).
         public Script GetScriptById(string id) {
             Task<Script> script = null;
             try {
@@ -57,10 +66,13 @@ namespace Database {
             return script.Result;
         }
 
-        public void Upsert(Script script) {
+        //This method inserts a script into the database. 
+        public Script Upsert(Script script) {
             try {
+                //If a new script is created that has no Id, it is inserted (and MongoDB generates a new Id). 
                 if (script.Id == null || script.Id == "") {
                     Collection.InsertOne(script);
+                    //If it's a script that already has an Id, the script is replaced. 
                 } else {
                     var objectId = new ObjectId(script.Id);
                     var filter = Builders<Script>.Filter.Eq("_id", objectId);
@@ -69,8 +81,10 @@ namespace Database {
             } catch (MongoException me) {
                 throw new Exception("Something went wrong when trying to insert a script", me);
             }
+            return script;
         }
 
+        //This method gets scripts from the database by language, and returns it in a list.  
         public IEnumerable<Script> GetByLanguage(string language) {
             Task<List<Script>> scripts = null;
             try {
@@ -82,6 +96,7 @@ namespace Database {
             return scripts.Result;
         }
 
+        //This method gets a list of scripts from the database by a customer, and returns it in a list. 
         public IEnumerable<Script> GetByCustomer(string customer) {
             Task<List<Script>> scripts = null;
             try {

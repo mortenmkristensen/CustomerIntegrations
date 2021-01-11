@@ -25,14 +25,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-4 justify-content-center">
-                        <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript"></textarea>
+                        <textarea id="editorContent" class="textEditorArea" name="editorContent" form="saveScript">@Model.Code</textarea>
                         <p>You can now edit the script: </p>
                         <br />
                         <form id='saveScript' name='saveScript' action='@Url.Action("SaveScript", "IDE")' method="post">
                             <table width="80%" class="table" cellpadding="4" align="left">
                                 <tr>
                                     <td><label>ID:</label></td>
-                                    <td><input class="inputCustom" type="text" name="id" id="id" value="@Model.Id" /></td>
+                                    <td><input class="inputCustom" type="text" name="id" id="id" value="@Model.Id" readonly /></td>
                                 </tr>
                                 <tr>
                                     <td><label>Script name:</label></td>

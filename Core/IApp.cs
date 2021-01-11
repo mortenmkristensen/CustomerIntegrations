@@ -1,8 +1,5 @@
-﻿using Models;
-using System.Collections.Generic;
-
-namespace Core {
-    interface IApp {
-        int Run(string interpreterPath, int count);
+﻿namespace Core {
+    public interface IApp {
+        int Run(string interpreterPath, int count, string queueName, string consumerQuequeName);
     }
 }
