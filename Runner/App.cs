@@ -47,7 +47,7 @@ namespace Runner {
                 try {
                     //if a container does not already exist a new one is started
                     if (!_dockerContainers.Contains(name)) {
-                        containerName = StartDockerContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"),
+                        containerName = _dockerService. StartContainer(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING"),
                                                              Environment.GetEnvironmentVariable("MP_COLLECTION"),
                                                              Environment.GetEnvironmentVariable("MP_DATABASE"), name, interpreter,
                                                              Environment.GetEnvironmentVariable("MP_MESSAGEBROKER"),
@@ -82,23 +82,12 @@ namespace Runner {
             }
         }
 
-        //this method calls PullImage on DockerService which pulls the image that is used to start the docker containers from DockerHub
-        private async Task PullDockerImage() {
-            await _dockerService.PullImage();
-        }
-        //this method calls StartContainer on DockerService which creates a container and starts it
-        private async Task<string> StartDockerContainer(string connectionString, string collection, string database, string queuename, string interpreterpath,
-                                            string messageBroker, string queueUser, string queuePassword, string consumerQueue, string logCollection) {
-            return await _dockerService.StartContainer(connectionString, collection, database, queuename, interpreterpath, messageBroker, queueUser, queuePassword, consumerQueue, logCollection);
-
-        }
-
         //This method is called when the program is started and makes sure to pull the image and prune unwanted containers
         //it then starts aTaskFactory to make a new thread which UpdateFromDocker runs on independently from the main thread
         //lastly it starts to listen for incoming messages in queue in the messagebroker specified by the queueName parameter
         public async Task Start(string queueName) {
-            await PullDockerImage();
-            await PruneContainers();
+            await _dockerService.PullImage();
+            await _dockerService.PruneContainers();
             TaskFactory taskFactory = new TaskFactory();
             taskFactory.StartNew(UpdateFromDocker);
             ListenToQueue(queueName);
@@ -138,18 +127,12 @@ namespace Runner {
             }
         }
 
-        //This method calls PruneContainers on DockerService which removes all container that are not running
-        private async Task PruneContainers() {
-            await _dockerService.PruneContainers();
-
-        }
-
         //This method checks if any containers are idle and then removes them if they are
         private async Task CheckForIdleContainers() {
             var containers = await _dockerService.GetContainers();
             foreach (var container in containers) {
                 if (container.State == "exited") {
-                    await PruneContainers();
+                    await _dockerService.PruneContainers();
                 }
             }
         }

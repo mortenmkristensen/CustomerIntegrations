@@ -27,7 +27,7 @@ namespace Core {
         }
 
         //The first thing this method does is getting a list of scripts from a queue, and if the list is null count is counted up by 1. 
-        public int Run(string interpreterPath, int count, string queueName, string consumerQuequeName) {
+        public int Run(string interpreterPath, int count, string queueName, string consumerQueueName) {
             var scripts = GetScriptsFromQueue(queueName);
             if (scripts == null) {
                 return ++count;
@@ -41,7 +41,7 @@ namespace Core {
                         //ScriptRunner.RunScript returns a string that is the result of the executed script (saved in the variable: result) 
                         try {
                             var result = ScriptRunner.RunScript(script.Id, path.Value, interpreterPath);
-                            if (true){//DataValidation.ValidateScriptOutput(result)) {
+                            if (DataValidation.ValidateScriptOutput(result)) {
                                 script.LastResult = result;
                                 script.HasErrors = false;
                                 //Script is updated in the database.
@@ -59,7 +59,7 @@ namespace Core {
             }
             //The result is sent to a messagebroker (the specific queue comes from the environment variablen MP_CONSUMERQUEUE). 
             var messages = scriptOutput.Values.ToList();
-            SendData(consumerQuequeName, messages);
+            SendData(consumerQueueName, messages);
             foreach (var id in scriptOutput) {
                 Console.WriteLine($"The Script with id: {id.Key} has been run");
             }

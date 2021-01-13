@@ -10,8 +10,8 @@ namespace WebIDE.Controllers {
     public class IDEController : Controller {
         private IAPIAccess aPIAccess;
 
-        public IDEController(IAPIAccess aPIAccess2) {
-            aPIAccess = aPIAccess2;
+        public IDEController(IAPIAccess aPIAccess) {
+            this.aPIAccess = aPIAccess;
         }
         
         public ActionResult Index() {

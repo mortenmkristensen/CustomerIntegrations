@@ -1,5 +1,6 @@
 ﻿using Docker.DotNet;
 using Docker.DotNet.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,6 +8,11 @@ using System.Threading.Tasks;
 namespace Runner {
     public class DockerService : IDockerService {
         private DockerClient _client = new DockerClientConfiguration().CreateClient();
+        private ILogger<DockerService> _log;
+
+        public DockerService(ILogger<DockerService> log) {
+            _log = log;
+        }
 
         //This method uses the docker client to pull the specified image from DockerHub
         public async Task PullImage() {
@@ -46,8 +52,8 @@ namespace Runner {
             try {
                 await _client.Containers.PruneContainersAsync();
             }
-            catch (Exception) {
-                //TODO log exceptions.
+            catch (Exception e) {
+                _log.LogWarning(e, "Unable to prune containers");
             } 
         }
     }
