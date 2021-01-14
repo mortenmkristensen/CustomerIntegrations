@@ -137,17 +137,35 @@ namespace SchedulingTest {
             }
             //Act
             var result1 = scheduler.SplitList<string>(list, 5).ToList();
-            var result2 = scheduler.SplitList<string>(list.GetRange(0,10), 7).ToList();
+            var result2 = scheduler.SplitList<string>(list.GetRange(0, 10), 7).ToList();
             var result3 = scheduler.SplitList<string>(list, 7).ToList();
             list.Clear();
             var result4 = scheduler.SplitList<string>(list, 10).ToList();
             list = null;
 
             //Assert
+            //Assert 5 lists of 5 elements
             Assert.Equal(5, result1.Count);
+            foreach (var result in result1) {
+                Assert.Equal(5, result.Count);
+            }
+
+            //Assert 2 lists of 7 and 3 elements.
             Assert.Equal(2, result2.Count);
+            Assert.Equal(7, result2[0].Count);
+            Assert.Equal(3, result2[1].Count);
+
+            //Assert 4 lists. 3 with 7 elements and 1 with 4.
             Assert.Equal(4, result3.Count);
+            for (int i = 0; i < 3; i++) {
+                Assert.Equal(7, result3[i].Count);
+            }
+            Assert.Equal(4, result3[3].Count);
+
+            //Assert and empty list is returned.
             Assert.Empty(result4);
+
+            //Assert that a NullReferenceException is thrown.
             Assert.Throws<NullReferenceException>(() => scheduler.SplitList<string>(list, 5).ToList());
         }
     }
