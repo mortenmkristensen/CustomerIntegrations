@@ -151,14 +151,17 @@ namespace CoreTest {
             paths3.Add(script5.Id, path5);
             paths3.Add(script6.Id, path6);
 
-            //Act
             stager.Setup(x => x.GetPaths(scripts1)).Returns(paths1);
             stager.Setup(x => x.GetPaths(scripts2)).Returns(paths2);
             stager.Setup(x => x.GetPaths(scripts3)).Returns(paths3);
-            //Assert
-            Assert.True(stager.Object.GetPaths(scripts1).Count > 0);
-            Assert.True(stager.Object.GetPaths(scripts2).Count > 0);
-            Assert.True(stager.Object.GetPaths(scripts3).Count > 0);
+            ////Act
+            var result1 = stager.Object.GetPaths(scripts1).Count;
+            var result2 = stager.Object.GetPaths(scripts2).Count;
+            var result3 = stager.Object.GetPaths(scripts3).Count;
+            /// Assert
+            Assert.True(result1 > 0);
+            Assert.True(result2 > 0);
+            Assert.True(result3 > 0);
         }
     }
 }

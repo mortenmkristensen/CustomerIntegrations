@@ -77,6 +77,7 @@ namespace CoreTest {
            
             //Assert
             Assert.Equal(0, i);
+            Assert.Equal(result, script1.LastResult);
         }
 
         //This test tests a list with a error script.

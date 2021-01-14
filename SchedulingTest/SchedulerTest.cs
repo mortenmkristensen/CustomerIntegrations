@@ -81,20 +81,52 @@ namespace SchedulingTest {
                 Author = "test1",
                 LastModified = DateTime.Now
             };
-            List<Script> scripts = new List<Script>();
-            scripts.Add(script1);
-            scripts.Add(script2);
-            scripts.Add(script3);
+            List<Script> listWith3Scripts = new List<Script>();
+            listWith3Scripts.Add(script1);
+            listWith3Scripts.Add(script2);
+            listWith3Scripts.Add(script3);
+
+            List<Script> listWith2Scripts = new List<Script>();
+            listWith2Scripts.Add(script1);
+            listWith2Scripts.Add(script2);
+
+            List<Script> listWith1Scripts = new List<Script>();
+            listWith1Scripts.Add(script1);
+
+            List<Script> listWith0Scripts = new List<Script>();
+
+            List<Script> nullList = null;
 
             //Act
-            var scriptsSeparetedByLangugage = scheduler.SeparateByLanguage(scripts);
-            var scriptLists = scriptsSeparetedByLangugage.Values.ToList();
-            var languages = scriptsSeparetedByLangugage.Keys.ToList();
-           
+            var scriptsSeparetedByLangugage1 = scheduler.SeparateByLanguage(listWith3Scripts);
+            var scriptLists1 = scriptsSeparetedByLangugage1.Values.ToList();
+            var languages1 = scriptsSeparetedByLangugage1.Keys.ToList();
+
+            var scriptsSeparetedByLangugage2 = scheduler.SeparateByLanguage(listWith2Scripts);
+            var scriptLists2 = scriptsSeparetedByLangugage2.Values.ToList();
+            var languages2 = scriptsSeparetedByLangugage2.Keys.ToList();
+
+            var scriptsSeparetedByLangugage3 = scheduler.SeparateByLanguage(listWith1Scripts);
+            var scriptLists3 = scriptsSeparetedByLangugage3.Values.ToList();
+            var languages3 = scriptsSeparetedByLangugage3.Keys.ToList();
+
+            var scriptsSeparetedByLangugage4 = scheduler.SeparateByLanguage(listWith0Scripts);
+
+            var scriptsSeparetedByLangugage5 = scheduler.SeparateByLanguage(nullList);
+
             //Assert
-            Assert.True(languages[0].Equals("python") && scriptLists[0][0].Language.Equals(languages[0]));
-            Assert.True(languages[1].Equals("ruby") && scriptLists[1][0].Language.Equals(languages[1]));
-            Assert.True(languages[2].Equals("javascript") && scriptLists[2][0].Language.Equals(languages[2]));
+            Assert.True(languages1[0].Equals("python") && scriptLists1[0][0].Language.Equals(languages1[0]));
+            Assert.True(languages1[1].Equals("ruby") && scriptLists1[1][0].Language.Equals(languages1[1]));
+            Assert.True(languages1[2].Equals("javascript") && scriptLists1[2][0].Language.Equals(languages1[2]));
+
+            Assert.True(languages2[0].Equals("python") && scriptLists2[0][0].Language.Equals(languages2[0]));
+            Assert.True(languages2[1].Equals("ruby") && scriptLists2[1][0].Language.Equals(languages2[1]));
+
+            Assert.True(languages3[0].Equals("python") && scriptLists3[0][0].Language.Equals(languages3[0]));
+
+            Assert.True(scriptsSeparetedByLangugage4.Count == 0);
+
+            Assert.True(scriptsSeparetedByLangugage5.Count == 0);
         }
 
         //This test tests the private method GetNewScripts.

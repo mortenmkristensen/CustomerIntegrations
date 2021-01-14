@@ -61,6 +61,10 @@ namespace Scheduling {
 
         //This method seperates the list of all scripts into smaller lists, one for each language supported by the system
         internal Dictionary<string, List<Script>> SeparateByLanguage(List<Script> scripts) {
+            if(scripts == null) {
+                _log.LogWarning("The list of scripts is null");
+                return new Dictionary<string, List<Script>>();
+            }
             Dictionary<string, List<Script>> scriptsSeparetedByLangugage = new Dictionary<string, List<Script>>();
             foreach (var script in scripts) {
                 //a list with scripts written in a specific language already exixts
