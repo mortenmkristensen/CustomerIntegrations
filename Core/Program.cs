@@ -11,10 +11,12 @@ namespace Core {
         static void Main(string[] args) {
             var app = Container.GetService<IApp>();
             string interpreterPath = Environment.GetEnvironmentVariable("MP_INTERPRETERPATH"); //set with env variables
+            string queueName = Environment.GetEnvironmentVariable("MP_QUEUENAME");
+            string consumerQueueName = Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE");
             int i = 0;
             while (true) {
                 //the container runs the Run method (happens every half second). 
-                i = app.Run(interpreterPath, i, Environment.GetEnvironmentVariable("MP_QUEUENAME"), Environment.GetEnvironmentVariable("MP_CONSUMERQUEUE"));
+                i = app.Run(interpreterPath, i, queueName , consumerQueueName);
                 if(i > 100) {
                     return;
                 }

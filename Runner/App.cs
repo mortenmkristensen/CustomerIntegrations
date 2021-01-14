@@ -58,7 +58,7 @@ namespace Runner {
                     }
                 }
                 catch (DockerApiException dae) {
-                    _log.LogWarning(dae, "Unable to start dockercontainer");
+                    _log.LogError(dae, "Unable to start dockercontainer");
                 }
                 catch (AggregateException ae) {
                     _log.LogError(ae, "unable to start docker container: " + name);

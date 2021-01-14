@@ -14,7 +14,8 @@ namespace Scheduling {
             //Adding logger with MongoDB Sink and a minimum level of Warning.
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Warning()
-                .WriteTo.MongoDB(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING") + "/" + Environment.GetEnvironmentVariable("MP_DATABASE"),
+                .WriteTo.MongoDB(Environment.GetEnvironmentVariable("MP_CONNECTIONSTRING") + "/" + 
+                                Environment.GetEnvironmentVariable("MP_DATABASE"),
                                 collectionName: Environment.GetEnvironmentVariable("MP_LOGCOLLECTION"))
                 .CreateLogger();
 

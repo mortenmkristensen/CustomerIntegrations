@@ -23,7 +23,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-4 justify-content-center">
-                    <p>Open an existing script: <button class="buttonCustom btn-primary shadow-none" onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button></p>
+                    <p>Open an existing script: <button class="buttonCustom btn-primary shadow-none" 
+                                                        onclick="location.href='@Url.Action("OpenScripts", "IDE" )'">Open scripts</button></p>
                     <p>Or start writing a new script:</p>
 
                     <select class="custom-select" id="box1">
@@ -65,7 +66,8 @@
                             </tr>
                         </table>
                         <br />
-                        <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" onclick="if ( ! validate()) return false;" language="javascript" /></p>
+                        <p>Save this script: <input type="submit" id="submit" value="Save Script" class="buttonCustom btn-success shadow-none" 
+                                                    onclick="if ( ! validate()) return false;" language="javascript" /></p>
                     </form>
                 </div>
                 <div class="col-8" id="editor">
