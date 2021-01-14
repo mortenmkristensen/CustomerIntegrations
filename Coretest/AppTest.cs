@@ -17,9 +17,9 @@ namespace CoreTest {
         private readonly Mock<IScriptRunner> scriptRunnerMock = new Mock<IScriptRunner>();
         private readonly Mock<IDataValidation> dataValidationMock = new Mock<IDataValidation>();
         private readonly Mock<IDBAccess> dbAccessMock = new Mock<IDBAccess>();
-        private readonly Mock<ILogger<App>>_log = new Mock<ILogger<App>>();
+        private readonly Mock<ILogger<App>>logMock = new Mock<ILogger<App>>();
         public AppTest() {
-            app = new App(dbAccessMock.Object, stagerMock.Object, scriptRunnerMock.Object, messageBrokerMock.Object, dataValidationMock.Object, _log.Object);
+            app = new App(dbAccessMock.Object, stagerMock.Object, scriptRunnerMock.Object, messageBrokerMock.Object, dataValidationMock.Object, logMock.Object);
         }
 
         //This test tests a list with a correct script.
@@ -41,7 +41,8 @@ namespace CoreTest {
                 Language = "python",
                 LanguageVersion = "1.0.1",
                 Code = "#This is the datamodel for Location, Source, and State." + "\n" +
-                       "location = { 'Id':" + '\u0022' + "" + '\u0022' + "," + "'ParentId':" + '\u0022' + "" + '\u0022' + "," + "'ExternalId':" + '\u0022' + "" + '\u0022' + "," + "'ConsumerId': 2, 'Sources': [] }" + "\n" +
+                       "location = { 'Id':" + '\u0022' + "" + '\u0022' + "," + "'ParentId':" + '\u0022' + "" + '\u0022' + "," + "'ExternalId':" + 
+                       '\u0022' + "" + '\u0022' + "," + "'ConsumerId': 2, 'Sources': [] }" + "\n" +
                         "source = { 'Type':" + '\u0022' + "" + '\u0022' + "," + "'TimeStamp':" + '\u0022' + "" + '\u0022' + "," + "'State': [] }" + "\n" +
                         "state = { 'Property':" + '\u0022' + "" + '\u0022' + "," + "'Value':" + '\u0022' + "" + '\u0022' + "," + "}",
                 DateCreated = DateTime.Now,

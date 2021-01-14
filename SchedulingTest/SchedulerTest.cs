@@ -15,9 +15,9 @@ namespace SchedulingTest {
         private readonly Scheduler scheduler;
         private readonly  Mock<IDBAccess> dBAccessMock = new Mock<IDBAccess>();
         private readonly Mock<IMessageBroker> messageBrokerMock = new Mock<IMessageBroker>();
-        private readonly Mock<ILogger<Scheduler>> _log = new Mock<ILogger<Scheduler>>();
+        private readonly Mock<ILogger<Scheduler>> logMock = new Mock<ILogger<Scheduler>>();
         public SchedulerTest() {
-            scheduler = new Scheduler(dBAccessMock.Object, messageBrokerMock.Object,_log.Object);
+            scheduler = new Scheduler(dBAccessMock.Object, messageBrokerMock.Object,logMock.Object);
         }
         //This test tests the private method SeperateByLanguage.
         [Fact]
@@ -32,7 +32,8 @@ namespace SchedulingTest {
                 Language = "python",
                 LanguageVersion = "1.0.1",
                 Code = "#This is the datamodel for Location, Source, and State." + "\n" +
-                       "location = { 'Id':" + '\u0022' + "" + '\u0022' + "," + "'ParentId':" + '\u0022' + "" + '\u0022' + "," + "'ExternalId':" + '\u0022' + "" + '\u0022' + "," + "'ConsumerId': 2, 'Sources': [] }" + "\n" +
+                       "location = { 'Id':" + '\u0022' + "" + '\u0022' + "," + "'ParentId':" + '\u0022' + "" + '\u0022' + "," + "'ExternalId':" + 
+                       '\u0022' + "" + '\u0022' + "," + "'ConsumerId': 2, 'Sources': [] }" + "\n" +
                         "source = { 'Type':" + '\u0022' + "" + '\u0022' + "," + "'TimeStamp':" + '\u0022' + "" + '\u0022' + "," + "'State': [] }" + "\n" +
                         "state = { 'Property':" + '\u0022' + "" + '\u0022' + "," + "'Value':" + '\u0022' + "" + '\u0022' + "," + "}",
                 DateCreated = DateTime.Now,
@@ -81,6 +82,7 @@ namespace SchedulingTest {
                 Author = "test1",
                 LastModified = DateTime.Now
             };
+
             List<Script> listWith3Scripts = new List<Script>();
             listWith3Scripts.Add(script1);
             listWith3Scripts.Add(script2);
